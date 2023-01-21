@@ -1,0 +1,1092 @@
+index, name,is_feature,feature_type, description
+0, index,0,, -
+1, gi_x,0,, GI (aka gene ID; to get fasta sequence)
+2, variation,0,, -
+3, UID,0,, Uniport ID ( to get fasta sequence)
+4, is_del,0,, Tag (weather
+5, mut_residue,1,normal, Position (from variation)
+6, nutation,0,, Origin -> New (from variantion)
+7, len,1,normal, Length of sequence
+8, ANDN920101,1,normal,AAindex
+9, ARGP820101,1,normal,AAindex
+10, ARGP820102,1,normal,AAindex
+11, ARGP820103,1,normal,AAindex
+12, BEGF750101,1,normal,AAindex
+13, BEGF750102,1,normal,AAindex
+14, BEGF750103,1,normal,AAindex
+15, BHAR880101,1,normal,AAindex
+16, BIGC670101,1,normal,AAindex
+17, BIOV880101,1,normal,AAindex
+18, BIOV880102,1,normal,AAindex
+19, BROC820101,1,normal,AAindex
+20, BROC820102,1,normal,AAindex
+21, BULH740101,1,normal,AAindex
+22, BUNA790102,1,normal,AAindex
+23, BURA740101,1,normal,AAindex
+24, BURA740102,1,normal,AAindex
+25, CHAM820101,1,normal,AAindex
+26, CHAM830101,1,normal,AAindex
+27, CHOC760101,1,normal,AAindex
+28, CHOC760102,1,normal,AAindex
+29, CHOC760103,1,normal,AAindex
+30, CHOC760104,1,normal,AAindex
+31, CHOP780101,1,normal,AAindex
+32, CHOP780201,1,normal,AAindex
+33, CHOP780202,1,normal,AAindex
+34, CHOP780203,1,normal,AAindex
+35, CHOP780204,1,normal,AAindex
+36, CHOP780205,1,normal,AAindex
+37, CHOP780206,1,normal,AAindex
+38, CHOP780207,1,normal,AAindex
+39, CHOP780208,1,normal,AAindex
+40, CHOP780209,1,normal,AAindex
+41, CHOP780210,1,normal,AAindex
+42, CHOP780211,1,normal,AAindex
+43, CHOP780212,1,normal,AAindex
+44, CHOP780213,1,normal,AAindex
+45, CHOP780214,1,normal,AAindex
+46, CHOP780215,1,normal,AAindex
+47, CHOP780216,1,normal,AAindex
+48, CIDH920101,1,normal,AAindex
+49, CIDH920102,1,normal,AAindex
+50, CIDH920103,1,normal,AAindex
+51, CIDH920104,1,normal,AAindex
+52, CIDH920105,1,normal,AAindex
+53, COHE430101,1,normal,AAindex
+54, CRAJ730101,1,normal,AAindex
+55, CRAJ730102,1,normal,AAindex
+56, CRAJ730103,1,normal,AAindex
+57, DAWD720101,1,normal,AAindex
+58, DAYM780101,1,normal,AAindex
+59, DAYM780201,1,normal,AAindex
+60, DESM900101,1,normal,AAindex
+61, DESM900102,1,normal,AAindex
+62, EISD840101,1,normal,AAindex
+63, EISD860101,1,normal,AAindex
+64, EISD860102,1,normal,AAindex
+65, FASG760101,1,normal,AAindex
+66, FASG760102,1,normal,AAindex
+67, FASG760103,1,normal,AAindex
+68, FASG760104,1,normal,AAindex
+69, FASG760105,1,normal,AAindex
+70, FAUJ830101,1,normal,AAindex
+71, FAUJ880101,1,normal,AAindex
+72, FAUJ880106,1,normal,AAindex
+73, FAUJ880107,1,normal,AAindex
+74, FAUJ880109,1,normal,AAindex
+75, FAUJ880110,1,normal,AAindex
+76, FAUJ880111,1,normal,AAindex
+77, FAUJ880112,1,normal,AAindex
+78, FINA910101,1,normal,AAindex
+79, FINA910103,1,normal,AAindex
+80, FINA910104,1,normal,AAindex
+81, GARJ730101,1,normal,AAindex
+82, GEIM800101,1,normal,AAindex
+83, GEIM800102,1,normal,AAindex
+84, GEIM800103,1,normal,AAindex
+85, GEIM800104,1,normal,AAindex
+86, GEIM800105,1,normal,AAindex
+87, GEIM800106,1,normal,AAindex
+88, GEIM800107,1,normal,AAindex
+89, GEIM800108,1,normal,AAindex
+90, GEIM800109,1,normal,AAindex
+91, GEIM800110,1,normal,AAindex
+92, GEIM800111,1,normal,AAindex
+93, GOLD730102,1,normal,AAindex
+94, GRAR740101,1,normal,AAindex
+95, GRAR740102,1,normal,AAindex
+96, GRAR740103,1,normal,AAindex
+97, GUYH850101,1,normal,AAindex
+98, HOPT810101,1,normal,AAindex
+99, HUTJ700101,1,normal,AAindex
+100, HUTJ700102,1,normal,AAindex
+101, HUTJ700103,1,normal,AAindex
+102, ISOY800101,1,normal,AAindex
+103, ISOY800102,1,normal,AAindex
+104, ISOY800103,1,normal,AAindex
+105, ISOY800104,1,normal,AAindex
+106, ISOY800105,1,normal,AAindex
+107, ISOY800106,1,normal,AAindex
+108, ISOY800107,1,normal,AAindex
+109, ISOY800108,1,normal,AAindex
+110, JANJ780101,1,normal,AAindex
+111, JANJ780102,1,normal,AAindex
+112, JANJ780103,1,normal,AAindex
+113, JANJ790101,1,normal,AAindex
+114, JANJ790102,1,normal,AAindex
+115, JOND750101,1,normal,AAindex
+116, JOND750102,1,normal,AAindex
+117, JOND920101,1,normal,AAindex
+118, JOND920102,1,normal,AAindex
+119, JUKT750101,1,normal,AAindex
+120, JUNJ780101,1,normal,AAindex
+121, KANM800101,1,normal,AAindex
+122, KANM800102,1,normal,AAindex
+123, KANM800103,1,normal,AAindex
+124, KANM800104,1,normal,AAindex
+125, KARP850101,1,normal,AAindex
+126, KARP850102,1,normal,AAindex
+127, KARP850103,1,normal,AAindex
+128, KLEP840101,1,normal,AAindex
+129, KRIW710101,1,normal,AAindex
+130, KRIW790101,1,normal,AAindex
+131, KRIW790102,1,normal,AAindex
+132, KRIW790103,1,normal,AAindex
+133, KYTJ820101,1,normal,AAindex
+134, LAWE840101,1,normal,AAindex
+135, LEVM760101,1,normal,AAindex
+136, LEVM760102,1,normal,AAindex
+137, LEVM760104,1,normal,AAindex
+138, LEVM760105,1,normal,AAindex
+139, LEVM760106,1,normal,AAindex
+140, LEVM760107,1,normal,AAindex
+141, LEVM780101,1,normal,AAindex
+142, LEVM780102,1,normal,AAindex
+143, LEVM780103,1,normal,AAindex
+144, LEVM780104,1,normal,AAindex
+145, LEVM780105,1,normal,AAindex
+146, LEVM780106,1,normal,AAindex
+147, LEWP710101,1,normal,AAindex
+148, LIFS790101,1,normal,AAindex
+149, LIFS790102,1,normal,AAindex
+150, LIFS790103,1,normal,AAindex
+151, MANP780101,1,normal,AAindex
+152, MAXF760101,1,normal,AAindex
+153, MAXF760102,1,normal,AAindex
+154, MAXF760103,1,normal,AAindex
+155, MAXF760104,1,normal,AAindex
+156, MAXF760105,1,normal,AAindex
+157, MAXF760106,1,normal,AAindex
+158, MCMT640101,1,normal,AAindex
+159, MEEJ800101,1,normal,AAindex
+160, MEEJ800102,1,normal,AAindex
+161, MEEJ810101,1,normal,AAindex
+162, MEEJ810102,1,normal,AAindex
+163, MEIH800101,1,normal,AAindex
+164, MEIH800102,1,normal,AAindex
+165, MEIH800103,1,normal,AAindex
+166, MIYS850101,1,normal,AAindex
+167, NAGK730101,1,normal,AAindex
+168, NAGK730102,1,normal,AAindex
+169, NAGK730103,1,normal,AAindex
+170, NAKH900101,1,normal,AAindex
+171, NAKH900102,1,normal,AAindex
+172, NAKH900103,1,normal,AAindex
+173, NAKH900104,1,normal,AAindex
+174, NAKH900105,1,normal,AAindex
+175, NAKH900106,1,normal,AAindex
+176, NAKH900107,1,normal,AAindex
+177, NAKH900108,1,normal,AAindex
+178, NAKH900109,1,normal,AAindex
+179, NAKH900110,1,normal,AAindex
+180, NAKH900111,1,normal,AAindex
+181, NAKH900112,1,normal,AAindex
+182, NAKH900113,1,normal,AAindex
+183, NAKH920101,1,normal,AAindex
+184, NAKH920102,1,normal,AAindex
+185, NAKH920103,1,normal,AAindex
+186, NAKH920104,1,normal,AAindex
+187, NAKH920105,1,normal,AAindex
+188, NAKH920106,1,normal,AAindex
+189, NAKH920107,1,normal,AAindex
+190, NAKH920108,1,normal,AAindex
+191, NISK800101,1,normal,AAindex
+192, NISK860101,1,normal,AAindex
+193, OOBM770101,1,normal,AAindex
+194, OOBM770102,1,normal,AAindex
+195, OOBM770103,1,normal,AAindex
+196, OOBM770104,1,normal,AAindex
+197, OOBM770105,1,normal,AAindex
+198, OOBM850101,1,normal,AAindex
+199, OOBM850102,1,normal,AAindex
+200, OOBM850103,1,normal,AAindex
+201, OOBM850104,1,normal,AAindex
+202, OOBM850105,1,normal,AAindex
+203, PALJ810101,1,normal,AAindex
+204, PALJ810102,1,normal,AAindex
+205, PALJ810103,1,normal,AAindex
+206, PALJ810104,1,normal,AAindex
+207, PALJ810105,1,normal,AAindex
+208, PALJ810106,1,normal,AAindex
+209, PALJ810107,1,normal,AAindex
+210, PALJ810108,1,normal,AAindex
+211, PALJ810109,1,normal,AAindex
+212, PALJ810110,1,normal,AAindex
+213, PALJ810111,1,normal,AAindex
+214, PALJ810112,1,normal,AAindex
+215, PALJ810115,1,normal,AAindex
+216, PALJ810116,1,normal,AAindex
+217, PARJ860101,1,normal,AAindex
+218, PLIV810101,1,normal,AAindex
+219, PONP800101,1,normal,AAindex
+220, PONP800102,1,normal,AAindex
+221, PONP800103,1,normal,AAindex
+222, PONP800104,1,normal,AAindex
+223, PONP800105,1,normal,AAindex
+224, PONP800106,1,normal,AAindex
+225, PONP800107,1,normal,AAindex
+226, PONP800108,1,normal,AAindex
+227, PRAM820101,1,normal,AAindex
+228, PRAM820102,1,normal,AAindex
+229, PRAM820103,1,normal,AAindex
+230, PRAM900101,1,normal,AAindex
+231, PRAM900102,1,normal,AAindex
+232, PRAM900103,1,normal,AAindex
+233, PRAM900104,1,normal,AAindex
+234, PTIO830101,1,normal,AAindex
+235, PTIO830102,1,normal,AAindex
+236, QIAN880101,1,normal,AAindex
+237, QIAN880102,1,normal,AAindex
+238, QIAN880103,1,normal,AAindex
+239, QIAN880104,1,normal,AAindex
+240, QIAN880105,1,normal,AAindex
+241, QIAN880106,1,normal,AAindex
+242, QIAN880107,1,normal,AAindex
+243, QIAN880108,1,normal,AAindex
+244, QIAN880109,1,normal,AAindex
+245, QIAN880110,1,normal,AAindex
+246, QIAN880111,1,normal,AAindex
+247, QIAN880112,1,normal,AAindex
+248, QIAN880113,1,normal,AAindex
+249, QIAN880114,1,normal,AAindex
+250, QIAN880115,1,normal,AAindex
+251, QIAN880116,1,normal,AAindex
+252, QIAN880117,1,normal,AAindex
+253, QIAN880118,1,normal,AAindex
+254, QIAN880119,1,normal,AAindex
+255, QIAN880120,1,normal,AAindex
+256, QIAN880121,1,normal,AAindex
+257, QIAN880122,1,normal,AAindex
+258, QIAN880123,1,normal,AAindex
+259, QIAN880124,1,normal,AAindex
+260, QIAN880125,1,normal,AAindex
+261, QIAN880126,1,normal,AAindex
+262, QIAN880127,1,normal,AAindex
+263, QIAN880128,1,normal,AAindex
+264, QIAN880129,1,normal,AAindex
+265, QIAN880130,1,normal,AAindex
+266, QIAN880131,1,normal,AAindex
+267, QIAN880132,1,normal,AAindex
+268, QIAN880133,1,normal,AAindex
+269, QIAN880134,1,normal,AAindex
+270, QIAN880136,1,normal,AAindex
+271, QIAN880137,1,normal,AAindex
+272, QIAN880138,1,normal,AAindex
+273, QIAN880139,1,normal,AAindex
+274, RACS770101,1,normal,AAindex
+275, RACS770102,1,normal,AAindex
+276, RACS820101,1,normal,AAindex
+277, RACS820102,1,normal,AAindex
+278, RACS820103,1,normal,AAindex
+279, RACS820104,1,normal,AAindex
+280, RACS820105,1,normal,AAindex
+281, RACS820106,1,normal,AAindex
+282, RACS820107,1,normal,AAindex
+283, RACS820108,1,normal,AAindex
+284, RACS820109,1,normal,AAindex
+285, RACS820110,1,normal,AAindex
+286, RACS820111,1,normal,AAindex
+287, RACS820112,1,normal,AAindex
+288, RACS820113,1,normal,AAindex
+289, RACS820114,1,normal,AAindex
+290, RICJ880101,1,normal,AAindex
+291, RICJ880102,1,normal,AAindex
+292, RICJ880103,1,normal,AAindex
+293, RICJ880104,1,normal,AAindex
+294, RICJ880105,1,normal,AAindex
+295, RICJ880106,1,normal,AAindex
+296, RICJ880107,1,normal,AAindex
+297, RICJ880108,1,normal,AAindex
+298, RICJ880109,1,normal,AAindex
+299, RICJ880110,1,normal,AAindex
+300, RICJ880111,1,normal,AAindex
+301, RICJ880112,1,normal,AAindex
+302, RICJ880113,1,normal,AAindex
+303, RICJ880114,1,normal,AAindex
+304, RICJ880115,1,normal,AAindex
+305, RICJ880116,1,normal,AAindex
+306, RICJ880117,1,normal,AAindex
+307, ROBB760101,1,normal,AAindex
+308, ROBB760102,1,normal,AAindex
+309, ROBB760103,1,normal,AAindex
+310, ROBB760104,1,normal,AAindex
+311, ROBB760105,1,normal,AAindex
+312, ROBB760106,1,normal,AAindex
+313, ROBB760107,1,normal,AAindex
+314, ROBB760108,1,normal,AAindex
+315, ROBB760109,1,normal,AAindex
+316, ROBB760110,1,normal,AAindex
+317, ROBB760111,1,normal,AAindex
+318, ROBB760112,1,normal,AAindex
+319, ROBB760113,1,normal,AAindex
+320, ROBB790101,1,normal,AAindex
+321, ROSG850101,1,normal,AAindex
+322, ROSG850102,1,normal,AAindex
+323, ROSM880101,1,normal,AAindex
+324, ROSM880102,1,normal,AAindex
+325, ROSM880103,1,normal,AAindex
+326, SIMZ760101,1,normal,AAindex
+327, SNEP660101,1,normal,AAindex
+328, SNEP660102,1,normal,AAindex
+329, SNEP660103,1,normal,AAindex
+330, SNEP660104,1,normal,AAindex
+331, SUEM840101,1,normal,AAindex
+332, SWER830101,1,normal,AAindex
+333, TANS770101,1,normal,AAindex
+334, TANS770102,1,normal,AAindex
+335, TANS770103,1,normal,AAindex
+336, TANS770104,1,normal,AAindex
+337, TANS770105,1,normal,AAindex
+338, TANS770106,1,normal,AAindex
+339, TANS770107,1,normal,AAindex
+340, TANS770108,1,normal,AAindex
+341, TANS770109,1,normal,AAindex
+342, TANS770110,1,normal,AAindex
+343, VASM830101,1,normal,AAindex
+344, VASM830102,1,normal,AAindex
+345, VELV850101,1,normal,AAindex
+346, VENT840101,1,normal,AAindex
+347, VHEG790101,1,normal,AAindex
+348, WARP780101,1,normal,AAindex
+349, WEBA780101,1,normal,AAindex
+350, WERD780101,1,normal,AAindex
+351, WERD780102,1,normal,AAindex
+352, WERD780104,1,normal,AAindex
+353, WOEC730101,1,normal,AAindex
+354, WOLR810101,1,normal,AAindex
+355, WOLS870101,1,normal,AAindex
+356, WOLS870102,1,normal,AAindex
+357, WOLS870103,1,normal,AAindex
+358, ZIMJ680101,1,normal,AAindex
+359, ZIMJ680102,1,normal,AAindex
+360, ZIMJ680103,1,normal,AAindex
+361, ZIMJ680104,1,normal,AAindex
+362, ZIMJ680105,1,normal,AAindex
+363, AURR980101,1,normal,AAindex
+364, AURR980102,1,normal,AAindex
+365, AURR980103,1,normal,AAindex
+366, AURR980104,1,normal,AAindex
+367, AURR980105,1,normal,AAindex
+368, AURR980106,1,normal,AAindex
+369, AURR980107,1,normal,AAindex
+370, AURR980108,1,normal,AAindex
+371, AURR980109,1,normal,AAindex
+372, AURR980110,1,normal,AAindex
+373, AURR980111,1,normal,AAindex
+374, AURR980112,1,normal,AAindex
+375, AURR980113,1,normal,AAindex
+376, AURR980114,1,normal,AAindex
+377, AURR980115,1,normal,AAindex
+378, AURR980116,1,normal,AAindex
+379, AURR980117,1,normal,AAindex
+380, AURR980118,1,normal,AAindex
+381, AURR980119,1,normal,AAindex
+382, AURR980120,1,normal,AAindex
+383, ONEK900101,1,normal,AAindex
+384, ONEK900102,1,normal,AAindex
+385, VINM940101,1,normal,AAindex
+386, VINM940102,1,normal,AAindex
+387, VINM940103,1,normal,AAindex
+388, VINM940104,1,normal,AAindex
+389, MUNV940101,1,normal,AAindex
+390, MUNV940102,1,normal,AAindex
+391, MUNV940103,1,normal,AAindex
+392, MUNV940104,1,normal,AAindex
+393, MUNV940105,1,normal,AAindex
+394, WIMW960101,1,normal,AAindex
+395, KIMC930101,1,normal,AAindex
+396, MONM990101,1,normal,AAindex
+397, BLAM930101,1,normal,AAindex
+398, PARS000101,1,normal,AAindex
+399, PARS000102,1,normal,AAindex
+400, KUMS000101,1,normal,AAindex
+401, KUMS000102,1,normal,AAindex
+402, KUMS000103,1,normal,AAindex
+403, KUMS000104,1,normal,AAindex
+404, TAKK010101,1,normal,AAindex
+405, FODM020101,1,normal,AAindex
+406, NADH010101,1,normal,AAindex
+407, NADH010102,1,normal,AAindex
+408, NADH010103,1,normal,AAindex
+409, NADH010104,1,normal,AAindex
+410, NADH010105,1,normal,AAindex
+411, NADH010106,1,normal,AAindex
+412, NADH010107,1,normal,AAindex
+413, MONM990201,1,normal,AAindex
+414, CEDJ970101,1,normal,AAindex
+415, CEDJ970102,1,normal,AAindex
+416, CEDJ970103,1,normal,AAindex
+417, CEDJ970104,1,normal,AAindex
+418, CEDJ970105,1,normal,AAindex
+419, FUKS010101,1,normal,AAindex
+420, FUKS010102,1,normal,AAindex
+421, FUKS010103,1,normal,AAindex
+422, FUKS010104,1,normal,AAindex
+423, FUKS010105,1,normal,AAindex
+424, FUKS010106,1,normal,AAindex
+425, FUKS010107,1,normal,AAindex
+426, FUKS010108,1,normal,AAindex
+427, FUKS010109,1,normal,AAindex
+428, FUKS010110,1,normal,AAindex
+429, FUKS010111,1,normal,AAindex
+430, FUKS010112,1,normal,AAindex
+431, MITS020101,1,normal,AAindex
+432, TSAJ990101,1,normal,AAindex
+433, TSAJ990102,1,normal,AAindex
+434, COSI940101,1,normal,AAindex
+435, PONP930101,1,normal,AAindex
+436, WILM950101,1,normal,AAindex
+437, WILM950102,1,normal,AAindex
+438, WILM950103,1,normal,AAindex
+439, WILM950104,1,normal,AAindex
+440, KUHL950101,1,normal,AAindex
+441, GUOD860101,1,normal,AAindex
+442, JURD980101,1,normal,AAindex
+443, BASU050101,1,normal,AAindex
+444, BASU050102,1,normal,AAindex
+445, BASU050103,1,normal,AAindex
+446, SUYM030101,1,normal,AAindex
+447, PUNT030101,1,normal,AAindex
+448, PUNT030102,1,normal,AAindex
+449, GEOR030101,1,normal,AAindex
+450, GEOR030102,1,normal,AAindex
+451, GEOR030103,1,normal,AAindex
+452, GEOR030104,1,normal,AAindex
+453, GEOR030105,1,normal,AAindex
+454, GEOR030106,1,normal,AAindex
+455, GEOR030107,1,normal,AAindex
+456, GEOR030108,1,normal,AAindex
+457, GEOR030109,1,normal,AAindex
+458, ZHOH040101,1,normal,AAindex
+459, ZHOH040102,1,normal,AAindex
+460, ZHOH040103,1,normal,AAindex
+461, BAEK050101,1,normal,AAindex
+462, HARY940101,1,normal,AAindex
+463, PONJ960101,1,normal,AAindex
+464, DIGM050101,1,normal,AAindex
+465, WOLR790101,1,normal,AAindex
+466, OLSK800101,1,normal,AAindex
+467, KIDA850101,1,normal,AAindex
+468, GUYH850102,1,normal,AAindex
+469, GUYH850104,1,normal,AAindex
+470, GUYH850105,1,normal,AAindex
+471, JACR890101,1,normal,AAindex
+472, COWR900101,1,normal,AAindex
+473, BLAS910101,1,normal,AAindex
+474, CASG920101,1,normal,AAindex
+475, CORJ870101,1,normal,AAindex
+476, CORJ870102,1,normal,AAindex
+477, CORJ870103,1,normal,AAindex
+478, CORJ870104,1,normal,AAindex
+479, CORJ870105,1,normal,AAindex
+480, CORJ870106,1,normal,AAindex
+481, CORJ870107,1,normal,AAindex
+482, CORJ870108,1,normal,AAindex
+483, MIYS990101,1,normal,AAindex
+484, MIYS990102,1,normal,AAindex
+485, MIYS990103,1,normal,AAindex
+486, MIYS990104,1,normal,AAindex
+487, MIYS990105,1,normal,AAindex
+488, ENGD860101,1,normal,AAindex
+489, FASG890101,1,normal,AAindex
+490, ALTS910101,1,normal,AAindex
+491, BENS940101,1,normal,AAindex
+492, BENS940102,1,normal,AAindex
+493, BENS940103,1,normal,AAindex
+494, BENS940104,1,normal,AAindex
+495, CSEM940101,1,normal,AAindex
+496, DAYM780301,1,normal,AAindex
+497, FEND850101,1,normal,AAindex
+498, FITW660101,1,normal,AAindex
+499, GEOD900101,1,normal,AAindex
+500, GONG920101,1,normal,AAindex
+501, GRAR740104,1,normal,AAindex
+502, HENS920101,1,normal,AAindex
+503, HENS920102,1,normal,AAindex
+504, HENS920103,1,normal,AAindex
+505, JOHM930101,1,normal,AAindex
+506, JOND920103,1,normal,AAindex
+507, JOND940101,1,normal,AAindex
+508, KOLA920101,1,normal,AAindex
+509, LEVJ860101,1,normal,AAindex
+510, LUTR910101,1,normal,AAindex
+511, LUTR910102,1,normal,AAindex
+512, LUTR910103,1,normal,AAindex
+513, LUTR910104,1,normal,AAindex
+514, LUTR910105,1,normal,AAindex
+515, LUTR910106,1,normal,AAindex
+516, LUTR910107,1,normal,AAindex
+517, LUTR910108,1,normal,AAindex
+518, LUTR910109,1,normal,AAindex
+519, MCLA710101,1,normal,AAindex
+520, MCLA720101,1,normal,AAindex
+521, MIYS930101,1,normal,AAindex
+522, MIYT790101,1,normal,AAindex
+523, MOHR870101,1,normal,AAindex
+524, NIEK910101,1,normal,AAindex
+525, NIEK910102,1,normal,AAindex
+526, OVEJ920101,1,normal,AAindex
+527, QU_C930101,1,normal,AAindex
+528, QU_C930102,1,normal,AAindex
+529, QU_C930103,1,normal,AAindex
+530, RISJ880101,1,normal,AAindex
+531, TUDE900101,1,normal,AAindex
+532, AZAE970101,1,normal,AAindex
+533, AZAE970102,1,normal,AAindex
+534, RIER950101,1,normal,AAindex
+535, WEIL970101,1,normal,AAindex
+536, WEIL970102,1,normal,AAindex
+537, MEHP950102,1,normal,AAindex
+538, KAPO950101,1,normal,AAindex
+539, VOGG950101,1,normal,AAindex
+540, KOSJ950101,1,normal,AAindex
+541, KOSJ950102,1,normal,AAindex
+542, KOSJ950103,1,normal,AAindex
+543, KOSJ950104,1,normal,AAindex
+544, KOSJ950105,1,normal,AAindex
+545, KOSJ950106,1,normal,AAindex
+546, KOSJ950107,1,normal,AAindex
+547, KOSJ950108,1,normal,AAindex
+548, KOSJ950109,1,normal,AAindex
+549, KOSJ950110,1,normal,AAindex
+550, KOSJ950111,1,normal,AAindex
+551, KOSJ950112,1,normal,AAindex
+552, KOSJ950113,1,normal,AAindex
+553, KOSJ950114,1,normal,AAindex
+554, KOSJ950115,1,normal,AAindex
+555, OVEJ920102,1,normal,AAindex
+556, OVEJ920103,1,normal,AAindex
+557, OVEJ920104,1,normal,AAindex
+558, OVEJ920105,1,normal,AAindex
+559, LINK010101,1,normal,AAindex
+560, BLAJ010101,1,normal,AAindex
+561, PRLA000101,1,normal,AAindex
+562, PRLA000102,1,normal,AAindex
+563, DOSZ010101,1,normal,AAindex
+564, DOSZ010102,1,normal,AAindex
+565, DOSZ010103,1,normal,AAindex
+566, DOSZ010104,1,normal,AAindex
+567, GIAG010101,1,normal,AAindex
+568, DAYM780302,1,normal,AAindex
+569, HENS920104,1,normal,AAindex
+570, QUIB020101,1,normal,AAindex
+571, NAOD960101,1,normal,AAindex
+572, RUSR970101,1,normal,AAindex
+573, RUSR970102,1,normal,AAindex
+574, RUSR970103,1,normal,AAindex
+575, OGAK980101,1,normal,AAindex
+576, KANM000101,1,normal,AAindex
+577, NGPC000101,1,normal,AAindex
+578, MUET010101,1,normal,AAindex
+579, MUET020101,1,normal,AAindex
+580, MUET020102,1,normal,AAindex
+581, CROG050101,1,normal,AAindex
+582, TANS760101,1,normal,AAindex
+583, TANS760102,1,normal,AAindex
+584, BRYS930101,1,normal,AAindex
+585, THOP960101,1,normal,AAindex
+586, MIRL960101,1,normal,AAindex
+587, VENM980101,1,normal,AAindex
+588, BASU010101,1,normal,AAindex
+589, MIYS850102,1,normal,AAindex
+590, MIYS850103,1,normal,AAindex
+591, MIYS960101,1,normal,AAindex
+592, MIYS960102,1,normal,AAindex
+593, MIYS960103,1,normal,AAindex
+594, MIYS990106,1,normal,AAindex
+595, MIYS990107,1,normal,AAindex
+596, LIWA970101,1,normal,AAindex
+597, KESO980101,1,normal,AAindex
+598, KESO980102,1,normal,AAindex
+599, MOOG990101,1,normal,AAindex
+600, BETM990101,1,normal,AAindex
+601, TOBD000101,1,normal,AAindex
+602, TOBD000102,1,normal,AAindex
+603, KOLA930101,1,normal,AAindex
+604, SKOJ970101,1,normal,AAindex
+605, SKOJ000101,1,normal,AAindex
+606, SKOJ000102,1,normal,AAindex
+607, BONM030101,1,normal,AAindex
+608, BONM030102,1,normal,AAindex
+609, BONM030103,1,normal,AAindex
+610, BONM030104,1,normal,AAindex
+611, BONM030105,1,normal,AAindex
+612, BONM030106,1,normal,AAindex
+613, MICC010101,1,normal,AAindex
+614, SIMK990101,1,normal,AAindex
+615, SIMK990102,1,normal,AAindex
+616, SIMK990103,1,normal,AAindex
+617, SIMK990104,1,normal,AAindex
+618, SIMK990105,1,normal,AAindex
+619, ZHAC000101,1,normal,AAindex
+620, ZHAC000102,1,normal,AAindex
+621, ZHAC000103,1,normal,AAindex
+622, ZHAC000104,1,normal,AAindex
+623, ZHAC000105,1,normal,AAindex
+624, ZHAC000106,1,normal,AAindex
+625, A.A,1,normal,"20*20 matrix (AA, origin -> new)"
+626, A.C,1,normal,"20*20 matrix (AA, origin -> new)"
+627, A.D,1,normal,"20*20 matrix (AA, origin -> new)"
+628, A.E,1,normal,"20*20 matrix (AA, origin -> new)"
+629, A.F,1,normal,"20*20 matrix (AA, origin -> new)"
+630, A.G,1,normal,"20*20 matrix (AA, origin -> new)"
+631, A.H,1,normal,"20*20 matrix (AA, origin -> new)"
+632, A.I,1,normal,"20*20 matrix (AA, origin -> new)"
+633, A.K,1,normal,"20*20 matrix (AA, origin -> new)"
+634, A.L,1,normal,"20*20 matrix (AA, origin -> new)"
+635, A.M,1,normal,"20*20 matrix (AA, origin -> new)"
+636, A.N,1,normal,"20*20 matrix (AA, origin -> new)"
+637, A.P,1,normal,"20*20 matrix (AA, origin -> new)"
+638, A.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+639, A.R,1,normal,"20*20 matrix (AA, origin -> new)"
+640, A.S,1,normal,"20*20 matrix (AA, origin -> new)"
+641, A.T,1,normal,"20*20 matrix (AA, origin -> new)"
+642, A.V,1,normal,"20*20 matrix (AA, origin -> new)"
+643, A.W,1,normal,"20*20 matrix (AA, origin -> new)"
+644, A.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+645, C.A,1,normal,"20*20 matrix (AA, origin -> new)"
+646, C.C,1,normal,"20*20 matrix (AA, origin -> new)"
+647, C.D,1,normal,"20*20 matrix (AA, origin -> new)"
+648, C.E,1,normal,"20*20 matrix (AA, origin -> new)"
+649, C.F,1,normal,"20*20 matrix (AA, origin -> new)"
+650, C.G,1,normal,"20*20 matrix (AA, origin -> new)"
+651, C.H,1,normal,"20*20 matrix (AA, origin -> new)"
+652, C.I,1,normal,"20*20 matrix (AA, origin -> new)"
+653, C.K,1,normal,"20*20 matrix (AA, origin -> new)"
+654, C.L,1,normal,"20*20 matrix (AA, origin -> new)"
+655, C.M,1,normal,"20*20 matrix (AA, origin -> new)"
+656, C.N,1,normal,"20*20 matrix (AA, origin -> new)"
+657, C.P,1,normal,"20*20 matrix (AA, origin -> new)"
+658, C.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+659, C.R,1,normal,"20*20 matrix (AA, origin -> new)"
+660, C.S,1,normal,"20*20 matrix (AA, origin -> new)"
+661, C.T,1,normal,"20*20 matrix (AA, origin -> new)"
+662, C.V,1,normal,"20*20 matrix (AA, origin -> new)"
+663, C.W,1,normal,"20*20 matrix (AA, origin -> new)"
+664, C.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+665, D.A,1,normal,"20*20 matrix (AA, origin -> new)"
+666, D.C,1,normal,"20*20 matrix (AA, origin -> new)"
+667, D.D,1,normal,"20*20 matrix (AA, origin -> new)"
+668, D.E,1,normal,"20*20 matrix (AA, origin -> new)"
+669, D.F,1,normal,"20*20 matrix (AA, origin -> new)"
+670, D.G,1,normal,"20*20 matrix (AA, origin -> new)"
+671, D.H,1,normal,"20*20 matrix (AA, origin -> new)"
+672, D.I,1,normal,"20*20 matrix (AA, origin -> new)"
+673, D.K,1,normal,"20*20 matrix (AA, origin -> new)"
+674, D.L,1,normal,"20*20 matrix (AA, origin -> new)"
+675, D.M,1,normal,"20*20 matrix (AA, origin -> new)"
+676, D.N,1,normal,"20*20 matrix (AA, origin -> new)"
+677, D.P,1,normal,"20*20 matrix (AA, origin -> new)"
+678, D.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+679, D.R,1,normal,"20*20 matrix (AA, origin -> new)"
+680, D.S,1,normal,"20*20 matrix (AA, origin -> new)"
+681, D.T,1,normal,"20*20 matrix (AA, origin -> new)"
+682, D.V,1,normal,"20*20 matrix (AA, origin -> new)"
+683, D.W,1,normal,"20*20 matrix (AA, origin -> new)"
+684, D.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+685, E.A,1,normal,"20*20 matrix (AA, origin -> new)"
+686, E.C,1,normal,"20*20 matrix (AA, origin -> new)"
+687, E.D,1,normal,"20*20 matrix (AA, origin -> new)"
+688, E.E,1,normal,"20*20 matrix (AA, origin -> new)"
+689, E.F,1,normal,"20*20 matrix (AA, origin -> new)"
+690, E.G,1,normal,"20*20 matrix (AA, origin -> new)"
+691, E.H,1,normal,"20*20 matrix (AA, origin -> new)"
+692, E.I,1,normal,"20*20 matrix (AA, origin -> new)"
+693, E.K,1,normal,"20*20 matrix (AA, origin -> new)"
+694, E.L,1,normal,"20*20 matrix (AA, origin -> new)"
+695, E.M,1,normal,"20*20 matrix (AA, origin -> new)"
+696, E.N,1,normal,"20*20 matrix (AA, origin -> new)"
+697, E.P,1,normal,"20*20 matrix (AA, origin -> new)"
+698, E.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+699, E.R,1,normal,"20*20 matrix (AA, origin -> new)"
+700, E.S,1,normal,"20*20 matrix (AA, origin -> new)"
+701, E.T,1,normal,"20*20 matrix (AA, origin -> new)"
+702, E.V,1,normal,"20*20 matrix (AA, origin -> new)"
+703, E.W,1,normal,"20*20 matrix (AA, origin -> new)"
+704, E.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+705, F.A,1,normal,"20*20 matrix (AA, origin -> new)"
+706, F.C,1,normal,"20*20 matrix (AA, origin -> new)"
+707, F.D,1,normal,"20*20 matrix (AA, origin -> new)"
+708, F.E,1,normal,"20*20 matrix (AA, origin -> new)"
+709, F.F,1,normal,"20*20 matrix (AA, origin -> new)"
+710, F.G,1,normal,"20*20 matrix (AA, origin -> new)"
+711, F.H,1,normal,"20*20 matrix (AA, origin -> new)"
+712, F.I,1,normal,"20*20 matrix (AA, origin -> new)"
+713, F.K,1,normal,"20*20 matrix (AA, origin -> new)"
+714, F.L,1,normal,"20*20 matrix (AA, origin -> new)"
+715, F.M,1,normal,"20*20 matrix (AA, origin -> new)"
+716, F.N,1,normal,"20*20 matrix (AA, origin -> new)"
+717, F.P,1,normal,"20*20 matrix (AA, origin -> new)"
+718, F.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+719, F.R,1,normal,"20*20 matrix (AA, origin -> new)"
+720, F.S,1,normal,"20*20 matrix (AA, origin -> new)"
+721, F.T,1,normal,"20*20 matrix (AA, origin -> new)"
+722, F.V,1,normal,"20*20 matrix (AA, origin -> new)"
+723, F.W,1,normal,"20*20 matrix (AA, origin -> new)"
+724, F.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+725, G.A,1,normal,"20*20 matrix (AA, origin -> new)"
+726, G.C,1,normal,"20*20 matrix (AA, origin -> new)"
+727, G.D,1,normal,"20*20 matrix (AA, origin -> new)"
+728, G.E,1,normal,"20*20 matrix (AA, origin -> new)"
+729, G.F,1,normal,"20*20 matrix (AA, origin -> new)"
+730, G.G,1,normal,"20*20 matrix (AA, origin -> new)"
+731, G.H,1,normal,"20*20 matrix (AA, origin -> new)"
+732, G.I,1,normal,"20*20 matrix (AA, origin -> new)"
+733, G.K,1,normal,"20*20 matrix (AA, origin -> new)"
+734, G.L,1,normal,"20*20 matrix (AA, origin -> new)"
+735, G.M,1,normal,"20*20 matrix (AA, origin -> new)"
+736, G.N,1,normal,"20*20 matrix (AA, origin -> new)"
+737, G.P,1,normal,"20*20 matrix (AA, origin -> new)"
+738, G.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+739, G.R,1,normal,"20*20 matrix (AA, origin -> new)"
+740, G.S,1,normal,"20*20 matrix (AA, origin -> new)"
+741, G.T,1,normal,"20*20 matrix (AA, origin -> new)"
+742, G.V,1,normal,"20*20 matrix (AA, origin -> new)"
+743, G.W,1,normal,"20*20 matrix (AA, origin -> new)"
+744, G.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+745, H.A,1,normal,"20*20 matrix (AA, origin -> new)"
+746, H.C,1,normal,"20*20 matrix (AA, origin -> new)"
+747, H.D,1,normal,"20*20 matrix (AA, origin -> new)"
+748, H.E,1,normal,"20*20 matrix (AA, origin -> new)"
+749, H.F,1,normal,"20*20 matrix (AA, origin -> new)"
+750, H.G,1,normal,"20*20 matrix (AA, origin -> new)"
+751, H.H,1,normal,"20*20 matrix (AA, origin -> new)"
+752, H.I,1,normal,"20*20 matrix (AA, origin -> new)"
+753, H.K,1,normal,"20*20 matrix (AA, origin -> new)"
+754, H.L,1,normal,"20*20 matrix (AA, origin -> new)"
+755, H.M,1,normal,"20*20 matrix (AA, origin -> new)"
+756, H.N,1,normal,"20*20 matrix (AA, origin -> new)"
+757, H.P,1,normal,"20*20 matrix (AA, origin -> new)"
+758, H.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+759, H.R,1,normal,"20*20 matrix (AA, origin -> new)"
+760, H.S,1,normal,"20*20 matrix (AA, origin -> new)"
+761, H.T,1,normal,"20*20 matrix (AA, origin -> new)"
+762, H.V,1,normal,"20*20 matrix (AA, origin -> new)"
+763, H.W,1,normal,"20*20 matrix (AA, origin -> new)"
+764, H.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+765, I.A,1,normal,"20*20 matrix (AA, origin -> new)"
+766, I.C,1,normal,"20*20 matrix (AA, origin -> new)"
+767, I.D,1,normal,"20*20 matrix (AA, origin -> new)"
+768, I.E,1,normal,"20*20 matrix (AA, origin -> new)"
+769, I.F,1,normal,"20*20 matrix (AA, origin -> new)"
+770, I.G,1,normal,"20*20 matrix (AA, origin -> new)"
+771, I.H,1,normal,"20*20 matrix (AA, origin -> new)"
+772, I.I,1,normal,"20*20 matrix (AA, origin -> new)"
+773, I.K,1,normal,"20*20 matrix (AA, origin -> new)"
+774, I.L,1,normal,"20*20 matrix (AA, origin -> new)"
+775, I.M,1,normal,"20*20 matrix (AA, origin -> new)"
+776, I.N,1,normal,"20*20 matrix (AA, origin -> new)"
+777, I.P,1,normal,"20*20 matrix (AA, origin -> new)"
+778, I.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+779, I.R,1,normal,"20*20 matrix (AA, origin -> new)"
+780, I.S,1,normal,"20*20 matrix (AA, origin -> new)"
+781, I.T,1,normal,"20*20 matrix (AA, origin -> new)"
+782, I.V,1,normal,"20*20 matrix (AA, origin -> new)"
+783, I.W,1,normal,"20*20 matrix (AA, origin -> new)"
+784, I.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+785, K.A,1,normal,"20*20 matrix (AA, origin -> new)"
+786, K.C,1,normal,"20*20 matrix (AA, origin -> new)"
+787, K.D,1,normal,"20*20 matrix (AA, origin -> new)"
+788, K.E,1,normal,"20*20 matrix (AA, origin -> new)"
+789, K.F,1,normal,"20*20 matrix (AA, origin -> new)"
+790, K.G,1,normal,"20*20 matrix (AA, origin -> new)"
+791, K.H,1,normal,"20*20 matrix (AA, origin -> new)"
+792, K.I,1,normal,"20*20 matrix (AA, origin -> new)"
+793, K.K,1,normal,"20*20 matrix (AA, origin -> new)"
+794, K.L,1,normal,"20*20 matrix (AA, origin -> new)"
+795, K.M,1,normal,"20*20 matrix (AA, origin -> new)"
+796, K.N,1,normal,"20*20 matrix (AA, origin -> new)"
+797, K.P,1,normal,"20*20 matrix (AA, origin -> new)"
+798, K.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+799, K.R,1,normal,"20*20 matrix (AA, origin -> new)"
+800, K.S,1,normal,"20*20 matrix (AA, origin -> new)"
+801, K.T,1,normal,"20*20 matrix (AA, origin -> new)"
+802, K.V,1,normal,"20*20 matrix (AA, origin -> new)"
+803, K.W,1,normal,"20*20 matrix (AA, origin -> new)"
+804, K.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+805, L.A,1,normal,"20*20 matrix (AA, origin -> new)"
+806, L.C,1,normal,"20*20 matrix (AA, origin -> new)"
+807, L.D,1,normal,"20*20 matrix (AA, origin -> new)"
+808, L.E,1,normal,"20*20 matrix (AA, origin -> new)"
+809, L.F,1,normal,"20*20 matrix (AA, origin -> new)"
+810, L.G,1,normal,"20*20 matrix (AA, origin -> new)"
+811, L.H,1,normal,"20*20 matrix (AA, origin -> new)"
+812, L.I,1,normal,"20*20 matrix (AA, origin -> new)"
+813, L.K,1,normal,"20*20 matrix (AA, origin -> new)"
+814, L.L,1,normal,"20*20 matrix (AA, origin -> new)"
+815, L.M,1,normal,"20*20 matrix (AA, origin -> new)"
+816, L.N,1,normal,"20*20 matrix (AA, origin -> new)"
+817, L.P,1,normal,"20*20 matrix (AA, origin -> new)"
+818, L.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+819, L.R,1,normal,"20*20 matrix (AA, origin -> new)"
+820, L.S,1,normal,"20*20 matrix (AA, origin -> new)"
+821, L.T,1,normal,"20*20 matrix (AA, origin -> new)"
+822, L.V,1,normal,"20*20 matrix (AA, origin -> new)"
+823, L.W,1,normal,"20*20 matrix (AA, origin -> new)"
+824, L.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+825, M.A,1,normal,"20*20 matrix (AA, origin -> new)"
+826, M.C,1,normal,"20*20 matrix (AA, origin -> new)"
+827, M.D,1,normal,"20*20 matrix (AA, origin -> new)"
+828, M.E,1,normal,"20*20 matrix (AA, origin -> new)"
+829, M.F,1,normal,"20*20 matrix (AA, origin -> new)"
+830, M.G,1,normal,"20*20 matrix (AA, origin -> new)"
+831, M.H,1,normal,"20*20 matrix (AA, origin -> new)"
+832, M.I,1,normal,"20*20 matrix (AA, origin -> new)"
+833, M.K,1,normal,"20*20 matrix (AA, origin -> new)"
+834, M.L,1,normal,"20*20 matrix (AA, origin -> new)"
+835, M.M,1,normal,"20*20 matrix (AA, origin -> new)"
+836, M.N,1,normal,"20*20 matrix (AA, origin -> new)"
+837, M.P,1,normal,"20*20 matrix (AA, origin -> new)"
+838, M.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+839, M.R,1,normal,"20*20 matrix (AA, origin -> new)"
+840, M.S,1,normal,"20*20 matrix (AA, origin -> new)"
+841, M.T,1,normal,"20*20 matrix (AA, origin -> new)"
+842, M.V,1,normal,"20*20 matrix (AA, origin -> new)"
+843, M.W,1,normal,"20*20 matrix (AA, origin -> new)"
+844, M.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+845, N.A,1,normal,"20*20 matrix (AA, origin -> new)"
+846, N.C,1,normal,"20*20 matrix (AA, origin -> new)"
+847, N.D,1,normal,"20*20 matrix (AA, origin -> new)"
+848, N.E,1,normal,"20*20 matrix (AA, origin -> new)"
+849, N.F,1,normal,"20*20 matrix (AA, origin -> new)"
+850, N.G,1,normal,"20*20 matrix (AA, origin -> new)"
+851, N.H,1,normal,"20*20 matrix (AA, origin -> new)"
+852, N.I,1,normal,"20*20 matrix (AA, origin -> new)"
+853, N.K,1,normal,"20*20 matrix (AA, origin -> new)"
+854, N.L,1,normal,"20*20 matrix (AA, origin -> new)"
+855, N.M,1,normal,"20*20 matrix (AA, origin -> new)"
+856, N.N,1,normal,"20*20 matrix (AA, origin -> new)"
+857, N.P,1,normal,"20*20 matrix (AA, origin -> new)"
+858, N.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+859, N.R,1,normal,"20*20 matrix (AA, origin -> new)"
+860, N.S,1,normal,"20*20 matrix (AA, origin -> new)"
+861, N.T,1,normal,"20*20 matrix (AA, origin -> new)"
+862, N.V,1,normal,"20*20 matrix (AA, origin -> new)"
+863, N.W,1,normal,"20*20 matrix (AA, origin -> new)"
+864, N.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+865, P.A,1,normal,"20*20 matrix (AA, origin -> new)"
+866, P.C,1,normal,"20*20 matrix (AA, origin -> new)"
+867, P.D,1,normal,"20*20 matrix (AA, origin -> new)"
+868, P.E,1,normal,"20*20 matrix (AA, origin -> new)"
+869, P.F,1,normal,"20*20 matrix (AA, origin -> new)"
+870, P.G,1,normal,"20*20 matrix (AA, origin -> new)"
+871, P.H,1,normal,"20*20 matrix (AA, origin -> new)"
+872, P.I,1,normal,"20*20 matrix (AA, origin -> new)"
+873, P.K,1,normal,"20*20 matrix (AA, origin -> new)"
+874, P.L,1,normal,"20*20 matrix (AA, origin -> new)"
+875, P.M,1,normal,"20*20 matrix (AA, origin -> new)"
+876, P.N,1,normal,"20*20 matrix (AA, origin -> new)"
+877, P.P,1,normal,"20*20 matrix (AA, origin -> new)"
+878, P.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+879, P.R,1,normal,"20*20 matrix (AA, origin -> new)"
+880, P.S,1,normal,"20*20 matrix (AA, origin -> new)"
+881, P.T,1,normal,"20*20 matrix (AA, origin -> new)"
+882, P.V,1,normal,"20*20 matrix (AA, origin -> new)"
+883, P.W,1,normal,"20*20 matrix (AA, origin -> new)"
+884, P.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+885, Q.A,1,normal,"20*20 matrix (AA, origin -> new)"
+886, Q.C,1,normal,"20*20 matrix (AA, origin -> new)"
+887, Q.D,1,normal,"20*20 matrix (AA, origin -> new)"
+888, Q.E,1,normal,"20*20 matrix (AA, origin -> new)"
+889, Q.F,1,normal,"20*20 matrix (AA, origin -> new)"
+890, Q.G,1,normal,"20*20 matrix (AA, origin -> new)"
+891, Q.H,1,normal,"20*20 matrix (AA, origin -> new)"
+892, Q.I,1,normal,"20*20 matrix (AA, origin -> new)"
+893, Q.K,1,normal,"20*20 matrix (AA, origin -> new)"
+894, Q.L,1,normal,"20*20 matrix (AA, origin -> new)"
+895, Q.M,1,normal,"20*20 matrix (AA, origin -> new)"
+896, Q.N,1,normal,"20*20 matrix (AA, origin -> new)"
+897, Q.P,1,normal,"20*20 matrix (AA, origin -> new)"
+898, Q.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+899, Q.R,1,normal,"20*20 matrix (AA, origin -> new)"
+900, Q.S,1,normal,"20*20 matrix (AA, origin -> new)"
+901, Q.T,1,normal,"20*20 matrix (AA, origin -> new)"
+902, Q.V,1,normal,"20*20 matrix (AA, origin -> new)"
+903, Q.W,1,normal,"20*20 matrix (AA, origin -> new)"
+904, Q.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+905, R.A,1,normal,"20*20 matrix (AA, origin -> new)"
+906, R.C,1,normal,"20*20 matrix (AA, origin -> new)"
+907, R.D,1,normal,"20*20 matrix (AA, origin -> new)"
+908, R.E,1,normal,"20*20 matrix (AA, origin -> new)"
+909, R.F,1,normal,"20*20 matrix (AA, origin -> new)"
+910, R.G,1,normal,"20*20 matrix (AA, origin -> new)"
+911, R.H,1,normal,"20*20 matrix (AA, origin -> new)"
+912, R.I,1,normal,"20*20 matrix (AA, origin -> new)"
+913, R.K,1,normal,"20*20 matrix (AA, origin -> new)"
+914, R.L,1,normal,"20*20 matrix (AA, origin -> new)"
+915, R.M,1,normal,"20*20 matrix (AA, origin -> new)"
+916, R.N,1,normal,"20*20 matrix (AA, origin -> new)"
+917, R.P,1,normal,"20*20 matrix (AA, origin -> new)"
+918, R.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+919, R.R,1,normal,"20*20 matrix (AA, origin -> new)"
+920, R.S,1,normal,"20*20 matrix (AA, origin -> new)"
+921, R.T,1,normal,"20*20 matrix (AA, origin -> new)"
+922, R.V,1,normal,"20*20 matrix (AA, origin -> new)"
+923, R.W,1,normal,"20*20 matrix (AA, origin -> new)"
+924, R.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+925, S.A,1,normal,"20*20 matrix (AA, origin -> new)"
+926, S.C,1,normal,"20*20 matrix (AA, origin -> new)"
+927, S.D,1,normal,"20*20 matrix (AA, origin -> new)"
+928, S.E,1,normal,"20*20 matrix (AA, origin -> new)"
+929, S.F,1,normal,"20*20 matrix (AA, origin -> new)"
+930, S.G,1,normal,"20*20 matrix (AA, origin -> new)"
+931, S.H,1,normal,"20*20 matrix (AA, origin -> new)"
+932, S.I,1,normal,"20*20 matrix (AA, origin -> new)"
+933, S.K,1,normal,"20*20 matrix (AA, origin -> new)"
+934, S.L,1,normal,"20*20 matrix (AA, origin -> new)"
+935, S.M,1,normal,"20*20 matrix (AA, origin -> new)"
+936, S.N,1,normal,"20*20 matrix (AA, origin -> new)"
+937, S.P,1,normal,"20*20 matrix (AA, origin -> new)"
+938, S.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+939, S.R,1,normal,"20*20 matrix (AA, origin -> new)"
+940, S.S,1,normal,"20*20 matrix (AA, origin -> new)"
+941, S.T,1,normal,"20*20 matrix (AA, origin -> new)"
+942, S.V,1,normal,"20*20 matrix (AA, origin -> new)"
+943, S.W,1,normal,"20*20 matrix (AA, origin -> new)"
+944, S.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+945, T.A,1,normal,"20*20 matrix (AA, origin -> new)"
+946, T.C,1,normal,"20*20 matrix (AA, origin -> new)"
+947, T.D,1,normal,"20*20 matrix (AA, origin -> new)"
+948, T.E,1,normal,"20*20 matrix (AA, origin -> new)"
+949, T.F,1,normal,"20*20 matrix (AA, origin -> new)"
+950, T.G,1,normal,"20*20 matrix (AA, origin -> new)"
+951, T.H,1,normal,"20*20 matrix (AA, origin -> new)"
+952, T.I,1,normal,"20*20 matrix (AA, origin -> new)"
+953, T.K,1,normal,"20*20 matrix (AA, origin -> new)"
+954, T.L,1,normal,"20*20 matrix (AA, origin -> new)"
+955, T.M,1,normal,"20*20 matrix (AA, origin -> new)"
+956, T.N,1,normal,"20*20 matrix (AA, origin -> new)"
+957, T.P,1,normal,"20*20 matrix (AA, origin -> new)"
+958, T.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+959, T.R,1,normal,"20*20 matrix (AA, origin -> new)"
+960, T.S,1,normal,"20*20 matrix (AA, origin -> new)"
+961, T.T,1,normal,"20*20 matrix (AA, origin -> new)"
+962, T.V,1,normal,"20*20 matrix (AA, origin -> new)"
+963, T.W,1,normal,"20*20 matrix (AA, origin -> new)"
+964, T.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+965, V.A,1,normal,"20*20 matrix (AA, origin -> new)"
+966, V.C,1,normal,"20*20 matrix (AA, origin -> new)"
+967, V.D,1,normal,"20*20 matrix (AA, origin -> new)"
+968, V.E,1,normal,"20*20 matrix (AA, origin -> new)"
+969, V.F,1,normal,"20*20 matrix (AA, origin -> new)"
+970, V.G,1,normal,"20*20 matrix (AA, origin -> new)"
+971, V.H,1,normal,"20*20 matrix (AA, origin -> new)"
+972, V.I,1,normal,"20*20 matrix (AA, origin -> new)"
+973, V.K,1,normal,"20*20 matrix (AA, origin -> new)"
+974, V.L,1,normal,"20*20 matrix (AA, origin -> new)"
+975, V.M,1,normal,"20*20 matrix (AA, origin -> new)"
+976, V.N,1,normal,"20*20 matrix (AA, origin -> new)"
+977, V.P,1,normal,"20*20 matrix (AA, origin -> new)"
+978, V.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+979, V.R,1,normal,"20*20 matrix (AA, origin -> new)"
+980, V.S,1,normal,"20*20 matrix (AA, origin -> new)"
+981, V.T,1,normal,"20*20 matrix (AA, origin -> new)"
+982, V.V,1,normal,"20*20 matrix (AA, origin -> new)"
+983, V.W,1,normal,"20*20 matrix (AA, origin -> new)"
+984, V.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+985, W.A,1,normal,"20*20 matrix (AA, origin -> new)"
+986, W.C,1,normal,"20*20 matrix (AA, origin -> new)"
+987, W.D,1,normal,"20*20 matrix (AA, origin -> new)"
+988, W.E,1,normal,"20*20 matrix (AA, origin -> new)"
+989, W.F,1,normal,"20*20 matrix (AA, origin -> new)"
+990, W.G,1,normal,"20*20 matrix (AA, origin -> new)"
+991, W.H,1,normal,"20*20 matrix (AA, origin -> new)"
+992, W.I,1,normal,"20*20 matrix (AA, origin -> new)"
+993, W.K,1,normal,"20*20 matrix (AA, origin -> new)"
+994, W.L,1,normal,"20*20 matrix (AA, origin -> new)"
+995, W.M,1,normal,"20*20 matrix (AA, origin -> new)"
+996, W.N,1,normal,"20*20 matrix (AA, origin -> new)"
+997, W.P,1,normal,"20*20 matrix (AA, origin -> new)"
+998, W.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+999, W.R,1,normal,"20*20 matrix (AA, origin -> new)"
+1000, W.S,1,normal,"20*20 matrix (AA, origin -> new)"
+1001, W.T,1,normal,"20*20 matrix (AA, origin -> new)"
+1002, W.V,1,normal,"20*20 matrix (AA, origin -> new)"
+1003, W.W,1,normal,"20*20 matrix (AA, origin -> new)"
+1004, W.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+1005, Y.A,1,normal,"20*20 matrix (AA, origin -> new)"
+1006, Y.C,1,normal,"20*20 matrix (AA, origin -> new)"
+1007, Y.D,1,normal,"20*20 matrix (AA, origin -> new)"
+1008, Y.E,1,normal,"20*20 matrix (AA, origin -> new)"
+1009, Y.F,1,normal,"20*20 matrix (AA, origin -> new)"
+1010, Y.G,1,normal,"20*20 matrix (AA, origin -> new)"
+1011, Y.H,1,normal,"20*20 matrix (AA, origin -> new)"
+1012, Y.I,1,normal,"20*20 matrix (AA, origin -> new)"
+1013, Y.K,1,normal,"20*20 matrix (AA, origin -> new)"
+1014, Y.L,1,normal,"20*20 matrix (AA, origin -> new)"
+1015, Y.M,1,normal,"20*20 matrix (AA, origin -> new)"
+1016, Y.N,1,normal,"20*20 matrix (AA, origin -> new)"
+1017, Y.P,1,normal,"20*20 matrix (AA, origin -> new)"
+1018, Y.Q,1,normal,"20*20 matrix (AA, origin -> new)"
+1019, Y.R,1,normal,"20*20 matrix (AA, origin -> new)"
+1020, Y.S,1,normal,"20*20 matrix (AA, origin -> new)"
+1021, Y.T,1,normal,"20*20 matrix (AA, origin -> new)"
+1022, Y.V,1,normal,"20*20 matrix (AA, origin -> new)"
+1023, Y.W,1,normal,"20*20 matrix (AA, origin -> new)"
+1024, Y.Y,1,normal,"20*20 matrix (AA, origin -> new)"
+1025, g1.g1,1,normal,"6*6 matrix (AA group, origin -> new)"
+1026, g1.g2,1,normal,"6*6 matrix (AA group, origin -> new)"
+1027, g1.g3,1,normal,"6*6 matrix (AA group, origin -> new)"
+1028, g1.g4,1,normal,"6*6 matrix (AA group, origin -> new)"
+1029, g1.g5,1,normal,"6*6 matrix (AA group, origin -> new)"
+1030, g1.g6,1,normal,"6*6 matrix (AA group, origin -> new)"
+1031, g2.g1,1,normal,"6*6 matrix (AA group, origin -> new)"
+1032, g2.g2,1,normal,"6*6 matrix (AA group, origin -> new)"
+1033, g2.g3,1,normal,"6*6 matrix (AA group, origin -> new)"
+1034, g2.g4,1,normal,"6*6 matrix (AA group, origin -> new)"
+1035, g2.g5,1,normal,"6*6 matrix (AA group, origin -> new)"
+1036, g2.g6,1,normal,"6*6 matrix (AA group, origin -> new)"
+1037, g3.g1,1,normal,"6*6 matrix (AA group, origin -> new)"
+1038, g3.g2,1,normal,"6*6 matrix (AA group, origin -> new)"
+1039, g3.g3,1,normal,"6*6 matrix (AA group, origin -> new)"
+1040, g3.g4,1,normal,"6*6 matrix (AA group, origin -> new)"
+1041, g3.g5,1,normal,"6*6 matrix (AA group, origin -> new)"
+1042, g3.g6,1,normal,"6*6 matrix (AA group, origin -> new)"
+1043, g4.g1,1,normal,"6*6 matrix (AA group, origin -> new)"
+1044, g4.g2,1,normal,"6*6 matrix (AA group, origin -> new)"
+1045, g4.g3,1,normal,"6*6 matrix (AA group, origin -> new)"
+1046, g4.g4,1,normal,"6*6 matrix (AA group, origin -> new)"
+1047, g4.g5,1,normal,"6*6 matrix (AA group, origin -> new)"
+1048, g4.g6,1,normal,"6*6 matrix (AA group, origin -> new)"
+1049, g5.g1,1,normal,"6*6 matrix (AA group, origin -> new)"
+1050, g5.g2,1,normal,"6*6 matrix (AA group, origin -> new)"
+1051, g5.g3,1,normal,"6*6 matrix (AA group, origin -> new)"
+1052, g5.g4,1,normal,"6*6 matrix (AA group, origin -> new)"
+1053, g5.g5,1,normal,"6*6 matrix (AA group, origin -> new)"
+1054, g5.g6,1,normal,"6*6 matrix (AA group, origin -> new)"
+1055, g6.g1,1,normal,"6*6 matrix (AA group, origin -> new)"
+1056, g6.g2,1,normal,"6*6 matrix (AA group, origin -> new)"
+1057, g6.g3,1,normal,"6*6 matrix (AA group, origin -> new)"
+1058, g6.g4,1,normal,"6*6 matrix (AA group, origin -> new)"
+1059, g6.g5,1,normal,"6*6 matrix (AA group, origin -> new)"
+1060, g6.g6,1,normal,"6*6 matrix (AA group, origin -> new)"
+1061, AA20D.A,1,normal,20-dimensional vector (count AA in windows of 23)
+1062, AA20D.C,1,normal,20-dimensional vector (count AA in windows of 23)
+1063, AA20D.D,1,normal,20-dimensional vector (count AA in windows of 23)
+1064, AA20D.E,1,normal,20-dimensional vector (count AA in windows of 23)
+1065, AA20D.F,1,normal,20-dimensional vector (count AA in windows of 23)
+1066, AA20D.G,1,normal,20-dimensional vector (count AA in windows of 23)
+1067, AA20D.H,1,normal,20-dimensional vector (count AA in windows of 23)
+1068, AA20D.I,1,normal,20-dimensional vector (count AA in windows of 23)
+1069, AA20D.K,1,normal,20-dimensional vector (count AA in windows of 23)
+1070, AA20D.L,1,normal,20-dimensional vector (count AA in windows of 23)
+1071, AA20D.M,1,normal,20-dimensional vector (count AA in windows of 23)
+1072, AA20D.N,1,normal,20-dimensional vector (count AA in windows of 23)
+1073, AA20D.P,1,normal,20-dimensional vector (count AA in windows of 23)
+1074, AA20D.Q,1,normal,20-dimensional vector (count AA in windows of 23)
+1075, AA20D.R,1,normal,20-dimensional vector (count AA in windows of 23)
+1076, AA20D.S,1,normal,20-dimensional vector (count AA in windows of 23)
+1077, AA20D.T,1,normal,20-dimensional vector (count AA in windows of 23)
+1078, AA20D.V,1,normal,20-dimensional vector (count AA in windows of 23)
+1079, AA20D.W,1,normal,20-dimensional vector (count AA in windows of 23)
+1080, AA20D.Y,1,normal,20-dimensional vector (count AA in windows of 23)
+1081, NonPolarAA,1,normal,5-dimensional vector (count AA group in windows of 23)
+1082, PolarAA,1,normal,5-dimensional vector (count AA group in windows of 23)
+1083, ChargedAA,1,normal,5-dimensional vector (count AA group in windows of 23)
+1084, PosAA,1,normal,5-dimensional vector (count AA group in windows of 23)
+1085, NegAA,1,normal,5-dimensional vector (count AA group in windows of 23)
+1086, hits,1,evolution,number of related sequences
+1087, score,1,evolution,SIFT score
+1088, ancestor,0,,GO innotation
+1089, pos_1,0,,whether is M
+1090, site,0,,GO information
