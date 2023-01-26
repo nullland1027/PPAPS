@@ -24,14 +24,20 @@ class DataSet:
     def data_clean(self):
         """
         Remove unwanted data item
-        :return:
+        :return: Cleaned data without no-val features
         """
         self._y = self.df[label_cols]
         self._cleaned_data = self.df.drop(labels=unwanted_cols, axis=1)
         return self._cleaned_data
 
-    def range_scale(self):
-        scaler = preprocessing.MinMaxScaler(feature_range=(0, 10))
+    def range_scale(self, low, up):
+        """
+        Scale the data into [low, up] range.
+        @param low: lower bound
+        @param up: upper bound
+        @return: Dataframe object after scaling
+        """
+        scaler = preprocessing.MinMaxScaler(feature_range=(low, up))
         return scaler.fit_transform(self.df)
 
     def normalize(self, norm='l1'):
@@ -43,9 +49,16 @@ class DataSet:
         self._X = preprocessing.normalize(self._cleaned_data, norm=norm)
         return self._X
 
+    def get_data(self):
+        """Return data that can be trained and validated without labels"""
+        return self._X
+
+    def get_label(self):
+        """Return labels"""
+        return self._y
+
     def __getitem__(self, item: int):
         """
-
         :param item: index
         :return: the item-th data and label
         """
