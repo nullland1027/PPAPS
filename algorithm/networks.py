@@ -84,7 +84,7 @@ class RFPredictor(Predictor):
 
     def search_params(self, params_dict: dict):
         adapter = GridSearchCV(estimator=self.rf_classifier,
-                               scoring='accuracy',
+                               scoring='f1_macro',
                                param_grid=params_dict,
                                verbose=10)  # using grid search to find the best params
         adapter.fit(self._X, self._y)
@@ -92,7 +92,7 @@ class RFPredictor(Predictor):
         return adapter.best_score_, adapter.best_estimator_
 
     def save_model(self, name: str, path: str):
-        pickle.dump(self.rf_classifier, open(os.path.join(path, name, '.pickle'), 'wb'))
+        pickle.dump(self.rf_classifier, open(os.path.join(path, name) + '.pickle', 'wb'))
 
     def load_model(self, file_name):
         return pickle.load(open(file_name, 'rb'))
@@ -118,22 +118,29 @@ class RFPredictor(Predictor):
 
 
 class XGBoostPredictor(Predictor):
-    def __init__(self):
+    def __init__(self, kind, X, y, **kwargs):
+        self._kind = kind  # animal or plant
+        self._X = X
+        self._y = y
+        self.params: dict = kwargs  # learner's params
+        self._k_fold = StratifiedKFold(n_splits=5, random_state=42, shuffle=True)  # Cross validation
+        self.xgb = xgboost.XGBClassifier(**self.params)  # Build model
+        self.blind_y_ture = None
+        self.blind_y_pred = None
+
+    def train(self):
+        pass
+
+    def predict(self, target_file):
+        pass
+
+    def feature_importance(self):
         pass
 
     def load_model(self, file_name):
         pass
 
     def output_metrix(self):
-        pass
-
-    def feature_importance(self):
-        pass
-
-    def predict(self, target_file):
-        pass
-
-    def train(self):
         pass
 
     def search_params(self, params_dict):

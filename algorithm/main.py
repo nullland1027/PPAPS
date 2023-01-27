@@ -31,27 +31,29 @@ def data_process(path, kind='plant'):
     np.save(os.path.join(target_path, kind + '_label.npy'), dataset_obj.get_label())
 
 
+def rf_adjust_params():
+    search = {
+        'n_estimators': list(range(100, 400, 50)),
+        'min_samples_split': list(range(8, 20)),
+        'min_samples_leaf': list(range(1, 5)),
+        'min_weight_fraction_leaf': [0.3, 0.4, 0.5]
+    }
+    print(rf.search_params(search))
+
+
 if __name__ == '__main__':
     animal_data = os.path.join('raw_data', 'animal', 'animal.npy')
     animal_label = os.path.join('raw_data', 'animal', 'animal_label.npy')
     # plant = os.path.join('raw_data', 'plant', 'plant_all_data.csv')
 
     rf_params_dft = {  # default params
-        'n_estimators': 100,
-        'max_depth': 10,
-        'min_samples_split': 2,
-        'min_samples_leaf': 1,
-        'min_weight_fraction_leaf': 0,
+        'n_estimators': 250,
+        'min_samples_split': 17,
+        'min_samples_leaf': 4,
+        'min_weight_fraction_leaf': 0.3,
         'n_jobs': -1
     }
     rf = RFPredictor('animal', np.load(animal_data), np.load(animal_label), **rf_params_dft)
     # rf.train()
-    search = {
-        'n_estimators': list(range(50, 800, 50)),
-        'max_depth': list(range(1, 20)),
-        'min_samples_split': list(range(2, 10)),
-        'min_samples_leaf': list(range(1, 20)),
-        'min_weight_fraction_leaf': list(range(0, 10))
-    }
-    print(rf.search_params(search))
+
     rf.save_model('random_forest_animal', os.path.join('models'))
