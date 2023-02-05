@@ -1,11 +1,8 @@
 import os
 import numpy as np
-from datasets import PlantDataSet
-from datasets import AnimalDataSet
-from networks import RFPredictor
-from networks import XGBoostPredictor
-from networks import LGBMPredictor
+from datasets import PlantDataSet, AnimalDataSet, DatasetDL
 
+from networks import RFPredictor, XGBoostPredictor, LGBMPredictor, NNPredictor
 import time
 
 
@@ -93,6 +90,8 @@ if __name__ == '__main__':
     plant_data = os.path.join('raw_data', 'plant', 'plant.npy')
     plant_label = os.path.join('raw_data', 'plant', 'plant_label.npy')
 
+    shape = np.load(animal_data).shape
+    print(shape)
     # =========Random Forest ==============
     # rf_params_bst = {  # best params
     #     'n_estimators': 200,
@@ -140,27 +139,34 @@ if __name__ == '__main__':
 
     # ============LGBM===============
 
-    lgbm_params = {
-        'num_leaves': 10,
-        'max_depth': 3,
-        'learning_rate': 0.05,
-        'n_estimators': 100,
-        'subsample_for_bin': 100000,
-        'min_split_gain': 0.5,
-        'min_child_weight': 0.001,
-        'min_child_samples': 50,
-        'colsample_bytree': 0.5,
+    # lgbm_params = {
+    #     'num_leaves': 10,
+    #     'max_depth': 3,
+    #     'learning_rate': 0.05,
+    #     'n_estimators': 100,
+    #     'subsample_for_bin': 100000,
+    #     'min_split_gain': 0.5,
+    #     'min_child_weight': 0.001,
+    #     'min_child_samples': 50,
+    #     'colsample_bytree': 0.5,
+    #
+    #     'objective': 'binary',
+    #     'metric': 'auc',  # 优化指标
+    #     'n_jobs': -1,
+    #     'force_col_wise': True,
+    #     'random_state': 42
+    # }
+    # lgbm_predictor = LGBMPredictor('animal', np.load(animal_data), np.load(animal_label), **lgbm_params)
+    # start_time = time.time()
+    # lgbm_predictor = lgbm_adjust_params(lgbm_predictor)
+    # end_time = time.time()
+    # print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
+    # lgbm_predictor.train()
+    # lgbm_predictor.save_model('models')
 
-        'objective': 'binary',
-        'metric': 'auc',  # 优化指标
-        'n_jobs': -1,
-        'force_col_wise': True,
-        'random_state': 42
-    }
-    lgbm_predictor = LGBMPredictor('animal', np.load(animal_data), np.load(animal_label), **lgbm_params)
-    start_time = time.time()
-    lgbm_predictor = lgbm_adjust_params(lgbm_predictor)
-    end_time = time.time()
-    print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
-    lgbm_predictor.train()
-    lgbm_predictor.save_model('models')
+    # Deep NN
+    dlp = NNPredictor(12)
+    dlp.load_data(animal_data, animal_label, 3)
+    for i, j in dlp.dataloader_train:
+        print(i, j)
+        break

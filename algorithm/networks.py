@@ -1,19 +1,24 @@
-import abc
-import os.path
-from tqdm import tqdm
+import tqdm
 import pickle
-from matplotlib import pyplot as plt
-import numpy as np
-from xgboost import XGBClassifier
+import os.path
 from abc import ABC, abstractmethod
+
 import lightgbm as lgb
+import numpy as np
+
 from lightgbm import LGBMClassifier
+from matplotlib import pyplot as plt
 from sklearn import metrics
-from datasets import AnimalDataSet, PlantDataSet
-from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import classification_report
+from sklearn.model_selection import GridSearchCV, StratifiedKFold, train_test_split
+from xgboost import XGBClassifier
+
+from datasets import AnimalDataSet, PlantDataSet, DatasetDL
+
+import torch
+from torch import nn
+from torch.utils.data import DataLoader, TensorDataset
 
 
 class Predictor(ABC):
@@ -303,3 +308,51 @@ class LGBMPredictor(Predictor):
 
     def show_ROC_curve(self):
         Predictor._show_ROC_curve(self.blind_y_ture, self.blind_y_pred)
+
+
+class NNModel(nn.Module):
+
+    def __init__(self, input_features: int):
+        super().__init__()
+        self.linear = nn.Linear(input_features, 1)
+
+    def forward(self, x):
+        y = self.linear(x)
+        return torch.sigmoid(y)
+
+
+class NNPredictor:
+    def __init__(self, input_features):
+        self.model = NNModel(input_features)
+        self.dataset = None
+        self.dataloader_train = None
+        self.dataloader_val = None
+        self.criteria = nn.BCELoss()  # Loss function
+        # self.optimizer = torch.optim.SGD()
+
+    def load_data(self, data_filepath: str, label_filepath: str, batch_size: int):
+        self.dataset = DatasetDL(data_filepath, label_filepath)  # Create TensorDataset
+        X_train, X_test, y_train, y_test = train_test_split(self.dataset.get_data(),
+                                                            self.dataset.get_labels(),
+                                                            test_size=0.3,
+                                                            shuffle=True,
+                                                            random_state=42)
+        # Create Dataloader
+        self.dataloader_train = DataLoader(TensorDataset(X_train.double(), y_train.byte()),
+                                           batch_size=batch_size,
+                                           drop_last=True,
+                                           shuffle=True)
+        self.dataloader_val = DataLoader(TensorDataset(X_test.double(), y_test.byte()),
+                                         batch_size=batch_size,
+                                         drop_last=True,
+                                         shuffle=True
+                                         )
+
+    def train(self, num_epochs: int):
+        pass
+
+    def save_model(self):
+        pass
+
+    def predict(self):
+        pass

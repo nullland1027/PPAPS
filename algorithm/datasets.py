@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import torch
+from torch.utils.data import Dataset
 from sklearn import preprocessing
 
 unwanted_cols = ['index', 'gi_x', 'variation', 'UID', 'is_del', 'nutation', 'ancestor', 'pos_1', 'site']
@@ -80,3 +82,24 @@ class PlantDataSet(DataSet):
 
     def __init__(self, csv_path):
         super().__init__(csv_path)
+
+
+class DatasetDL(Dataset):
+    """The specific Dataset for deep learning"""
+
+    def __init__(self, data_filepath, label_filepath):
+        self._X = torch.from_numpy(np.load(data_filepath))
+        self._y = torch.from_numpy(np.load(label_filepath))
+        self._len = len(self._X)
+
+    def get_data(self):
+        return self._X
+
+    def get_labels(self):
+        return self._y
+
+    def __getitem__(self, item):
+        return self._X[item], self._y[item]
+
+    def __len__(self):
+        return self._len
