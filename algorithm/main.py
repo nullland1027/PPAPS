@@ -1,8 +1,9 @@
 import os
 import numpy as np
-from datasets import PlantDataSet, AnimalDataSet, DatasetDL
+import torch
 
-from networks import RFPredictor, XGBoostPredictor, LGBMPredictor, NNPredictor
+from datasets import PlantDataSet, AnimalDataSet, DatasetDL
+from networks import RFPredictor, XGBoostPredictor, LGBMPredictor, NNPredictor, NNModel
 import time
 
 
@@ -23,9 +24,9 @@ def data_process(path, kind='plant'):
         raise Exception("No this item.")
 
     dataset_obj.data_clean()
-    dataset_obj.normalize('l2')
-    np.save(os.path.join(target_path, kind + '.npy'), dataset_obj.get_data())
-    np.save(os.path.join(target_path, kind + '_label.npy'), dataset_obj.get_label())
+    # dataset_obj.normalize('l2')
+    np.save(os.path.join(target_path, kind + '_no_pro.npy'), dataset_obj.get_data())
+    np.save(os.path.join(target_path, kind + '_no_pro_label.npy'), dataset_obj.get_label())
 
 
 def rf_adjust_params(rf_predictor):
@@ -85,13 +86,12 @@ def lgbm_adjust_params(lgb_predictor):
 
 
 if __name__ == '__main__':
-    animal_data = os.path.join('raw_data', 'animal', 'animal.npy')
-    animal_label = os.path.join('raw_data', 'animal', 'animal_label.npy')
+    animal_data = os.path.join('raw_data', 'animal', 'animal_no_pro.npy')  # (306, 1082)
+    animal_label = os.path.join('raw_data', 'animal', 'animal_no_pro_label.npy')
     plant_data = os.path.join('raw_data', 'plant', 'plant.npy')
     plant_label = os.path.join('raw_data', 'plant', 'plant_label.npy')
 
-    shape = np.load(animal_data).shape
-    print(shape)
+    # data_process('raw_data/animal/animal_all_data.csv', kind='animal')
     # =========Random Forest ==============
     # rf_params_bst = {  # best params
     #     'n_estimators': 200,
@@ -165,8 +165,10 @@ if __name__ == '__main__':
     # lgbm_predictor.save_model('models')
 
     # Deep NN
-    dlp = NNPredictor(12)
-    dlp.load_data(animal_data, animal_label, 3)
-    for i, j in dlp.dataloader_train:
+    pred = NNPredictor(1082)
+    pred.load_data(animal_data, animal_label, 6)
+
+    for i, j in pred.dataloader_train:
         print(i, j)
-        break
+    pred.train(20)
+    pred.evaluate()

@@ -1,11 +1,11 @@
-import tqdm
+import numpy as np
+from tqdm import tqdm
 import pickle
 import os.path
 from abc import ABC, abstractmethod
-
 import lightgbm as lgb
-import numpy as np
-
+import datetime
+from copy import deepcopy
 from lightgbm import LGBMClassifier
 from matplotlib import pyplot as plt
 from sklearn import metrics
@@ -18,6 +18,7 @@ from datasets import AnimalDataSet, PlantDataSet, DatasetDL
 
 import torch
 from torch import nn
+from torch.nn import functional as F
 from torch.utils.data import DataLoader, TensorDataset
 
 
@@ -314,11 +315,21 @@ class NNModel(nn.Module):
 
     def __init__(self, input_features: int):
         super().__init__()
-        self.linear = nn.Linear(input_features, 1)
+        self.stack = nn.Sequential(
+            nn.Linear(input_features, 1024),
+            nn.ReLU(),
+            nn.Linear(1024, 512),
+            nn.ReLU(),
+            nn.Linear(512, 256),
+            nn.ReLU(),
+            nn.Linear(256, 128),
+            nn.ReLU(),
+            nn.Linear(128, 1),
+        )
 
     def forward(self, x):
-        y = self.linear(x)
-        return torch.sigmoid(y)
+        y = self.stack(x)
+        return y
 
 
 class NNPredictor:
@@ -327,28 +338,56 @@ class NNPredictor:
         self.dataset = None
         self.dataloader_train = None
         self.dataloader_val = None
-        self.criteria = nn.BCELoss()  # Loss function
-        # self.optimizer = torch.optim.SGD()
+        self.criteria = nn.BCEWithLogitsLoss()  # Loss function
+        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=0.001)
 
     def load_data(self, data_filepath: str, label_filepath: str, batch_size: int):
         self.dataset = DatasetDL(data_filepath, label_filepath)  # Create TensorDataset
         X_train, X_test, y_train, y_test = train_test_split(self.dataset.get_data(),
                                                             self.dataset.get_labels(),
-                                                            test_size=0.3,
-                                                            shuffle=True,
+                                                            test_size=0,
+                                                            shuffle=False,
                                                             random_state=42)
         # Create Dataloader
-        self.dataloader_train = DataLoader(TensorDataset(X_train.double(), y_train.byte()),
+        self.dataloader_train = DataLoader(TensorDataset(X_train.float(), y_train.float()),
                                            batch_size=batch_size,
                                            drop_last=True,
-                                           shuffle=True)
-        self.dataloader_val = DataLoader(TensorDataset(X_test.double(), y_test.byte()),
+                                           shuffle=False)
+        self.dataloader_val = DataLoader(TensorDataset(X_test.float(), y_test.float()),
                                          batch_size=batch_size,
                                          drop_last=True,
-                                         shuffle=True
+                                         shuffle=False
                                          )
 
-    def train(self, num_epochs: int):
+    def train_loop(self, num_epochs: int):
+        size = len(self.dataloader_train.dataset)
+
+        for batch, (X, y) in enumerate(self.dataloader_train):
+            # forward
+            outputs = self.model(X)  # predicted result
+            loss = self.criteria(outputs, y.unsqueeze(1))
+            self.optimizer.zero_grad()  # After getting rid of the gradients from the last round
+            # Backpropagation
+            loss.backward()  # compute the gradients of all parameters we want the network to learn.
+            self.optimizer.step()  # Update the model.
+            loss, current = loss.item(), batch * len(X)
+            print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
+
+    def test_loop(self):
+        size = len(self.dataloader_val.dataset)
+        num_batches = len(self.dataloader_val)
+        test_loss, correct = 0, 0
+        with torch.no_grad():
+            for X, y in self.dataloader_val:
+                outputs = self.model(X)
+                test_loss += self.criteria(outputs, y).item()
+                correct += (outputs.argmax(1) == y).type(torch.float).sum().item()
+
+        test_loss /= num_batches
+        correct /= size
+        print(f"Test: \n Accuracy: {(100 * correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+
+    def train(self):
         pass
 
     def save_model(self):

@@ -30,6 +30,7 @@ class DataSet:
         """
         self._y = self.df[label_cols]
         self._cleaned_data = self.df.drop(labels=unwanted_cols, axis=1)
+        self._X = self._cleaned_data
         return self._cleaned_data
 
     def range_scale(self, low, up):
