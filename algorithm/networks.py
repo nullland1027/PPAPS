@@ -314,7 +314,16 @@ class LGBMPredictor(Predictor):
 class NNModel(nn.Module):
 
     def __init__(self, input_features: int):
-        super().__init__()
+        super(NNModel, self).__init__()
+        # self.layer_1 = nn.Linear(input_features, 1024)
+        # self.layer_2 = nn.Linear(1024, 64)
+        # self.layer_out = nn.Linear(64, 1)
+        #
+        # self.relu = nn.ReLU()
+        # self.dropout = nn.Dropout(p=0.1)
+        # self.batch_norm1 = nn.BatchNorm1d(64)
+        # self.batch_norm2 = nn.BatchNorm1d(64)
+
         self.stack = nn.Sequential(
             nn.Linear(input_features, 1024),
             nn.ReLU(),
@@ -324,74 +333,104 @@ class NNModel(nn.Module):
             nn.ReLU(),
             nn.Linear(256, 128),
             nn.ReLU(),
-            nn.Linear(128, 1),
+            nn.Linear(128, 2),
         )
 
     def forward(self, x):
         y = self.stack(x)
+        # x = self.relu(self.layer_1(x))
+        # x = self.batch_norm1(x)
+        # x = self.relu(self.layer_2(x))
+        # x = self.batch_norm2(x)
+        # x = self.dropout(x)
+        # x = self.layer_out(x)
         return y
 
 
 class NNPredictor:
-    def __init__(self, input_features):
+    def __init__(self, kind: str, input_features: int):
+        self.kind = kind  # `animal` or `plant`
         self.model = NNModel(input_features)
         self.dataset = None
         self.dataloader_train = None
         self.dataloader_val = None
-        self.criteria = nn.BCEWithLogitsLoss()  # Loss function
-        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=0.001)
+        self.criteria = nn.CrossEntropyLoss()  # Loss function
+        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=0.0001)
 
     def load_data(self, data_filepath: str, label_filepath: str, batch_size: int):
         self.dataset = DatasetDL(data_filepath, label_filepath)  # Create TensorDataset
+        # self.dataset.change_label()
         X_train, X_test, y_train, y_test = train_test_split(self.dataset.get_data(),
                                                             self.dataset.get_labels(),
-                                                            test_size=0,
-                                                            shuffle=False,
+                                                            test_size=0.3,
+                                                            shuffle=True,
                                                             random_state=42)
         # Create Dataloader
-        self.dataloader_train = DataLoader(TensorDataset(X_train.float(), y_train.float()),
+        self.dataloader_train = DataLoader(TensorDataset(X_train.float(), y_train),
                                            batch_size=batch_size,
                                            drop_last=True,
-                                           shuffle=False)
-        self.dataloader_val = DataLoader(TensorDataset(X_test.float(), y_test.float()),
+                                           shuffle=True)
+        self.dataloader_val = DataLoader(TensorDataset(X_test.float(), y_test),
                                          batch_size=batch_size,
                                          drop_last=True,
-                                         shuffle=False
+                                         shuffle=True
                                          )
 
-    def train_loop(self, num_epochs: int):
-        size = len(self.dataloader_train.dataset)
+    @staticmethod
+    def check_gpu():
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        print(device)
 
+    def train_loop(self):
+        size = len(self.dataloader_train.dataset)  # the length of train data set
+        train_loss = 0
+        self.model.train()
         for batch, (X, y) in enumerate(self.dataloader_train):
             # forward
             outputs = self.model(X)  # predicted result
-            loss = self.criteria(outputs, y.unsqueeze(1))
-            self.optimizer.zero_grad()  # After getting rid of the gradients from the last round
+            loss = self.criteria(outputs, y)  # Compute the loss
+
             # Backpropagation
+            self.optimizer.zero_grad()  # After getting rid of the gradients from the last round
             loss.backward()  # compute the gradients of all parameters we want the network to learn.
             self.optimizer.step()  # Update the model.
-            loss, current = loss.item(), batch * len(X)
-            print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
+            train_loss += loss.item() * X.size(0)  # sum up the total loss
+        train_loss = train_loss / size  # get average loss
+        print('Training Loss: {:.6f}'.format(train_loss), end='        ')
 
-    def test_loop(self):
+    def evaluate_loop(self):
         size = len(self.dataloader_val.dataset)
-        num_batches = len(self.dataloader_val)
-        test_loss, correct = 0, 0
-        with torch.no_grad():
+        eval_loss, acc = 0, 0
+        true_labels, pred_labels = [], []  # the real label and the model prediction result
+        self.model.eval()
+
+        with torch.no_grad():  # evaluating
             for X, y in self.dataloader_val:
-                outputs = self.model(X)
-                test_loss += self.criteria(outputs, y).item()
-                correct += (outputs.argmax(1) == y).type(torch.float).sum().item()
+                output = self.model(X)
+                pred_res = torch.argmax(output, 1)
+                pred_labels.append(pred_res.data.numpy())
+                true_labels.append(y.data.numpy())
+                eval_loss += self.criteria(output, y).item() * X.size(0)
+        eval_loss = eval_loss / size
+        true_labels, pred_labels = np.concatenate(true_labels), np.concatenate(pred_labels)
+        acc = np.sum(true_labels == pred_labels) / len(pred_labels)
+        print('Validation Loss: {:.6f}, Accuracy: {:6f}\n'.format(eval_loss, acc))
 
-        test_loss /= num_batches
-        correct /= size
-        print(f"Test: \n Accuracy: {(100 * correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
-
-    def train(self):
-        pass
+    def train(self, epoch_times):
+        for t in range(epoch_times):
+            print(f"Epoch {t + 1}-------------------------------")
+            self.train_loop()
+            self.evaluate_loop()
+        print("Done!")
 
     def save_model(self):
-        pass
+        """Save the params of current model"""
+        if os.path.exists('models/mlp_' + self.kind + '.pth'):
+            os.remove('models/mlp_' + self.kind + '.pth')
+        torch.save(self.model.state_dict(), 'models/mlp_' + self.kind + '.pth')
+
+    def load_model(self, model_file):
+        self.model.load_state_dict(torch.load(model_file))
 
     def predict(self):
-        pass
+        self.model.eval()

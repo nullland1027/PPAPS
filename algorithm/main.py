@@ -86,8 +86,8 @@ def lgbm_adjust_params(lgb_predictor):
 
 
 if __name__ == '__main__':
-    animal_data = os.path.join('raw_data', 'animal', 'animal_no_pro.npy')  # (306, 1082)
-    animal_label = os.path.join('raw_data', 'animal', 'animal_no_pro_label.npy')
+    animal_data = os.path.join('raw_data', 'animal', 'animal.npy')  # (306, 1082)
+    animal_label = os.path.join('raw_data', 'animal', 'animal_label.npy')
     plant_data = os.path.join('raw_data', 'plant', 'plant.npy')
     plant_label = os.path.join('raw_data', 'plant', 'plant_label.npy')
 
@@ -166,9 +166,11 @@ if __name__ == '__main__':
 
     # Deep NN
     pred = NNPredictor(1082)
-    pred.load_data(animal_data, animal_label, 6)
+    pred.load_data(plant_data, plant_label, batch_size=2)
 
-    for i, j in pred.dataloader_train:
-        print(i, j)
-    pred.train(20)
-    pred.evaluate()
+    pred.train(50)
+    # for data, label in pred.dataloader_train:
+    #     print(data.shape, label)
+
+    # pred.model.eval()
+    # print(pred.model(pred.dataset[2][0]))
