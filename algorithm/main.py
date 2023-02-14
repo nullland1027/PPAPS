@@ -165,10 +165,17 @@ if __name__ == '__main__':
     # lgbm_predictor.save_model('models')
 
     # Deep NN
-    pred = NNPredictor(1082)
-    pred.load_data(plant_data, plant_label, batch_size=2)
+    pred = NNPredictor('animal', 1082)
+    pred.load_data(animal_data, animal_label, batch_size=2)
 
-    pred.train(50)
+    # pred.train(30)
+    # pred.save_model()
+    pred.load_model('models/mlp_animal.pth')
+    res = pred.model_predict()
+
+    # pred.save_model_onnx('models/mlp_animal.pth', 2)
+    # onnx_model = pred.load_model_onnx('models/mlp_animal.onnx')
+    # print(onnx_model)
     # for data, label in pred.dataloader_train:
     #     print(data.shape, label)
 

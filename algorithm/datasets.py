@@ -88,9 +88,13 @@ class PlantDataSet(DataSet):
 class DatasetDL(Dataset):
     """The specific Dataset for deep learning"""
 
-    def __init__(self, data_filepath, label_filepath):
-        self._X = torch.from_numpy(np.load(data_filepath))
-        self._y = torch.from_numpy(np.load(label_filepath))
+    def __init__(self, data_filepath, label_filepath, npy_obj_data=None, npy_obj_label=None):
+        if not (npy_obj_data and npy_obj_label):
+            self._X = torch.from_numpy(np.load(data_filepath))
+            self._y = torch.from_numpy(np.load(label_filepath))
+        elif (data_filepath and label_filepath) and (npy_obj_data is not None):
+            self._X = npy_obj_data
+            self._y = npy_obj_label
         self._len = len(self._X)
 
     def change_label(self):

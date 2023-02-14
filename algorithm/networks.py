@@ -17,6 +17,8 @@ from xgboost import XGBClassifier
 from datasets import AnimalDataSet, PlantDataSet, DatasetDL
 
 import torch
+import onnx
+import onnxruntime
 from torch import nn
 from torch.nn import functional as F
 from torch.utils.data import DataLoader, TensorDataset
@@ -352,8 +354,9 @@ class NNPredictor:
         self.kind = kind  # `animal` or `plant`
         self.model = NNModel(input_features)
         self.dataset = None
-        self.dataloader_train = None
-        self.dataloader_val = None
+        self.dataloader_train = None  #
+        self.dataloader_val = None  # Evaluation data to
+        self.dataloader_blind_test = None  # Blind test data to see the final performance of predictor
         self.criteria = nn.CrossEntropyLoss()  # Loss function
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=0.0001)
 
@@ -373,8 +376,11 @@ class NNPredictor:
         self.dataloader_val = DataLoader(TensorDataset(X_test.float(), y_test),
                                          batch_size=batch_size,
                                          drop_last=True,
-                                         shuffle=True
-                                         )
+                                         shuffle=True)
+
+    def load_blind_test(self, csv_file: str, batch_size):
+        pass
+        # TODO
 
     @staticmethod
     def check_gpu():
@@ -398,7 +404,7 @@ class NNPredictor:
         train_loss = train_loss / size  # get average loss
         print('Training Loss: {:.6f}'.format(train_loss), end='        ')
 
-    def evaluate_loop(self):
+    def model_predict(self):
         size = len(self.dataloader_val.dataset)
         eval_loss, acc = 0, 0
         true_labels, pred_labels = [], []  # the real label and the model prediction result
@@ -412,7 +418,20 @@ class NNPredictor:
                 true_labels.append(y.data.numpy())
                 eval_loss += self.criteria(output, y).item() * X.size(0)
         eval_loss = eval_loss / size
-        true_labels, pred_labels = np.concatenate(true_labels), np.concatenate(pred_labels)
+        return {
+            'Evaluation loss': eval_loss,
+            'Prediction result': pred_labels,
+            'True labels': true_labels,
+        }
+
+    def evaluate_loop(self):
+        res_dict = self.model_predict()
+        eval_loss = res_dict['Evaluation loss']
+        true_labels = res_dict['True labels']
+        pred_labels = res_dict['Prediction result']
+
+        true_labels, pred_labels = np.concatenate(true_labels), np.concatenate(
+            pred_labels)  # if batch_size != 1, this can put all res into one array
         acc = np.sum(true_labels == pred_labels) / len(pred_labels)
         print('Validation Loss: {:.6f}, Accuracy: {:6f}\n'.format(eval_loss, acc))
 
@@ -429,8 +448,42 @@ class NNPredictor:
             os.remove('models/mlp_' + self.kind + '.pth')
         torch.save(self.model.state_dict(), 'models/mlp_' + self.kind + '.pth')
 
+    def save_model_onnx(self, pth_file, batch_size):
+        self.model.load_state_dict(pth_file)
+        self.model.eval()
+        x = torch.randn(batch_size, 1, 1082, requires_grad=True)
+        torch_out = self.model(x)
+
+        # export
+        torch.onnx.export(
+            self.model,
+            x,
+            'models/mlp_' + self.kind + '.onnx',
+            export_params=True,
+            opset_version=10,
+            do_constant_folding=True,
+            input_names=['input'],
+            output_names=['output']
+
+        )
+
     def load_model(self, model_file):
         self.model.load_state_dict(torch.load(model_file))
 
-    def predict(self):
+    @staticmethod
+    def load_model_onnx(onnx_file: str):
+        try:
+            onnx.checker.check_model(onnx_file)
+        except onnx.checker.ValidationError as e:
+            print("The model is invalid: %s" % e)
+        else:
+            print('The model is valid!')
+            return onnxruntime.InferenceSession(onnx_file)
+
+    def predict(self, npy_):
+        pass
+        # TODO
+
+    def infer(self, npy_obj: np.ndarray):
+        """Using onnx and do inference"""
         self.model.eval()
