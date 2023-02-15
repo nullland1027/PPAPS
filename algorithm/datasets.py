@@ -25,10 +25,10 @@ class DataSet:
 
     def data_clean(self):
         """
-        Remove unwanted data item
+        Remove unwanted data item and convert the type into numpy.ndarray
         :return: Cleaned data without no-val features
         """
-        self._y = self.df[label_cols]
+        self._y = np.array(self.df[label_cols])
         self._cleaned_data = self.df.drop(labels=unwanted_cols, axis=1)
         self._X = self._cleaned_data
         return self._cleaned_data
@@ -88,11 +88,11 @@ class PlantDataSet(DataSet):
 class DatasetDL(Dataset):
     """The specific Dataset for deep learning"""
 
-    def __init__(self, data_filepath, label_filepath, npy_obj_data=None, npy_obj_label=None):
-        if not (npy_obj_data and npy_obj_label):
+    def __init__(self, data_filepath=None, label_filepath=None, npy_obj_data=None, npy_obj_label=None):
+        if npy_obj_label is None and npy_obj_label is None:
             self._X = torch.from_numpy(np.load(data_filepath))
             self._y = torch.from_numpy(np.load(label_filepath))
-        elif (data_filepath and label_filepath) and (npy_obj_data is not None):
+        else:
             self._X = npy_obj_data
             self._y = npy_obj_label
         self._len = len(self._X)

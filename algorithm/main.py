@@ -3,7 +3,7 @@ import numpy as np
 import torch
 
 from datasets import PlantDataSet, AnimalDataSet, DatasetDL
-from networks import RFPredictor, XGBoostPredictor, LGBMPredictor, NNPredictor, NNModel
+from dl_preds import RFPredictor, XGBoostPredictor, LGBMPredictor, NNPredictor, NNModel
 import time
 
 
@@ -170,14 +170,4 @@ if __name__ == '__main__':
 
     # pred.train(30)
     # pred.save_model()
-    pred.load_model('models/mlp_animal.pth')
-    res = pred.model_predict()
-
-    # pred.save_model_onnx('models/mlp_animal.pth', 2)
-    # onnx_model = pred.load_model_onnx('models/mlp_animal.onnx')
-    # print(onnx_model)
-    # for data, label in pred.dataloader_train:
-    #     print(data.shape, label)
-
-    # pred.model.eval()
-    # print(pred.model(pred.dataset[2][0]))
+    print(pred.load_blind_test(csv_file='raw_data/animal/Blind_Animal.csv', batch_size=2))
