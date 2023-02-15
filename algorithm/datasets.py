@@ -89,12 +89,14 @@ class DatasetDL(Dataset):
     """The specific Dataset for deep learning"""
 
     def __init__(self, data_filepath=None, label_filepath=None, npy_obj_data=None, npy_obj_label=None):
+        self._X = None
+        self._y = None
         if npy_obj_label is None and npy_obj_label is None:
             self._X = torch.from_numpy(np.load(data_filepath))
             self._y = torch.from_numpy(np.load(label_filepath))
         else:
-            self._X = npy_obj_data
-            self._y = npy_obj_label
+            self._X = torch.from_numpy(npy_obj_data)
+            self._y = torch.from_numpy(npy_obj_label)
         self._len = len(self._X)
 
     def change_label(self):

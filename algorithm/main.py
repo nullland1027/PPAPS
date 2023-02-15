@@ -1,10 +1,11 @@
 import os
+import time
 import numpy as np
 import torch
 
 from datasets import PlantDataSet, AnimalDataSet, DatasetDL
-from dl_preds import RFPredictor, XGBoostPredictor, LGBMPredictor, NNPredictor, NNModel
-import time
+from ml_preds import RFPredictor, XGBoostPredictor, LGBMPredictor
+from dl_preds import NNPredictor, NNModel
 
 
 def data_process(path, kind='plant'):
@@ -165,9 +166,15 @@ if __name__ == '__main__':
     # lgbm_predictor.save_model('models')
 
     # Deep NN
-    pred = NNPredictor('animal', 1082)
-    pred.load_data(animal_data, animal_label, batch_size=2)
+    hyparams = {
+        'lr': 0.008,
+        'batch_size': 2
+    }
+    pred = NNPredictor('plant', 1082, hyparams)
+    pred.load_data(plant_data, plant_label, batch_size=hyparams['batch_size'])
 
-    # pred.train(30)
+    # pred.train(60)
     # pred.save_model()
-    print(pred.load_blind_test(csv_file='raw_data/animal/Blind_Animal.csv', batch_size=2))
+    pred.load_model('models/mlp_plant.pth')
+    pred.load_blind_test('raw_data/plant/Blind_Plant.csv', hyparams['batch_size'])
+    pred.predict()

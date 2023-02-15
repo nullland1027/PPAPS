@@ -1,6 +1,7 @@
 import numpy as np
 import os.path
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, StratifiedKFold
+from sklearn.metrics import confusion_matrix, classification_report
 from datasets import AnimalDataSet, PlantDataSet, DatasetDL
 
 import torch
@@ -25,9 +26,9 @@ class NNModel(nn.Module):
         # self.batch_norm2 = nn.BatchNorm1d(64)
 
         self.stack = nn.Sequential(
-            nn.Linear(input_features, 2048),
+            nn.Linear(input_features, 1024),
             nn.ReLU(),
-            nn.Linear(2048, 512),
+            nn.Linear(1024, 512),
             nn.ReLU(),
             nn.Linear(512, 256),
             nn.ReLU(),
@@ -48,7 +49,7 @@ class NNModel(nn.Module):
 
 
 class NNPredictor:
-    def __init__(self, kind: str, input_features: int):
+    def __init__(self, kind: str, input_features: int, hyper_params):
         self.kind = kind  # `animal` or `plant`
         self.model = NNModel(input_features)
         self.dataset = None
@@ -56,7 +57,10 @@ class NNPredictor:
         self.dataloader_val = None  # Evaluation data to
         self.dataloader_blind_test = None  # Blind test data to see the final performance of predictor
         self.criteria = nn.CrossEntropyLoss()  # Loss function
-        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=0.0001)
+        self.optimizer = torch.optim.Adam(
+            self.model.parameters(),
+            lr=hyper_params['lr'])
+        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self.optimizer, 3)
 
     def load_data(self, data_filepath: str, label_filepath: str, batch_size: int):
         self.dataset = DatasetDL(data_filepath, label_filepath)  # Create TensorDataset
@@ -92,10 +96,9 @@ class NNPredictor:
             raise Exception
         dataset.data_clean()  # Remove unwanted data
         dataset.normalize('l2')  # Data process
-
-        dataset = DatasetDL(npy_obj_data=dataset.get_data(), npy_obj_label=dataset.get_label())
+        dataset_dl = DatasetDL(npy_obj_data=dataset.get_data(), npy_obj_label=dataset.get_label())
         self.dataloader_blind_test = DataLoader(
-            TensorDataset(dataset.get_data().float(), dataset.get_labels()),
+            TensorDataset(dataset_dl.get_data().float(), dataset_dl.get_labels()),
             batch_size=batch_size,
             drop_last=True,
             shuffle=False
@@ -104,7 +107,7 @@ class NNPredictor:
     @staticmethod
     def check_gpu():
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        print(device)
+        print('device: %s', device)
 
     def train_loop(self):
         size = len(self.dataloader_train.dataset)  # the length of train data set
@@ -116,6 +119,7 @@ class NNPredictor:
             loss = self.criteria(outputs, y)  # Compute the loss
 
             # Backpropagation
+
             self.optimizer.zero_grad()  # After getting rid of the gradients from the last round
             loss.backward()  # compute the gradients of all parameters we want the network to learn.
             self.optimizer.step()  # Update the model.
@@ -123,14 +127,15 @@ class NNPredictor:
         train_loss = train_loss / size  # get average loss
         print('Training Loss: {:.6f}'.format(train_loss), end='        ')
 
-    def model_predict(self):
-        size = len(self.dataloader_val.dataset)
-        eval_loss, acc = 0, 0
+    def __model_predict(self, loader):
+        """Internal method, cannot be called by outside"""
+        size = len(loader.dataset)
+        eval_loss = 0
         true_labels, pred_labels = [], []  # the real label and the model prediction result
         self.model.eval()
 
         with torch.no_grad():  # evaluating
-            for X, y in self.dataloader_val:
+            for X, y in loader:
                 output = self.model(X)
                 pred_res = torch.argmax(output, 1)
                 pred_labels.append(pred_res.data.numpy())
@@ -144,7 +149,7 @@ class NNPredictor:
         }
 
     def evaluate_loop(self):
-        res_dict = self.model_predict()
+        res_dict = self.__model_predict(self.dataloader_val)
         eval_loss = res_dict['Evaluation loss']
         true_labels = res_dict['True labels']
         pred_labels = res_dict['Prediction result']
@@ -157,8 +162,11 @@ class NNPredictor:
     def train(self, epoch_times):
         for t in range(epoch_times):
             print(f"Epoch {t + 1}-------------------------------")
+            print(self.optimizer.param_groups[0]['lr'])
             self.train_loop()
             self.evaluate_loop()
+            self.optimizer.step()
+            self.scheduler.step()
         print("Done!")
 
     def save_model(self):
@@ -199,9 +207,20 @@ class NNPredictor:
             print('The model is valid!')
             return onnxruntime.InferenceSession(onnx_file)
 
-    def predict(self, npy_):
+    def predict(self):
+        """Do prediction on blind test data set"""
         pass
-        # TODO
+        res_dict = self.__model_predict(self.dataloader_blind_test)
+        true_labels = res_dict['True labels']
+        pred_labels = res_dict['Prediction result']
+
+        true_labels, pred_labels = np.concatenate(true_labels), np.concatenate(pred_labels)
+        acc = np.sum(true_labels == pred_labels) / len(pred_labels)
+        print(pred_labels)
+        print('Accuracy: {:6f}\n'.format(acc))
+        print(classification_report(true_labels, pred_labels))
+
+
 
     def infer(self, npy_obj: np.ndarray):
         """Using onnx and do inference"""
