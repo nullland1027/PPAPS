@@ -168,7 +168,7 @@ if __name__ == '__main__':
     # Deep NN
     hyparams = {
         'lr': 0.008,
-        'batch_size': 2
+        'batch_size': 10
     }
     pred = NNPredictor('plant', 1082, hyparams)
     pred.load_data(plant_data, plant_label, batch_size=hyparams['batch_size'])

@@ -51,7 +51,8 @@ class NNModel(nn.Module):
 class NNPredictor:
     def __init__(self, kind: str, input_features: int, hyper_params):
         self.kind = kind  # `animal` or `plant`
-        self.model = NNModel(input_features)
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        self.model = NNModel(input_features).to(self.device)
         self.dataset = None
         self.dataloader_train = None  #
         self.dataloader_val = None  # Evaluation data to
@@ -104,10 +105,9 @@ class NNPredictor:
             shuffle=False
         )
 
-    @staticmethod
+    
     def check_gpu():
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        print('device: %s', device)
+        print('device:', self.device)
 
     def train_loop(self):
         size = len(self.dataloader_train.dataset)  # the length of train data set
@@ -115,6 +115,8 @@ class NNPredictor:
         self.model.train()
         for batch, (X, y) in enumerate(self.dataloader_train):
             # forward
+            X = X.to(self.device)
+            y = y.to(self.device)
             outputs = self.model(X)  # predicted result
             loss = self.criteria(outputs, y)  # Compute the loss
 
@@ -136,10 +138,12 @@ class NNPredictor:
 
         with torch.no_grad():  # evaluating
             for X, y in loader:
+                X, y = X.to(self.device), y.to(self.device)
                 output = self.model(X)
                 pred_res = torch.argmax(output, 1)
-                pred_labels.append(pred_res.data.numpy())
-                true_labels.append(y.data.numpy())
+                
+                pred_labels.append(pred_res.cpu().data.numpy())
+                true_labels.append(y.cpu().data.numpy())
                 eval_loss += self.criteria(output, y).item() * X.size(0)
         eval_loss = eval_loss / size
         return {
