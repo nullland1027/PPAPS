@@ -91,26 +91,13 @@ class DatasetDL(Dataset):
     def __init__(self, data_filepath=None, label_filepath=None, npy_obj_data=None, npy_obj_label=None):
         self._X = None
         self._y = None
-        if npy_obj_label is None and npy_obj_label is None:
+        if data_filepath and label_filepath:
             self._X = torch.from_numpy(np.load(data_filepath))
             self._y = torch.from_numpy(np.load(label_filepath))
         else:
             self._X = torch.from_numpy(npy_obj_data)
             self._y = torch.from_numpy(npy_obj_label)
         self._len = len(self._X)
-
-    def change_label(self):
-        """
-        Change the label size from [1] into [2]
-        examples: [0] -> [0, 1]; [1] -> [1, 0]
-        When the model uses softmax classification and call this function
-        @return None
-        """
-        new_tensor = torch.zeros(self._y.shape)
-        for i in range(len(self._y)):
-            if self._y[i][0].item() == 0:
-                new_tensor[i][0] = 1
-        self._y = torch.cat([self._y, new_tensor], 1)
 
     def get_data(self):
         return self._X

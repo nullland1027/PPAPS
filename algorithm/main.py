@@ -168,13 +168,13 @@ if __name__ == '__main__':
     # Deep NN
     hyparams = {
         'lr': 0.008,
-        'batch_size': 10
+        'batch_size': 10,
+        'epoch': 10
     }
     pred = NNPredictor('plant', 1082, hyparams)
     pred.load_data(plant_data, plant_label, batch_size=hyparams['batch_size'])
-
     # pred.train(60)
     # pred.save_model()
-    pred.load_model('models/mlp_plant.pth')
+    pred.load_model('models/mlp_plant_e10.pth')
     pred.load_blind_test('raw_data/plant/Blind_Plant.csv', hyparams['batch_size'])
     pred.predict()

@@ -50,18 +50,20 @@ class NNModel(nn.Module):
 
 class NNPredictor:
     def __init__(self, kind: str, input_features: int, hyper_params):
-        self.kind = kind  # `animal` or `plant`
-        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        self.model = NNModel(input_features).to(self.device)
+        self._kind = kind  # `animal` or `plant`
+        self._device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        self._epochs = hyper_params['epoch']
+
+        self.model = NNModel(input_features).to(self._device)
+
         self.dataset = None
-        self.dataloader_train = None  #
+        self.dataloader_train = None
         self.dataloader_val = None  # Evaluation data to
         self.dataloader_blind_test = None  # Blind test data to see the final performance of predictor
+
         self.criteria = nn.CrossEntropyLoss()  # Loss function
-        self.optimizer = torch.optim.Adam(
-            self.model.parameters(),
-            lr=hyper_params['lr'])
-        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self.optimizer, 3)
+        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=hyper_params['lr'])
+        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self.optimizer, 3, eta_min=0.00001, verbose=True)
 
     def load_data(self, data_filepath: str, label_filepath: str, batch_size: int):
         self.dataset = DatasetDL(data_filepath, label_filepath)  # Create TensorDataset
@@ -89,9 +91,9 @@ class NNPredictor:
         @return:
         """
         dataset = None
-        if self.kind == 'animal':
+        if self._kind == 'animal':
             dataset = AnimalDataSet(csv_file)
-        elif self.kind == 'plant':
+        elif self._kind == 'plant':
             dataset = PlantDataSet(csv_file)
         else:
             raise Exception
@@ -105,9 +107,8 @@ class NNPredictor:
             shuffle=False
         )
 
-    
-    def check_gpu():
-        print('device:', self.device)
+    def check_gpu(self):
+        print('device:', self._device)
 
     def train_loop(self):
         size = len(self.dataloader_train.dataset)  # the length of train data set
@@ -115,8 +116,8 @@ class NNPredictor:
         self.model.train()
         for batch, (X, y) in enumerate(self.dataloader_train):
             # forward
-            X = X.to(self.device)
-            y = y.to(self.device)
+            X = X.to(self._device)
+            y = y.to(self._device)
             outputs = self.model(X)  # predicted result
             loss = self.criteria(outputs, y)  # Compute the loss
 
@@ -138,10 +139,10 @@ class NNPredictor:
 
         with torch.no_grad():  # evaluating
             for X, y in loader:
-                X, y = X.to(self.device), y.to(self.device)
+                X, y = X.to(self._device), y.to(self._device)
                 output = self.model(X)
                 pred_res = torch.argmax(output, 1)
-                
+
                 pred_labels.append(pred_res.cpu().data.numpy())
                 true_labels.append(y.cpu().data.numpy())
                 eval_loss += self.criteria(output, y).item() * X.size(0)
@@ -170,14 +171,15 @@ class NNPredictor:
             self.train_loop()
             self.evaluate_loop()
             self.optimizer.step()
-            self.scheduler.step()
+            self.scheduler.step()  # Update learning rate
         print("Done!")
 
     def save_model(self):
         """Save the params of current model"""
-        if os.path.exists('models/mlp_' + self.kind + '.pth'):
-            os.remove('models/mlp_' + self.kind + '.pth')
-        torch.save(self.model.state_dict(), 'models/mlp_' + self.kind + '.pth')
+        name = 'models/mlp_' + self._kind + '_e' + self._epochs + '.pth'
+        if os.path.exists(name):  # Overwrite
+            os.remove(name)
+        torch.save(self.model.state_dict(), name)
 
     def save_model_onnx(self, pth_file, batch_size):
         self.model.load_state_dict(pth_file)
@@ -189,7 +191,7 @@ class NNPredictor:
         torch.onnx.export(
             self.model,
             x,
-            'models/mlp_' + self.kind + '.onnx',
+            'models/mlp_' + self._kind + '.onnx',
             export_params=True,
             opset_version=10,
             do_constant_folding=True,
@@ -198,8 +200,18 @@ class NNPredictor:
 
         )
 
-    def load_model(self, model_file):
-        self.model.load_state_dict(torch.load(model_file))
+    def load_model(self, model_file: str):
+        """
+        Can load the GPU model on cpu-only machine by map_location params
+        @param model_file: id of file
+        @return:
+        """
+        try:
+            self.model.load_state_dict(torch.load(model_file, map_location=self._device))
+        except FileNotFoundError as fnfe:
+            print(fnfe, 'Load failed!')
+            return False
+        return True
 
     @staticmethod
     def load_model_onnx(onnx_file: str):
@@ -213,7 +225,6 @@ class NNPredictor:
 
     def predict(self):
         """Do prediction on blind test data set"""
-        pass
         res_dict = self.__model_predict(self.dataloader_blind_test)
         true_labels = res_dict['True labels']
         pred_labels = res_dict['Prediction result']
@@ -223,8 +234,6 @@ class NNPredictor:
         print(pred_labels)
         print('Accuracy: {:6f}\n'.format(acc))
         print(classification_report(true_labels, pred_labels))
-
-
 
     def infer(self, npy_obj: np.ndarray):
         """Using onnx and do inference"""
