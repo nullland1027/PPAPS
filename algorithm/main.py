@@ -37,10 +37,10 @@ def rf_adjust_params(rf_predictor):
     @return:
     """
     search = {
-        'n_estimators': list(range(100, 400, 50)),
-        'min_samples_split': list(range(8, 20)),
-        'min_samples_leaf': list(range(1, 5)),
-        'min_weight_fraction_leaf': [0.3, 0.4, 0.5]
+        'n_estimators': list(range(100, 500, 50)),
+        'min_samples_split': list(range(5, 20)),
+        'min_samples_leaf': list(range(3, 10)),
+        'min_weight_fraction_leaf': [0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
     }
     print(rf_predictor.search_params(search))  # Predictor will update inner RF model automatically
     return rf_predictor
@@ -86,7 +86,7 @@ def lgbm_adjust_params(lgb_predictor):
     return lgb_predictor
 
 
-def randon_forest(kind, data, label, test_data):
+def random_forest(kind, data, label, test_data):
     rf_params_bst = {  # best params
         'n_estimators': 200,
         'min_samples_split': 8,
@@ -100,7 +100,8 @@ def randon_forest(kind, data, label, test_data):
     end_time = time.time()
     print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
     rf.train()
-
+    rf.save_model('models')
+    
     rf.load_model(os.path.join('models', 'random_forest_' + kind + '.pickle'))
     rf.predict(test_data)
     rf.output_metrix()
@@ -174,18 +175,21 @@ if __name__ == '__main__':
     plant_data = os.path.join('raw_data', 'plant', 'plant.npy')
     plant_label = os.path.join('raw_data', 'plant', 'plant_label.npy')
 
-    data_process('raw_data/animal/animal_all_data.csv', kind='animal')
 
     # Deep NN
-    hyparams = {
-        'lr': 0.008,
-        'batch_size': 10,
-        'epoch': 60
-    }
-    pred = NNPredictor('plant', 1082, hyparams)
-    pred.load_data(plant_data, plant_label, batch_size=hyparams['batch_size'])
-    # pred.train(60)
-    # pred.save_model()
-    pred.load_model('models/mlp_plant_e10.pth')
-    pred.load_blind_test('raw_data/plant/Blind_Plant.csv', hyparams['batch_size'])
-    pred.predict()
+#     hyparams = {
+#         'lr': 0.008,
+#         'batch_size': 10,
+#         'epoch': 100
+#     }
+#     pred = NNPredictor('animal', 1082, hyparams)
+#     # pred.load_data(animal_data, animal_label, batch_size=hyparams['batch_size'])
+#     # pred.train()
+#     # pred.save_model()
+    
+#     pred.load_model('models/mlp_animal_e100.pth')
+#     pred.load_blind_test('raw_data/animal/Blind_Animal.csv', 2)
+#     pred.predict()
+
+    
+    # random_forest('plant', plant_data, plant_label, 'raw_data/plant/Blind_Plant.csv')

@@ -52,7 +52,8 @@ class NNPredictor:
         self._kind = kind  # `animal` or `plant`
         self._device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self._epochs = hyper_params['epoch']
-
+        self._batch_size = hyper_params['batch_size']
+        
         self.model = NNModel(input_features).to(self._device)
 
         self._dataset = None
@@ -64,9 +65,8 @@ class NNPredictor:
         self._optimizer = torch.optim.Adam(self.model.parameters(), lr=hyper_params['lr'])
         self._scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self._optimizer, 3, eta_min=0.00001, verbose=True)
 
-    def load_data(self, data_filepath: str, label_filepath: str, batch_size: int):
+    def load_data(self, data_filepath: str, label_filepath: str):
         self._dataset = DatasetDL(data_filepath, label_filepath)  # Create TensorDataset
-        # self.dataset.change_label()
         X_train, X_test, y_train, y_test = train_test_split(self._dataset.get_data(),
                                                             self._dataset.get_labels(),
                                                             test_size=0.3,
@@ -74,11 +74,11 @@ class NNPredictor:
                                                             random_state=42)
         # Create Dataloader
         self.dataloader_train = DataLoader(TensorDataset(X_train.float(), y_train),
-                                           batch_size=batch_size,
+                                           batch_size=self._batch_size,
                                            drop_last=True,
                                            shuffle=True)
         self.dataloader_val = DataLoader(TensorDataset(X_test.float(), y_test),
-                                         batch_size=batch_size,
+                                         batch_size=self._batch_size,
                                          drop_last=True,
                                          shuffle=True)
 
@@ -102,7 +102,7 @@ class NNPredictor:
         self.dataloader_blind_test = DataLoader(
             TensorDataset(dataset_dl.get_data().float(), dataset_dl.get_labels()),
             batch_size=batch_size,
-            drop_last=True,
+            drop_last=False,
             shuffle=False
         )
 
@@ -163,8 +163,8 @@ class NNPredictor:
         acc = np.sum(true_labels == pred_labels) / len(pred_labels)
         print('Validation Loss: {:.6f}, Accuracy: {:6f}\n'.format(eval_loss, acc))
 
-    def train(self, epoch_times):
-        for t in range(epoch_times):
+    def train(self):
+        for t in range(self._epochs):
             print(f"Epoch {t + 1}-------------------------------")
             print(self._optimizer.param_groups[0]['lr'])
             self.train_loop()
@@ -175,7 +175,7 @@ class NNPredictor:
 
     def save_model(self):
         """Save the params of current model"""
-        name = 'models/mlp_' + self._kind + '_e' + self._epochs + '.pth'
+        name = 'models/mlp_' + self._kind + '_e' + str(self._epochs) + '_b' + str(self._batch_size) + '.pth'
         if os.path.exists(name):  # Overwrite
             os.remove(name)
         torch.save(self.model.state_dict(), name)
