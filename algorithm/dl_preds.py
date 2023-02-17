@@ -1,14 +1,13 @@
 import numpy as np
 import os.path
-from sklearn.model_selection import train_test_split, StratifiedKFold
-from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
 from datasets import AnimalDataSet, PlantDataSet, DatasetDL
 
 import torch
 import onnx
 import onnxruntime
 from torch import nn
-from torch.nn import functional as F
 from torch.utils.data import DataLoader, TensorDataset
 
 
@@ -56,20 +55,20 @@ class NNPredictor:
 
         self.model = NNModel(input_features).to(self._device)
 
-        self.dataset = None
+        self._dataset = None
         self.dataloader_train = None
         self.dataloader_val = None  # Evaluation data to
         self.dataloader_blind_test = None  # Blind test data to see the final performance of predictor
 
-        self.criteria = nn.CrossEntropyLoss()  # Loss function
-        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=hyper_params['lr'])
-        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self.optimizer, 3, eta_min=0.00001, verbose=True)
+        self._criteria = nn.CrossEntropyLoss()  # Loss function
+        self._optimizer = torch.optim.Adam(self.model.parameters(), lr=hyper_params['lr'])
+        self._scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self._optimizer, 3, eta_min=0.00001, verbose=True)
 
     def load_data(self, data_filepath: str, label_filepath: str, batch_size: int):
-        self.dataset = DatasetDL(data_filepath, label_filepath)  # Create TensorDataset
+        self._dataset = DatasetDL(data_filepath, label_filepath)  # Create TensorDataset
         # self.dataset.change_label()
-        X_train, X_test, y_train, y_test = train_test_split(self.dataset.get_data(),
-                                                            self.dataset.get_labels(),
+        X_train, X_test, y_train, y_test = train_test_split(self._dataset.get_data(),
+                                                            self._dataset.get_labels(),
                                                             test_size=0.3,
                                                             shuffle=True,
                                                             random_state=42)
@@ -119,13 +118,13 @@ class NNPredictor:
             X = X.to(self._device)
             y = y.to(self._device)
             outputs = self.model(X)  # predicted result
-            loss = self.criteria(outputs, y)  # Compute the loss
+            loss = self._criteria(outputs, y)  # Compute the loss
 
             # Backpropagation
 
-            self.optimizer.zero_grad()  # After getting rid of the gradients from the last round
+            self._optimizer.zero_grad()  # After getting rid of the gradients from the last round
             loss.backward()  # compute the gradients of all parameters we want the network to learn.
-            self.optimizer.step()  # Update the model.
+            self._optimizer.step()  # Update the model.
             train_loss += loss.item() * X.size(0)  # sum up the total loss
         train_loss = train_loss / size  # get average loss
         print('Training Loss: {:.6f}'.format(train_loss), end='        ')
@@ -145,7 +144,7 @@ class NNPredictor:
 
                 pred_labels.append(pred_res.cpu().data.numpy())
                 true_labels.append(y.cpu().data.numpy())
-                eval_loss += self.criteria(output, y).item() * X.size(0)
+                eval_loss += self._criteria(output, y).item() * X.size(0)
         eval_loss = eval_loss / size
         return {
             'Evaluation loss': eval_loss,
@@ -153,7 +152,7 @@ class NNPredictor:
             'True labels': true_labels,
         }
 
-    def evaluate_loop(self):
+    def validate_loop(self):
         res_dict = self.__model_predict(self.dataloader_val)
         eval_loss = res_dict['Evaluation loss']
         true_labels = res_dict['True labels']
@@ -167,11 +166,11 @@ class NNPredictor:
     def train(self, epoch_times):
         for t in range(epoch_times):
             print(f"Epoch {t + 1}-------------------------------")
-            print(self.optimizer.param_groups[0]['lr'])
+            print(self._optimizer.param_groups[0]['lr'])
             self.train_loop()
-            self.evaluate_loop()
-            self.optimizer.step()
-            self.scheduler.step()  # Update learning rate
+            self.validate_loop()
+            self._optimizer.step()
+            self._scheduler.step()  # Update learning rate
         print("Done!")
 
     def save_model(self):

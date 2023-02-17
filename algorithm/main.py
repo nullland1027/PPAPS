@@ -86,90 +86,101 @@ def lgbm_adjust_params(lgb_predictor):
     return lgb_predictor
 
 
+def randon_forest(kind, data, label, test_data):
+    rf_params_bst = {  # best params
+        'n_estimators': 200,
+        'min_samples_split': 8,
+        'min_samples_leaf': 3,
+        'min_weight_fraction_leaf': 0.4,
+        'n_jobs': -1
+    }
+    rf = RFPredictor(kind, np.load(data), np.load(label), **rf_params_bst)
+    start_time = time.time()
+    rf = rf_adjust_params(rf)
+    end_time = time.time()
+    print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
+    rf.train()
+
+    rf.load_model(os.path.join('models', 'random_forest_' + kind + '.pickle'))
+    rf.predict(test_data)
+    rf.output_metrix()
+
+
+def xgboost(kind, data, label, test_data):
+    xgb_params = {
+        'n_estimators': 350,
+        'max_depth': 4,
+        'learning_rate': 0.1,
+
+        'min_child_weight': 7,
+        'gamma': 10,
+        'subsample': 0.8,
+        'colsample_bytree': 0.5,
+        'scale_pos_weight': 0.5,
+
+        'objective': 'binary:logistic',  # loss function
+        'eval_metric': 'auc',
+        'n_jobs': -1,
+        'nthread': -1,
+        'random_state': 42
+    }
+
+    xgb = XGBoostPredictor(kind, np.load(data), np.load(label), **xgb_params)
+    start_time = time.time()
+    xgb = xgboost_adjust_params(xgb)
+    end_time = time.time()
+    print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
+    xgb.train()
+    xgb.save_model('models')
+
+    xgb.load_model(os.path.join('models', 'xgboost_' + kind + '.pickle'))
+    xgb.predict(test_data)
+    xgb.output_metrix()
+    xgb.show_ROC_curve()
+
+
+def lgbm(kind, data, label, test_data):
+    lgbm_params = {
+        'num_leaves': 10,
+        'max_depth': 3,
+        'learning_rate': 0.05,
+        'n_estimators': 100,
+        'subsample_for_bin': 100000,
+        'min_split_gain': 0.5,
+        'min_child_weight': 0.001,
+        'min_child_samples': 50,
+        'colsample_bytree': 0.5,
+
+        'objective': 'binary',
+        'metric': 'auc',  # 优化指标
+        'n_jobs': -1,
+        'force_col_wise': True,
+        'random_state': 42
+    }
+    lgbm_predictor = LGBMPredictor(kind, np.load(data), np.load(label), **lgbm_params)
+    start_time = time.time()
+    lgbm_predictor = lgbm_adjust_params(lgbm_predictor)
+    end_time = time.time()
+    print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
+    lgbm_predictor.train()
+    lgbm_predictor.save_model('models')
+
+    lgbm_predictor.load_model('models/lgbm_' + kind + '.pickle')
+
+
 if __name__ == '__main__':
     animal_data = os.path.join('raw_data', 'animal', 'animal.npy')  # (306, 1082)
     animal_label = os.path.join('raw_data', 'animal', 'animal_label.npy')
     plant_data = os.path.join('raw_data', 'plant', 'plant.npy')
     plant_label = os.path.join('raw_data', 'plant', 'plant_label.npy')
 
-    # data_process('raw_data/animal/animal_all_data.csv', kind='animal')
-    # =========Random Forest ==============
-    # rf_params_bst = {  # best params
-    #     'n_estimators': 200,
-    #     'min_samples_split': 8,
-    #     'min_samples_leaf': 3,
-    #     'min_weight_fraction_leaf': 0.4,
-    #     'n_jobs': -1
-    # }
-    # rf = RFPredictor('animal', np.load(animal_data), np.load(animal_label), **rf_params_bst)
-    # rf.load_model(os.path.join('models', 'random_forest_animal.pickle'))
-    # rf.predict(os.path.join('raw_data', 'animal', 'Blind_Animal.csv'))
-    # rf = rf_adjust_params(rf)
-    # rf.train()
-
-    # rf.output_metrix()
-
-    # ========XGBoost ===================
-    # xgb_params = {
-    #     'n_estimators': 350,
-    #     'max_depth': 4,
-    #     'learning_rate': 0.1,
-    #
-    #     'min_child_weight': 7,
-    #     'gamma': 10,
-    #     'subsample': 0.8,
-    #     'colsample_bytree': 0.5,
-    #     'scale_pos_weight': 0.5,
-    #
-    #     'objective': 'binary:logistic',  # loss function
-    #     'eval_metric': 'auc',
-    #     'n_jobs': -1,
-    #     'nthread': -1,
-    #     'random_state': 42
-    # }
-    #
-    # ani_xgb = XGBoostPredictor('animal', np.load(animal_data), np.load(animal_label), **xgb_params)
-    # print(ani_xgb.search_params(xgb_search))  # output best score and params
-    # ani_xgb.train()
-    # ani_xgb.save_model('models')
-
-    # ani_xgb.load_model(os.path.join('models', 'xgboost_animal.pickle'))
-    # ani_xgb.predict(os.path.join('raw_data', 'animal', 'Blind_Animal.csv'))
-    # ani_xgb.output_metrix()
-    # ani_xgb.show_ROC_curve()
-
-    # ============LGBM===============
-
-    # lgbm_params = {
-    #     'num_leaves': 10,
-    #     'max_depth': 3,
-    #     'learning_rate': 0.05,
-    #     'n_estimators': 100,
-    #     'subsample_for_bin': 100000,
-    #     'min_split_gain': 0.5,
-    #     'min_child_weight': 0.001,
-    #     'min_child_samples': 50,
-    #     'colsample_bytree': 0.5,
-    #
-    #     'objective': 'binary',
-    #     'metric': 'auc',  # 优化指标
-    #     'n_jobs': -1,
-    #     'force_col_wise': True,
-    #     'random_state': 42
-    # }
-    # lgbm_predictor = LGBMPredictor('animal', np.load(animal_data), np.load(animal_label), **lgbm_params)
-    # start_time = time.time()
-    # lgbm_predictor = lgbm_adjust_params(lgbm_predictor)
-    # end_time = time.time()
-    # print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
-    # lgbm_predictor.train()
-    # lgbm_predictor.save_model('models')
+    data_process('raw_data/animal/animal_all_data.csv', kind='animal')
 
     # Deep NN
     hyparams = {
         'lr': 0.008,
         'batch_size': 10,
-        'epoch': 10
+        'epoch': 60
     }
     pred = NNPredictor('plant', 1082, hyparams)
     pred.load_data(plant_data, plant_label, batch_size=hyparams['batch_size'])
