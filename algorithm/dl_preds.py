@@ -8,13 +8,14 @@ import torch
 import onnx
 import onnxruntime
 from torch import nn
+from torch.nn import functional as F
 from torch.utils.data import DataLoader, TensorDataset
 
 
-class NNModel(nn.Module):
+class MLPNet(nn.Module):
 
     def __init__(self, input_features: int):
-        super(NNModel, self).__init__()
+        super(MLPNet, self).__init__()
         # self.layer_1 = nn.Linear(input_features, 1024)
         # self.layer_2 = nn.Linear(1024, 64)
         # self.layer_out = nn.Linear(64, 1)
@@ -47,14 +48,43 @@ class NNModel(nn.Module):
         return y
 
 
+class AttentionNet(nn.Module):
+    def __init__(self, num_features, num_hidden, num_classes):
+        super(AttentionNet, self).__init__()
+
+        self.fc1 = nn.Linear(num_features, num_hidden)
+        self.fc2 = nn.Linear(num_hidden, num_classes)
+
+        # 定义注意力机制的参数
+        self.attention_weights = nn.Parameter(torch.zeros(num_hidden, 1))
+        self.attention_bias = nn.Parameter(torch.zeros(num_hidden))
+
+    def forward(self, x):
+        # x 的维度为 (batch_size, num_features)
+        # 计算隐藏层的输出
+        h = F.relu(self.fc1(x))  # (batch_size, num_hidden)
+
+        # 计算注意力权重
+        weights = torch.matmul(h, self.attention_weights) + self.attention_bias
+        weights = torch.tanh(weights)  # (batch_size, 1)
+        weights = F.softmax(weights, dim=0)  # (batch_size, 1)
+
+        # 加权平均隐藏层的输出，得到注意力向量
+        attention = torch.sum(weights * h, dim=0)  # (num_hidden,)
+
+        # 计算分类输出
+        out = self.fc2(attention)  # (num_classes,)
+        return out
+
+
 class NNPredictor:
     def __init__(self, kind: str, input_features: int, hyper_params):
         self._kind = kind  # `animal` or `plant`
         self._device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self._epochs = hyper_params['epoch']
         self._batch_size = hyper_params['batch_size']
-        
-        self.model = NNModel(input_features).to(self._device)
+
+        self.model = MLPNet(input_features).to(self._device)
 
         self._dataset = None
         self.dataloader_train = None
