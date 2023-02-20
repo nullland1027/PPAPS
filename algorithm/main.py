@@ -101,7 +101,7 @@ def random_forest(kind, data, label, test_data):
     print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
     rf.train()
     rf.save_model('models')
-    
+
     rf.load_model(os.path.join('models', 'random_forest_' + kind + '.pickle'))
     rf.predict(test_data)
     rf.output_metrix()
@@ -175,7 +175,6 @@ if __name__ == '__main__':
     plant_data = os.path.join('raw_data', 'plant', 'plant.npy')
     plant_label = os.path.join('raw_data', 'plant', 'plant_label.npy')
 
-
     # Deep NN
 #     hyparams = {
 #         'lr': 0.008,
@@ -186,10 +185,10 @@ if __name__ == '__main__':
 #     # pred.load_data(animal_data, animal_label, batch_size=hyparams['batch_size'])
 #     # pred.train()
 #     # pred.save_model()
-    
+
 #     pred.load_model('models/mlp_animal_e100.pth')
 #     pred.load_blind_test('raw_data/animal/Blind_Animal.csv', 2)
 #     pred.predict()
 
-    
-    # random_forest('plant', plant_data, plant_label, 'raw_data/plant/Blind_Plant.csv')
+
+# random_forest('plant', plant_data, plant_label, 'raw_data/plant/Blind_Plant.csv')
