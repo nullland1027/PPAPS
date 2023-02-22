@@ -176,22 +176,24 @@ if __name__ == '__main__':
     plant_label = os.path.join('raw_data', 'plant', 'plant_label.npy')
 
     # Deep NN
-    # hyparams = {
-    #     'lr': 0.008,
-    #     'batch_size': 10,
-    #     'epoch': 100
-    # }
-    # pred = NNPredictor('animal', 1082, hyparams)
-    # pred.load_data(animal_data, animal_label)
+    hyparams = {
+        'lr': 0.008,
+        'batch_size': 5,
+        'epoch': 100
+    }
+    pred = NNPredictor('plant', 1082, hyparams)
+    pred.load_data(plant_data, plant_label)
+    # for x, y in pred.dataloader_train:
+    #     print(x.shape)
+    #     break
     # pred.train()
     # pred.save_model()
     #
-    # pred.load_model('models/mlp_animal_e100.pth')
-    # pred.load_blind_test('raw_data/animal/Blind_Animal.csv', 2)
-    # pred.predict()
+    # pred.load_model('models/attention_plant_e100_b5.pth')
+    # pred.save_model_onnx('models/attention_plant_e100_b5.pth', 3)
+    pred.load_blind_test('raw_data/plant/Blind_Plant.csv', 3)
+    pred.infer()
 
-    # Using attention net
-    att_net = AttentionNet(1082, 512, 2)  # input data: (batch_size, num_features)
-    att_net()
+
 
 # random_forest('plant', plant_data, plant_label, 'raw_data/plant/Blind_Plant.csv')

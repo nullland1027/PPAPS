@@ -1,5 +1,5 @@
 Flask==2.2.2
-lightgbm==3.3.4
+lightgbm==3.3.5
 matplotlib==3.6.2
 numpy==1.23.4
 onnx==1.13.0

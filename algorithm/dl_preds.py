@@ -6,7 +6,7 @@ from datasets import AnimalDataSet, PlantDataSet, DatasetDL
 
 import torch
 import onnx
-import onnxruntime
+import onnxruntime as ort
 from torch import nn
 from torch.nn import functional as F
 from torch.utils.data import DataLoader, TensorDataset
@@ -49,7 +49,7 @@ class MLPNet(nn.Module):
 
 
 class AttentionNet(nn.Module):
-    def __init__(self, num_features, num_hidden, num_classes):
+    def __init__(self, num_features: int, num_hidden: int, num_classes: int):
         super(AttentionNet, self).__init__()
 
         self.fc1 = nn.Linear(num_features, num_hidden)
@@ -59,8 +59,7 @@ class AttentionNet(nn.Module):
         self.attention_weights = nn.Parameter(torch.zeros(num_hidden, 1))
         self.attention_bias = nn.Parameter(torch.zeros(num_hidden))
 
-    def forward(self, x):
-        # x 的维度为 (batch_size, num_features)
+    def forward(self, x):  # x 的维度为 (batch_size, num_features)
         # 计算隐藏层的输出
         h = F.relu(self.fc1(x))  # (batch_size, num_hidden)
 
@@ -70,10 +69,10 @@ class AttentionNet(nn.Module):
         weights = F.softmax(weights, dim=0)  # (batch_size, 1)
 
         # 加权平均隐藏层的输出，得到注意力向量
-        attention = torch.sum(weights * h, dim=0)  # (num_hidden,)
-
+        # attention = torch.sum(weights * h, dim=0).resize((10, -1))  # (batch_size, num_hidden,)
+        attention = weights * h  # (batch_size, num_hidden)
         # 计算分类输出
-        out = self.fc2(attention)  # (num_classes,)
+        out = self.fc2(attention)  # (batch_size, num_classes)
         return out
 
 
@@ -84,8 +83,8 @@ class NNPredictor:
         self._epochs = hyper_params['epoch']
         self._batch_size = hyper_params['batch_size']
 
-        self.model = MLPNet(input_features).to(self._device)
-
+        self.model = AttentionNet(input_features, 512, 2).to(self._device)  # Modify model here
+        # self.model = MLPNet(input_features)
         self._dataset = None
         self.dataloader_train = None
         self.dataloader_val = None  # Evaluation data to
@@ -205,13 +204,19 @@ class NNPredictor:
 
     def save_model(self):
         """Save the params of current model"""
-        name = 'models/mlp_' + self._kind + '_e' + str(self._epochs) + '_b' + str(self._batch_size) + '.pth'
+        name = 'models/attention_' + self._kind + '_e' + str(self._epochs) + '_b' + str(self._batch_size) + '.pth'
         if os.path.exists(name):  # Overwrite
             os.remove(name)
         torch.save(self.model.state_dict(), name)
 
     def save_model_onnx(self, pth_file, batch_size):
-        self.model.load_state_dict(pth_file)
+        """
+        Must call save_model before this method!!!!!
+        @param pth_file:
+        @param batch_size:
+        @return:
+        """
+        self.model.load_state_dict(torch.load(pth_file, map_location=self._device))
         self.model.eval()
         x = torch.randn(batch_size, 1, 1082, requires_grad=True)
         torch_out = self.model(x)
@@ -219,10 +224,10 @@ class NNPredictor:
         # export
         torch.onnx.export(
             self.model,
-            x,
-            'models/mlp_' + self._kind + '.onnx',
+            args=(x,),
+            f='models/attention_' + self._kind + '.onnx',
             export_params=True,
-            opset_version=10,
+            opset_version=12,
             do_constant_folding=True,
             input_names=['input'],
             output_names=['output']
@@ -250,7 +255,7 @@ class NNPredictor:
             print("The model is invalid: %s" % e)
         else:
             print('The model is valid!')
-            return onnxruntime.InferenceSession(onnx_file)
+            return ort.InferenceSession(onnx_file)
 
     def predict(self):
         """Do prediction on blind test data set"""
@@ -263,7 +268,19 @@ class NNPredictor:
         print(pred_labels)
         print('Accuracy: {:6f}\n'.format(acc))
         print(classification_report(true_labels, pred_labels))
+        return acc
 
-    def infer(self, npy_obj: np.ndarray):
+    def infer(self):
         """Using onnx and do inference"""
-        self.model.eval()
+        # 加载 ONNX 模型
+        sess = ort.InferenceSession("models/attention_plant.onnx")
+
+        # 准备输入数据
+        for X, y in self.dataloader_blind_test:  # np.ndarray
+            X = X.numpy()
+            print(X)
+            # 执行推理
+            ort_inputs = {sess.get_inputs()[0].name: X}
+            ort_outs = sess.run(None, ort_inputs)
+
+            print(ort_outs)
