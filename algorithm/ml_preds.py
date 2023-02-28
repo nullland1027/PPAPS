@@ -107,6 +107,7 @@ class RFPredictor(Predictor):
         adapter = GridSearchCV(estimator=self.rf_classifier,
                                scoring='f1',
                                param_grid=params_dict,
+                               n_jobs=-1,
                                verbose=10)  # using grid search to find the best params
         adapter.fit(self._X, self._y)
         self.rf_classifier = adapter.best_estimator_  # Update the model
@@ -176,6 +177,7 @@ class XGBoostPredictor(Predictor):
         adapter = GridSearchCV(estimator=self.xgb,
                                scoring='roc_auc',
                                param_grid=params_dict,
+                               n_jobs=-1,
                                cv=5,
                                verbose=10)  # using grid search to find the best params
         adapter.fit(self._X, self._y)
@@ -247,6 +249,7 @@ class LGBMPredictor(Predictor):
                                scoring='roc_auc',
                                param_grid=params_dict,
                                cv=5,
+                               n_jobs=-1,
                                verbose=10)  # using grid search to find the best params
         adapter.fit(self._X, self._y)
         self.lgb_clf = adapter.best_estimator_  # Update the model=======THE MOST IMPORTANT CODE

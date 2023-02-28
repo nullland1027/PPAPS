@@ -5,7 +5,13 @@ import torch
 
 from datasets import PlantDataSet, AnimalDataSet, DatasetDL
 from ml_preds import RFPredictor, XGBoostPredictor, LGBMPredictor
-from dl_preds import NNPredictor, MLPNet, AttentionNet
+from dl_preds import NNPredictor, AttentionNet
+import argparse
+
+parser = argparse.ArgumentParser(description='This is a demo script')
+parser.add_argument('--kind', dest='kind', type=str, required=True,
+                    help='please input `animal` or `plant`')
+args = parser.parse_args()
 
 
 def data_process(path, kind='plant'):
@@ -32,7 +38,6 @@ def data_process(path, kind='plant'):
 
 def rf_adjust_params(rf_predictor):
     """
-
     @param rf_predictor:
     @return:
     """
@@ -48,7 +53,6 @@ def rf_adjust_params(rf_predictor):
 
 def xgboost_adjust_params(xgboost_predictor):
     """
-
     @param xgboost_predictor:
     @return:
     """
@@ -100,14 +104,21 @@ def random_forest(kind, data, label, test_data):
     end_time = time.time()
     print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
     rf.train()
-    rf.save_model('models')
+    rf.save_model('algorithm/models')
 
-    rf.load_model(os.path.join('models', 'random_forest_' + kind + '.pickle'))
+    rf.load_model(os.path.join('algorithm', 'models', 'random_forest_' + kind + '.pickle'))
     rf.predict(test_data)
     rf.output_metrix()
 
 
 def xgboost(kind, data, label, test_data):
+    """
+    @param kind:
+    @param data:
+    @param label:
+    @param test_data: CSV file
+    @return:
+    """
     xgb_params = {
         'n_estimators': 350,
         'max_depth': 4,
@@ -128,13 +139,13 @@ def xgboost(kind, data, label, test_data):
 
     xgb = XGBoostPredictor(kind, np.load(data), np.load(label), **xgb_params)
     start_time = time.time()
-    xgb = xgboost_adjust_params(xgb)
+    xgb = xgboost_adjust_params(xgb)  # turning params
     end_time = time.time()
     print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
     xgb.train()
-    xgb.save_model('models')
+    xgb.save_model('algorithm/models')
 
-    xgb.load_model(os.path.join('models', 'xgboost_' + kind + '.pickle'))
+    xgb.load_model(os.path.join('algorithm', 'models', 'xgboost_' + kind + '.pickle'))
     xgb.predict(test_data)
     xgb.output_metrix()
     xgb.show_ROC_curve()
@@ -164,16 +175,16 @@ def lgbm(kind, data, label, test_data):
     end_time = time.time()
     print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
     lgbm_predictor.train()
-    lgbm_predictor.save_model('models')
+    lgbm_predictor.save_model('algorithm/models')
 
-    lgbm_predictor.load_model('models/lgbm_' + kind + '.pickle')
+    lgbm_predictor.load_model(os.path.join('algorithm', 'models', 'lgbm_' + kind + '.pickle'))
 
 
 if __name__ == '__main__':
-    animal_data = os.path.join('raw_data', 'animal', 'animal.npy')  # (306, 1082)
-    animal_label = os.path.join('raw_data', 'animal', 'animal_label.npy')
-    plant_data = os.path.join('raw_data', 'plant', 'plant.npy')
-    plant_label = os.path.join('raw_data', 'plant', 'plant_label.npy')
+    animal_data = os.path.join('algorithm', 'raw_data', 'animal', 'animal.npy')  # (306, 1082)
+    animal_label = os.path.join('algorithm', 'raw_data', 'animal', 'animal_label.npy')
+    plant_data = os.path.join('algorithm', 'raw_data', 'plant', 'plant.npy')
+    plant_label = os.path.join('algorithm', 'raw_data', 'plant', 'plant_label.npy')
 
     # Deep NN
     hyparams = {
@@ -181,19 +192,9 @@ if __name__ == '__main__':
         'batch_size': 5,
         'epoch': 100
     }
-    pred = NNPredictor('plant', 1082, hyparams)
-    pred.load_data(plant_data, plant_label)
-    # for x, y in pred.dataloader_train:
-    #     print(x.shape)
-    #     break
-    # pred.train()
-    # pred.save_model()
-    #
-    # pred.load_model('models/attention_plant_e100_b5.pth')
-    # pred.save_model_onnx('models/attention_plant_e100_b5.pth', 3)
-    pred.load_blind_test('raw_data/plant/Blind_Plant.csv', 3)
-    pred.infer()
 
-
-
-# random_forest('plant', plant_data, plant_label, 'raw_data/plant/Blind_Plant.csv')
+    kind = ''
+    if args.kind.lower() == 'animal':
+        xgboost('animal', animal_data, animal_label, os.path.join('algorithm', 'raw_data', 'animal', 'Blind_Animal.csv'))
+    elif args.kind.lower() == 'plant':
+        xgboost('plant', plant_data, plant_label, os.path.join('algorithm', 'raw_data', 'plant', 'Blind_Plant.csv'))

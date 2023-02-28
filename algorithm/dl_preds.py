@@ -12,42 +12,6 @@ from torch.nn import functional as F
 from torch.utils.data import DataLoader, TensorDataset
 
 
-class MLPNet(nn.Module):
-
-    def __init__(self, input_features: int):
-        super(MLPNet, self).__init__()
-        # self.layer_1 = nn.Linear(input_features, 1024)
-        # self.layer_2 = nn.Linear(1024, 64)
-        # self.layer_out = nn.Linear(64, 1)
-        #
-        # self.relu = nn.ReLU()
-        # self.dropout = nn.Dropout(p=0.1)
-        # self.batch_norm1 = nn.BatchNorm1d(64)
-        # self.batch_norm2 = nn.BatchNorm1d(64)
-
-        self.stack = nn.Sequential(
-            nn.Linear(input_features, 1024),
-            nn.ReLU(),
-            nn.Linear(1024, 512),
-            nn.ReLU(),
-            nn.Linear(512, 256),
-            nn.ReLU(),
-            nn.Linear(256, 128),
-            nn.ReLU(),
-            nn.Linear(128, 2),
-        )
-
-    def forward(self, x):
-        y = self.stack(x)
-        # x = self.relu(self.layer_1(x))
-        # x = self.batch_norm1(x)
-        # x = self.relu(self.layer_2(x))
-        # x = self.batch_norm2(x)
-        # x = self.dropout(x)
-        # x = self.layer_out(x)
-        return y
-
-
 class AttentionNet(nn.Module):
     def __init__(self, num_features: int, num_hidden: int, num_classes: int):
         super(AttentionNet, self).__init__()
@@ -82,6 +46,7 @@ class NNPredictor:
         self._device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self._epochs = hyper_params['epoch']
         self._batch_size = hyper_params['batch_size']
+        self._bts_num = 0  # blind test sample number
 
         self.model = AttentionNet(input_features, 512, 2).to(self._device)  # Modify model here
         # self.model = MLPNet(input_features)
@@ -128,6 +93,7 @@ class NNPredictor:
         dataset.data_clean()  # Remove unwanted data
         dataset.normalize('l2')  # Data process
         dataset_dl = DatasetDL(npy_obj_data=dataset.get_data(), npy_obj_label=dataset.get_label())
+        self._bts_num = len(dataset_dl)
         self.dataloader_blind_test = DataLoader(
             TensorDataset(dataset_dl.get_data().float(), dataset_dl.get_labels()),
             batch_size=batch_size,
@@ -272,15 +238,16 @@ class NNPredictor:
 
     def infer(self):
         """Using onnx and do inference"""
-        # 加载 ONNX 模型
-        sess = ort.InferenceSession("models/attention_plant.onnx")
+        # Load onnx model
+        sess = ort.InferenceSession("models/attention_plant.onnx", providers=['CPUExecutionProvider'])
+        pred_res = []
+        # Prepare input data, Must be np.ndarray type
 
-        # 准备输入数据
-        for X, y in self.dataloader_blind_test:  # np.ndarray
+        for batch, (X, y) in enumerate(self.dataloader_blind_test):  # np.ndarray
             X = X.numpy()
-            print(X)
-            # 执行推理
-            ort_inputs = {sess.get_inputs()[0].name: X}
+            X = np.reshape(X, (3, 1, 1082))
+            ort_inputs = {sess.get_inputs()[0].name: X}  # {'input': X}
             ort_outs = sess.run(None, ort_inputs)
-
-            print(ort_outs)
+            for i in range(len(ort_outs[0])):
+                pred_res.append(np.argmax(ort_outs[0][i][0]))
+        print(classification_report(np.concatenate((self.__model_predict(self.dataloader_blind_test)['True labels'])), pred_res))
