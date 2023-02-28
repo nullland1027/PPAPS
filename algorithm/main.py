@@ -134,7 +134,8 @@ def xgboost(kind, data, label, test_data):
         'eval_metric': 'auc',
         'n_jobs': -1,
         'nthread': -1,
-        'random_state': 42
+        'random_state': 42,
+        'tree_method': 'hist'
     }
 
     xgb = XGBoostPredictor(kind, np.load(data), np.load(label), **xgb_params)
