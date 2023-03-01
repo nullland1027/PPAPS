@@ -75,16 +75,17 @@ def lgbm_adjust_params(lgb_predictor):
     @param lgb_predictor:
     @return:
     """
+    # colsample_bytree=0.5, learning_rate=0.05, max_depth=5, min_child_samples=10, min_child_weight=0.005, min_split_gain=0.5, n_estimators=200, num_leaves=10, subsample_for_bin=500000
     search = {
-        'num_leaves': [10, 20, 31, 40],
-        'max_depth': [3, 5, 8, 10],
-        'learning_rate': [0.1, 0.05],
-        'n_estimators': list(range(100, 500, 100)),
-        'subsample_for_bin': [100000, 200000, 500000],
-        'min_split_gain': [0, 0.1, 0.5, 0.8],
-        'min_child_weight': [0.001, 0.005, 0.1],
-        'min_child_samples': [5, 10, 20, 50],
-        'colsample_bytree': [0.2, 0.5, 0.8],
+        'num_leaves': [64, 128],
+        'max_depth': [5, 6],
+        'learning_rate': [0.05],
+        'n_estimators': [200, 300],
+        'subsample_for_bin': [200000, 500000],
+        'min_split_gain': [0.1, 0.5, 0.8],
+        'min_child_weight': [0.005],
+        'min_child_samples': [9, 10, 11],
+        'colsample_bytree': [0.4, 0.5, 0.6],
     }
     print(lgb_predictor.search_params(search))
     return lgb_predictor
@@ -167,8 +168,8 @@ def lgbm(kind, data, label, test_data):
         'objective': 'binary',
         'metric': 'auc',  # 优化指标
         'n_jobs': -1,
-        'force_col_wise': True,
-        'random_state': 42
+        'random_state': 42,
+#         'device': 'gpu'
     }
     lgbm_predictor = LGBMPredictor(kind, np.load(data), np.load(label), **lgbm_params)
     start_time = time.time()
