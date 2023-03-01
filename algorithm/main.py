@@ -179,6 +179,9 @@ def lgbm(kind, data, label, test_data):
     lgbm_predictor.save_model('algorithm/models')
 
     lgbm_predictor.load_model(os.path.join('algorithm', 'models', 'lgbm_' + kind + '.pickle'))
+    lgbm_predictor.predict(test_data)
+    lgbm_predictor.output_metrix()
+    lgbm_predictor.show_ROC_curve()
 
 
 if __name__ == '__main__':
@@ -194,8 +197,7 @@ if __name__ == '__main__':
         'epoch': 100
     }
 
-    kind = ''
     if args.kind.lower() == 'animal':
-        xgboost('animal', animal_data, animal_label, os.path.join('algorithm', 'raw_data', 'animal', 'Blind_Animal.csv'))
+        lgbm('animal', animal_data, animal_label, os.path.join('algorithm', 'raw_data', 'animal', 'Blind_Animal.csv'))
     elif args.kind.lower() == 'plant':
-        xgboost('plant', plant_data, plant_label, os.path.join('algorithm', 'raw_data', 'plant', 'Blind_Plant.csv'))
+        lgbm('plant', plant_data, plant_label, os.path.join('algorithm', 'raw_data', 'plant', 'Blind_Plant.csv'))
