@@ -1,5 +1,7 @@
-from torch import optim
-from torch import nn
+import pandas as pd
+import numpy as np
 
-# Loss and Optimizer
+
+def file_process(csv_file):
+    pass
 

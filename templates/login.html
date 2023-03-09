@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>登录</title>  
+    <link rel="stylesheet" href="css/login.css"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+</head>
+<body>
+	<div id="login-box">
+		<h1>Login</h1>
+		<div class="form">
+			<div class="item">
+			   <i class="fa fa-github-alt" style="font-size:24px"></i>
+			   <input type="text" placeholder="Username">		   
+			</div>
+			<div class="item">
+			   <i class="fa fa-search" style="font-size:24px"></i>
+			   <input type="text" placeholder="Password">		   
+			</div>
+		</div>
+		<button onclick="flask()">登录</button>
+		<button onclick="jump()">注册</button>
+	</div>
+	
+</body>
+<!-- 跳转函数用于注册按钮 ，点击注册按钮转移到注册界面-->
+<script>
+    function jump(){
+        window.location.href="registered.html";
+    }
+</script>
+<!-- flask函数填充位置 -->
+<script>
+    function flask(){
+		
+    }
+</script>
+
+
+</html>

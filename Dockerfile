@@ -1,11 +1,6 @@
-FROM python:3.9-alpine
+FROM uhub.service.ucloud.cn/openbayesruntimes/python:3.8-py38-cpu.84
 
-ADD . /app
-WORKDIR /app
-RUN /usr/local/bin/python -m pip install --upgrade pip
-RUN conda install -r requirements.txt
+ADD . /src
+WORKDIR /src
 
-ENV FLASK_APP=app.py REDIS_HOST=redis FLASK_RUN_HOST=0.0.0.0
-
-EXPOSE 8888
-CMD ["flask", "run"]
+ENTRYPOINT /bin/bash
