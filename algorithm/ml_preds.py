@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
 from matplotlib import pyplot as plt
-from datasets import AnimalDataSet, PlantDataSet
+from algorithm.data_sets import AnimalDataSet, PlantDataSet
 
 from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier

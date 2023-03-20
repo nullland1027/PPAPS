@@ -2,7 +2,7 @@ import numpy as np
 import os.path
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
-from datasets import AnimalDataSet, PlantDataSet, DatasetDL
+from data_sets import AnimalDataSet, PlantDataSet, DatasetDL
 
 import torch
 import onnx
@@ -49,7 +49,7 @@ class NNPredictor:
         self._bts_num = 0  # blind test sample number
 
         self.model = AttentionNet(input_features, 512, 2).to(self._device)  # Modify model here
-        # self.model = MLPNet(input_features)
+
         self._dataset = None
         self.dataloader_train = None
         self.dataloader_val = None  # Evaluation data to
@@ -76,7 +76,7 @@ class NNPredictor:
                                          drop_last=True,
                                          shuffle=True)
 
-    def load_blind_test(self, csv_file: str, batch_size):
+    def load_blind_test(self, csv_file: str, batch_size: int):
         """
         Load blind test data and make data loader.
         @param csv_file: Blind test animal ro plant csv file
@@ -161,7 +161,7 @@ class NNPredictor:
     def train(self):
         for t in range(self._epochs):
             print(f"Epoch {t + 1}-------------------------------")
-            print(self._optimizer.param_groups[0]['lr'])
+            # print(self._optimizer.param_groups[0]['lr'])
             self.train_loop()
             self.validate_loop()
             self._optimizer.step()
@@ -170,10 +170,12 @@ class NNPredictor:
 
     def save_model(self):
         """Save the params of current model"""
-        name = 'models/attention_' + self._kind + '_e' + str(self._epochs) + '_b' + str(self._batch_size) + '.pth'
-        if os.path.exists(name):  # Overwrite
-            os.remove(name)
-        torch.save(self.model.state_dict(), name)
+        base_dir = os.path.abspath(os.path.dirname(__file__))
+        name = 'attention_' + self._kind + '_e' + str(self._epochs) + '_b' + str(self._batch_size) + '.pth'
+        model_path = os.path.join(base_dir, 'models', self._kind, name)
+        if os.path.exists(model_path):  # Overwrite
+            os.remove(model_path)
+        torch.save(self.model.state_dict(), model_path)
 
     def save_model_onnx(self, pth_file, batch_size):
         """
@@ -231,7 +233,6 @@ class NNPredictor:
 
         true_labels, pred_labels = np.concatenate(true_labels), np.concatenate(pred_labels)
         acc = np.sum(true_labels == pred_labels) / len(pred_labels)
-        print(pred_labels)
         print('Accuracy: {:6f}\n'.format(acc))
         print(classification_report(true_labels, pred_labels))
         return acc
@@ -239,7 +240,7 @@ class NNPredictor:
     def infer(self):
         """Using onnx and do inference"""
         # Load onnx model
-        sess = ort.InferenceSession("models/attention_plant.onnx", providers=['CPUExecutionProvider'])
+        sess = ort.InferenceSession("models/plant/attention_plant.onnx", providers=['CPUExecutionProvider'])
         pred_res = []
         # Prepare input data, Must be np.ndarray type
 

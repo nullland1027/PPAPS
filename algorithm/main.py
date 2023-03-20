@@ -3,7 +3,7 @@ import time
 import numpy as np
 import torch
 
-from datasets import PlantDataSet, AnimalDataSet, DatasetDL
+from data_sets import PlantDataSet, AnimalDataSet, DatasetDL
 from ml_preds import RFPredictor, XGBoostPredictor, LGBMPredictor
 from dl_preds import NNPredictor, AttentionNet
 import argparse
@@ -12,28 +12,6 @@ parser = argparse.ArgumentParser(description='This is a demo script')
 parser.add_argument('--kind', dest='kind', type=str, required=True,
                     help='please input `animal` or `plant`')
 args = parser.parse_args()
-
-
-def data_process(path, kind='plant'):
-    """
-    Do data process and save npy
-    @param path: raw data.csv file path
-    @param kind: `plant` or `animal`
-    @return: None
-    """
-    target_path = os.path.split(path)[0]
-    dataset_obj = None
-    if kind == 'plant':
-        dataset_obj = PlantDataSet(path)
-    elif kind == 'animal':
-        dataset_obj = AnimalDataSet(path)
-    else:
-        raise Exception("No this item.")
-
-    dataset_obj.data_clean()
-    # dataset_obj.normalize('l2')
-    np.save(os.path.join(target_path, kind + '_no_pro.npy'), dataset_obj.get_data())
-    np.save(os.path.join(target_path, kind + '_no_pro_label.npy'), dataset_obj.get_label())
 
 
 def rf_adjust_params(rf_predictor):
@@ -169,7 +147,7 @@ def lgbm(kind, data, label, test_data):
         'metric': 'auc',  # 优化指标
         'n_jobs': -1,
         'random_state': 42,
-#         'device': 'gpu'
+        #         'device': 'gpu'
     }
     lgbm_predictor = LGBMPredictor(kind, np.load(data), np.load(label), **lgbm_params)
     start_time = time.time()
@@ -185,20 +163,33 @@ def lgbm(kind, data, label, test_data):
     lgbm_predictor.show_ROC_curve()
 
 
+def deep_learning(kind, data, label, test_data):
+    hyparams = {
+        'lr': 0.02,
+        'batch_size': 8,
+        'epoch': 80
+    }
+    attention_pred = NNPredictor(kind, 1082, hyparams)
+    attention_pred.load_data(data, label)
+    attention_pred.load_blind_test(test_data, 1)
+    # attention_pred.train()
+    # attention_pred.save_model()
+    attention_pred.load_model(os.path.join("algorithm", "models", kind, "attention_" + kind + "_e100_b5.pth"))
+    attention_pred.predict()
+
+
 if __name__ == '__main__':
     animal_data = os.path.join('algorithm', 'raw_data', 'animal', 'animal.npy')  # (306, 1082)
     animal_label = os.path.join('algorithm', 'raw_data', 'animal', 'animal_label.npy')
     plant_data = os.path.join('algorithm', 'raw_data', 'plant', 'plant.npy')
     plant_label = os.path.join('algorithm', 'raw_data', 'plant', 'plant_label.npy')
 
-    # Deep NN
-    hyparams = {
-        'lr': 0.008,
-        'batch_size': 5,
-        'epoch': 100
-    }
+    animal_btest = os.path.join("algorithm", "raw_data", "animal", "Blind_Animal.csv")
+    plant_btest = os.path.join("algorithm", "raw_data", "plant", "Blind_Plant.csv")
 
     if args.kind.lower() == 'animal':
-        lgbm('animal', animal_data, animal_label, os.path.join('algorithm', 'raw_data', 'animal', 'Blind_Animal.csv'))
+        # lgbm('animal', animal_data, animal_label, os.path.join('algorithm', 'raw_data', 'animal', 'Blind_Animal.csv'))
+        deep_learning(args.kind.lower(), animal_data, animal_label, animal_btest)
     elif args.kind.lower() == 'plant':
-        lgbm('plant', plant_data, plant_label, os.path.join('algorithm', 'raw_data', 'plant', 'Blind_Plant.csv'))
+        # lgbm('plant', plant_data, plant_label, os.path.join('algorithm', 'raw_data', 'plant', 'Blind_Plant.csv'))
+        deep_learning(args.kind.lower(), plant_data, plant_label, plant_btest)

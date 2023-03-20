@@ -1,11 +1,11 @@
 version: '3.8'
-
-
 services:
   web:
     build: .
     ports:
-      - "5000:8888"
+      - "8088:5000"
+    volumes:
+      - .:/src
     depends_on:
       - redis
     environment:

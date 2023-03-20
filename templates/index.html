@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form Example</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/home.css">
+    <script>
+        function displayFileName() {
+            const fileInput = document.getElementById('file');
+            const fileName = fileInput.files[0].name;
+            const fileNameDisplay = document.getElementById('fileName');
+            fileNameDisplay.innerHTML = `File selected：${fileName}`;
+        }
+
+        function checkFileSelected() {
+            var fileInput = document.querySelector('input[type=file]');
+            if (!fileInput.value) {
+                alert('Please select a file to upload.');
+                return false;
+            }
+            return true;
+        }
+
+        function validateForm() {
+            let i;
+            const radio_kind = document.getElementsByName("kind");
+            const radio_al = document.getElementsByName("al");
+            let formValid_kind = false;
+            let formValid_al = false;
+            for (i = 0; i < radio_kind.length; i++) {
+                if (radio_kind[i].checked) {
+                    formValid_kind = true;
+                    break;
+                }
+            }
+            for (i = 0; i < radio_al.length; i++) {
+                if (radio_al[i].checked) {
+                    formValid_al = true;
+                    break;
+                }
+            }
+
+            if (!formValid_kind || !formValid_al) {
+                alert("Please select an option!");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+<h1>PON: Prediction of whether the protein mutation is Pathogenic Or Not.</h1>
+<form method="post" enctype="multipart/form-data", onsubmit="return validateForm()">
+    <div style="text-align: center;">
+        <label>选择您要预测蛋白质的种类</label>
+    </div>
+    <div style="display: flex; justify-content: center;">
+        <label style="margin-right: 20px">
+            <input type="radio" name="kind" value="animal">
+            Animal🐒
+        </label>
+        <label>
+            <input type="radio" name="kind" value="plant">
+            Plant🌳
+        </label>
+    </div>
+    <br><br>
+    <div style="text-align: center;">
+        <label>选择预测算法</label>
+    </div>
+    <div style="display: flex; justify-content: center;">
+        <label style="margin-right: 20px">
+            <input type="radio" name="al" value="animal">
+            随机森林
+        </label>
+        <label>
+            <input type="radio" name="al" value="plant">
+            XGBoost
+        </label>
+        <label>
+            <input type="radio" name="al" value="plant">
+            LightGBM
+        </label>
+        <label>
+            <input type="radio" name="al" value="plant">
+            注意力网络
+        </label>
+    </div>
+
+
+    <br><br>
+    <div style="text-align: center;">
+        <label>选择蛋白质序列的CSV文件</label>
+        <label for="file" class="upload-btn">Choose file</label>
+        <input type="file" id="file" name="file" accept=".csv,.txt,text/csv" onchange="displayFileName()">
+
+        <input type="submit" value="Submit" class="submit-btn" onclick="return checkFileSelected();">
+    </div>
+    <div id="fileName"></div>
+</form>
+{% if message %}
+    <script>alert('{{ message }}');</script>
+{% endif %}
+
+</body>
+
+</html>
