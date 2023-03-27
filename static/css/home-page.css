@@ -1,8 +1,6 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
+    background-color: #f8f8f8;
     padding: 20px;
-    background-image: url("../image/higher-order-banner.jpeg");
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -15,6 +13,7 @@ h1 {
 
 form {
     background-color: #e8e8e8;
+    /*background-image: url("../image/higher-order-banner.jpeg");*/
     border-radius: 5px;
     padding: 20px;
     margin: 0 auto;
