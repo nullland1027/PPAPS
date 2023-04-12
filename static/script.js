@@ -54,3 +54,18 @@ function test() {
     });
 }
 
+function validatePassword() {
+  var password = document.getElementsByName("password")[0].value;
+  var confirmPassword = document.getElementsByName("confirm-password")[0].value;
+
+  if (password != confirmPassword) {
+    document.getElementsByName("password")[0].classList.add("border-danger");
+    document.getElementsByName("confirm-password")[0].classList.add("border-danger");
+    return false;
+  } else {
+    document.getElementsByName("password")[0].classList.remove("border-danger");
+    document.getElementsByName("confirm-password")[0].classList.remove("border-danger");
+    return true;
+  }
+}
+

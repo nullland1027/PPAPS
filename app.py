@@ -1,17 +1,23 @@
 import os
-
+import pickle
 import pandas as pd
 from redis import Redis
-from algorithm.utilitis import file_md5
-from algorithm.ml_preds import LGBMPredictor
-from flask import Flask, request, render_template
-from flask import redirect, url_for
+from views import bp_views
+from model import bp_model
+from algorithm.utilitis import file_md5, rf_pred
+from algorithm.ml_preds import RFPredictor, LGBMPredictor
+from flask import Flask, request, render_template, send_from_directory
+from flask import redirect, url_for, send_file
 
 app = Flask(__name__)  # 申明app对象
 redis = Redis(host='127.0.0.1', port=6379)  # host:数据库的服务名
 
 # Global variables area
 IS_LOGIN = False  # 用户是否登陆
+
+# Link other blueprints
+app.register_blueprint(bp_views)  # about page render
+app.register_blueprint(bp_model)  # about model
 
 
 @app.after_request
@@ -20,12 +26,6 @@ def set_response_headers(response):
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
     return response
-
-
-@app.route('/')
-def index():
-    """The website cover page"""
-    return render_template('index.html')
 
 
 @app.route('/check-state')
@@ -52,14 +52,9 @@ def login():
         return render_template('login.html')
 
 
-@app.route('/signup', methods=['POST', 'GET'])
-def sign_up():
-    return render_template('sign-up.html')
-
-
 @app.route('/home-page', methods=['POST', 'GET'])
 def home():
-    """After click"""
+    """The home page, do prediction"""
     global IS_LOGIN
     if not IS_LOGIN:  # 没有登陆
         return redirect(url_for("login"))
@@ -69,18 +64,19 @@ def home():
     file = request.files.get('file')
 
     if not file:
-        return render_template('home-page.html')  # , message='No file selected!')
-    filename = file.filename
-    # file.save(os.path.join("upload", filename))
-    return redirect(url_for('file_checking', kind=kind, al=al))
+        return render_template('home-page.html')
+
+    file.save(os.path.join("upload", file.filename))
+    print('in home 函数', file.filename)
+    return redirect(url_for('model.compute', kind=kind, al=al, file_name=file.filename))
 
 
-@app.route('/file-checking')
-def file_checking():
+@app.route('/download')
+def download():
     """The file has been uploaded"""
-    kind = request.args.get('kind')
-    al = request.args.get('al')
-    return f'File uploaded successfully Ready to infer. You selected: {kind, al}'
+    file_name = request.args.get('file_name')
+    return send_file("downloads/" + file_name, as_attachment=True)
+
 
 
 if __name__ == '__main__':

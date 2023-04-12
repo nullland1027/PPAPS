@@ -138,6 +138,11 @@ class RFPredictor(Predictor):
         return self.rf_classifier.feature_importances_
 
     def predict(self, target_file):
+        """
+
+        @param target_file: csv file path (name)
+        @return:
+        """
         dataset_obj = None
         if self._kind == 'plant':
             dataset_obj = PlantDataSet(target_file)

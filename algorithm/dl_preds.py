@@ -240,7 +240,7 @@ class NNPredictor:
     def infer(self):
         """Using onnx and do inference"""
         # Load onnx model
-        sess = ort.InferenceSession("models/plant/attention_plant.onnx", providers=['CPUExecutionProvider'])
+        sess = ort.InferenceSession("models/plant/attention.onnx", providers=['CPUExecutionProvider'])
         pred_res = []
         # Prepare input data, Must be np.ndarray type
 
