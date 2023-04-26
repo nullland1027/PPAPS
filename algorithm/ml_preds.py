@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
 from matplotlib import pyplot as plt
-from algorithm.data_sets import AnimalDataSet, PlantDataSet
+from data_sets import AnimalDataSet, PlantDataSet
 
 from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
@@ -158,6 +158,9 @@ class RFPredictor(Predictor):
     def output_metrix(self):
         Predictor._report(self.blind_y_ture, self.blind_y_pred)
 
+    def show_ROC_curve(self):
+        Predictor._show_ROC_curve(self.blind_y_ture, self.blind_y_pred)
+
 
 class XGBoostPredictor(Predictor):
     def __init__(self, kind, X, y, **kwargs):
@@ -223,6 +226,7 @@ class XGBoostPredictor(Predictor):
         dataset_obj.data_clean()
         dataset_obj.normalize('l2')
         self.blind_y_ture = dataset_obj.get_label()
+        print(dataset_obj.get_data().shape)
         self.blind_y_pred = self.xgb.predict(dataset_obj.get_data())
 
     def output_metrix(self):
@@ -270,7 +274,7 @@ class LGBMPredictor(Predictor):
 
     def save_model(self, path):
         try:
-            file_name = os.path.join(path, 'lgbm_' + self._kind + '.pickle')
+            file_name = os.path.join(path, self._kind, 'lgbm.pickle')
             if os.path.exists(file_name):
                 os.remove(file_name)
             pickle.dump(self.lgb_clf, open(file_name, 'wb'))

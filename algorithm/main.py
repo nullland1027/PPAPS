@@ -78,16 +78,17 @@ def random_forest(kind, data, label, test_data):
         'n_jobs': -1
     }
     rf = RFPredictor(kind, np.load(data), np.load(label), **rf_params_bst)
-    start_time = time.time()
-    rf = rf_adjust_params(rf)
-    end_time = time.time()
-    print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
-    rf.train()
-    rf.save_model('algorithm/models')
+    # start_time = time.time()
+    # rf = rf_adjust_params(rf)
+    # end_time = time.time()
+    # print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
+    # rf.train()
+    # rf.save_model('algorithm/models')
 
-    rf.load_model(os.path.join('algorithm', 'models', 'random_forest_' + kind + '.pickle'))
+    rf.load_model(os.path.join('algorithm', 'models', kind, 'random_forest.pickle'))
     rf.predict(test_data)
     rf.output_metrix()
+    rf.show_ROC_curve()
 
 
 def xgboost(kind, data, label, test_data):
@@ -118,14 +119,14 @@ def xgboost(kind, data, label, test_data):
     }
 
     xgb = XGBoostPredictor(kind, np.load(data), np.load(label), **xgb_params)
-    start_time = time.time()
-    xgb = xgboost_adjust_params(xgb)  # turning params
-    end_time = time.time()
-    print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
-    xgb.train()
-    xgb.save_model('algorithm/models')
+    # start_time = time.time()
+    # xgb = xgboost_adjust_params(xgb)  # turning params
+    # end_time = time.time()
+    # print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
+    # xgb.train()
+    # xgb.save_model('algorithm/models')
 
-    xgb.load_model(os.path.join('algorithm', 'models', 'xgboost_' + kind + '.pickle'))
+    xgb.load_model(os.path.join('algorithm', 'models', kind, 'xgboost.pickle'))
     xgb.predict(test_data)
     xgb.output_metrix()
     xgb.show_ROC_curve()
@@ -134,13 +135,13 @@ def xgboost(kind, data, label, test_data):
 def lgbm(kind, data, label, test_data):
     lgbm_params = {
         'num_leaves': 10,
-        'max_depth': 3,
+        'max_depth': 5,
         'learning_rate': 0.05,
-        'n_estimators': 100,
-        'subsample_for_bin': 100000,
+        'n_estimators': 200,
+        'subsample_for_bin': 500000,
         'min_split_gain': 0.5,
-        'min_child_weight': 0.001,
-        'min_child_samples': 50,
+        'min_child_weight': 0.005,
+        'min_child_samples': 10,
         'colsample_bytree': 0.5,
 
         'objective': 'binary',
@@ -150,14 +151,14 @@ def lgbm(kind, data, label, test_data):
         #         'device': 'gpu'
     }
     lgbm_predictor = LGBMPredictor(kind, np.load(data), np.load(label), **lgbm_params)
-    start_time = time.time()
-    lgbm_predictor = lgbm_adjust_params(lgbm_predictor)
-    end_time = time.time()
-    print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
-    lgbm_predictor.train()
-    lgbm_predictor.save_model('algorithm/models')
+    # start_time = time.time()
+    # lgbm_predictor = lgbm_adjust_params(lgbm_predictor)
+    # end_time = time.time()
+    # print('Params searching costs', round((end_time - start_time) / 3600, 3), 'Hours')
+    # lgbm_predictor.train()
+    # lgbm_predictor.save_model('algorithm/models')
 
-    lgbm_predictor.load_model(os.path.join('algorithm', 'models', 'lgbm_' + kind + '.pickle'))
+    lgbm_predictor.load_model(os.path.join('algorithm', 'models', kind, 'lgbm.pickle'))
     lgbm_predictor.predict(test_data)
     lgbm_predictor.output_metrix()
     lgbm_predictor.show_ROC_curve()
@@ -171,10 +172,10 @@ def deep_learning(kind, data, label, test_data):
     }
     attention_pred = NNPredictor(kind, 1082, hyparams)
     attention_pred.load_data(data, label)
-    attention_pred.load_blind_test(test_data, 1)
+    attention_pred.load_blind_test(test_data, batch_size=3)
     # attention_pred.train()
     # attention_pred.save_model()
-    attention_pred.load_model(os.path.join("algorithm", "models", kind, "attention_" + kind + "_e100_b5.pth"))
+    attention_pred.load_model(os.path.join("algorithm", "models", kind, "attention" + "_e100_b5.pth"))
     attention_pred.predict()
 
 
@@ -189,7 +190,13 @@ if __name__ == '__main__':
 
     if args.kind.lower() == 'animal':
         # lgbm('animal', animal_data, animal_label, os.path.join('algorithm', 'raw_data', 'animal', 'Blind_Animal.csv'))
-        deep_learning(args.kind.lower(), animal_data, animal_label, animal_btest)
+        deep_learning('animal', animal_data, animal_label, animal_btest)
+        # random_forest('animal', animal_data, animal_label, os.path.join('algorithm', 'raw_data', 'animal', 'Blind_Animal.csv'))
+        # xgboost('animal', animal_data, animal_label,
+        #         os.path.join('algorithm', 'raw_data', 'animal', 'Blind_Animal.csv'))
     elif args.kind.lower() == 'plant':
         # lgbm('plant', plant_data, plant_label, os.path.join('algorithm', 'raw_data', 'plant', 'Blind_Plant.csv'))
+
         deep_learning(args.kind.lower(), plant_data, plant_label, plant_btest)
+        # random_forest('plant', plant_data, plant_label, os.path.join('algorithm', 'raw_data', 'plant', 'Blind_Plant.csv'))
+        # xgboost('plant', plant_data, plant_label, os.path.join('algorithm', 'raw_data', 'plant', 'Blind_Plant.csv'))

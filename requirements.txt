@@ -6,4 +6,7 @@ onnxruntime==1.13.1
 pandas==1.5.2
 redis==4.4.2
 scikit-learn==1.2.0
-xgboost==1.7.3
+xgboost==1.6.2
+torch~=1.13.1
+onnx~=1.13.0
+tensorboardx~=2.6

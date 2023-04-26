@@ -2,8 +2,11 @@ import os
 import hashlib
 import numpy as np
 import pandas as pd
-from algorithm.data_sets import PlantDataSet, AnimalDataSet
-from algorithm.ml_preds import RFPredictor, XGBoostPredictor, LGBMPredictor
+
+from sklearn import metrics
+from matplotlib import pyplot as plt
+from data_sets import PlantDataSet, AnimalDataSet
+from ml_preds import RFPredictor, XGBoostPredictor, LGBMPredictor
 
 
 def get_dataset_obj(path, kind: str):
@@ -101,3 +104,24 @@ def lgbm_pred(file_path, kind):
 
 def attention_pred():
     pass
+
+
+def show_ROC_curve(blind_y_ture, blind_y_pred):
+    """
+    After the prediction to blind test data and Run to see the performance.
+    @param blind_y_ture: true val
+    @param blind_y_pred: prediction val
+    @return: None
+    """
+    fpr, tpr, threshold = metrics.roc_curve(blind_y_ture, blind_y_pred)
+    roc_auc = metrics.auc(fpr, tpr)
+    plt.figure(figsize=(6, 6))
+    plt.title('Validation ROC')
+    plt.plot(fpr, tpr, 'b', label='Val AUC = %0.3f' % roc_auc)
+    plt.legend(loc='lower right')
+    plt.plot([0, 1], [0, 1], 'r--')
+    plt.xlim([0, 1])
+    plt.ylim([0, 1])
+    plt.ylabel('True Positive Rate')
+    plt.xlabel('False Positive Rate')
+    plt.show()

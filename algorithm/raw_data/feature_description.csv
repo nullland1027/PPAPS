@@ -2,8 +2,8 @@ index, name,is_feature,feature_type, description
 0, index,0,, -
 1, gi_x,0,, GI (aka gene ID; to get fasta sequence)
 2, variation,0,, -
-3, UID,0,, Uniport ID ( to get fasta sequence)
-4, is_del,0,, Tag (weather
+3, UID,0,, Uniprot ID ( to get fasta sequence)
+4, is_pat,0,, Tag (weather
 5, mut_residue,1,normal, Position (from variation)
 6, nutation,0,, Origin -> New (from variantion)
 7, len,1,normal, Length of sequence

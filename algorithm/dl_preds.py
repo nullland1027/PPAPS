@@ -5,6 +5,7 @@ from sklearn.metrics import classification_report
 from data_sets import AnimalDataSet, PlantDataSet, DatasetDL
 
 import torch
+import utilitis
 import onnx
 import onnxruntime as ort
 from torch import nn
@@ -13,6 +14,8 @@ from torch.utils.data import DataLoader, TensorDataset
 
 
 class AttentionNet(nn.Module):
+    """Model class"""
+
     def __init__(self, num_features: int, num_hidden: int, num_classes: int):
         super(AttentionNet, self).__init__()
 
@@ -23,7 +26,12 @@ class AttentionNet(nn.Module):
         self.attention_weights = nn.Parameter(torch.zeros(num_hidden, 1))
         self.attention_bias = nn.Parameter(torch.zeros(num_hidden))
 
-    def forward(self, x):  # x 的维度为 (batch_size, num_features)
+    def forward(self, x):
+        """
+
+        @param x: x.size = (batch_size, num_features)
+        @return:
+        """
         # 计算隐藏层的输出
         h = F.relu(self.fc1(x))  # (batch_size, num_hidden)
 
@@ -60,6 +68,12 @@ class NNPredictor:
         self._scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self._optimizer, 3, eta_min=0.00001, verbose=True)
 
     def load_data(self, data_filepath: str, label_filepath: str):
+        """
+        Load train and validation data, Not blind test
+        @param data_filepath: path + file name
+        @param label_filepath: path + file name
+        @return:
+        """
         self._dataset = DatasetDL(data_filepath, label_filepath)  # Create TensorDataset
         X_train, X_test, y_train, y_test = train_test_split(self._dataset.get_data(),
                                                             self._dataset.get_labels(),
@@ -78,7 +92,7 @@ class NNPredictor:
 
     def load_blind_test(self, csv_file: str, batch_size: int):
         """
-        Load blind test data and make data loader.
+        Load blind test data and make a data loader.
         @param csv_file: Blind test animal ro plant csv file
         @param batch_size: You know
         @return:
@@ -235,6 +249,7 @@ class NNPredictor:
         acc = np.sum(true_labels == pred_labels) / len(pred_labels)
         print('Accuracy: {:6f}\n'.format(acc))
         print(classification_report(true_labels, pred_labels))
+        utilitis.show_ROC_curve(true_labels, pred_labels)
         return acc
 
     def infer(self):
@@ -251,4 +266,5 @@ class NNPredictor:
             ort_outs = sess.run(None, ort_inputs)
             for i in range(len(ort_outs[0])):
                 pred_res.append(np.argmax(ort_outs[0][i][0]))
-        print(classification_report(np.concatenate((self.__model_predict(self.dataloader_blind_test)['True labels'])), pred_res))
+        print(classification_report(np.concatenate((self.__model_predict(self.dataloader_blind_test)['True labels'])),
+                                    pred_res))
