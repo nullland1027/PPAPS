@@ -2,10 +2,11 @@ import numpy as np
 import os.path
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
-from data_sets import AnimalDataSet, PlantDataSet, DatasetDL
+from algorithm.data_sets import AnimalDataSet, PlantDataSet, DatasetDL
 
 import torch
-import utilitis
+from algorithm import interface
+from algorithm import utility
 import onnx
 import onnxruntime as ort
 from torch import nn
@@ -67,7 +68,17 @@ class NNPredictor:
         self._optimizer = torch.optim.Adam(self.model.parameters(), lr=hyper_params['lr'])
         self._scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self._optimizer, 3, eta_min=0.00001, verbose=True)
 
-    def load_data(self, data_filepath: str, label_filepath: str):
+    @staticmethod
+    def load_model_onnx(onnx_file: str):
+        try:
+            onnx.checker.check_model(onnx_file)
+        except onnx.checker.ValidationError as e:
+            print("The model is invalid: %s" % e)
+        else:
+            print('The model is valid!')
+            return ort.InferenceSession(onnx_file)
+
+    def load_data(self, data_filepath: str, label_filepath: str) -> None:
         """
         Load train and validation data, Not blind test
         @param data_filepath: path + file name
@@ -90,7 +101,7 @@ class NNPredictor:
                                          drop_last=True,
                                          shuffle=True)
 
-    def load_blind_test(self, csv_file: str, batch_size: int):
+    def load_blind_test(self, csv_file: str, batch_size: int) -> None:
         """
         Load blind test data and make a data loader.
         @param csv_file: Blind test animal ro plant csv file
@@ -115,10 +126,10 @@ class NNPredictor:
             shuffle=False
         )
 
-    def check_gpu(self):
+    def check_gpu(self) -> None:
         print('device:', self._device)
 
-    def train_loop(self):
+    def train_loop(self) -> None:
         size = len(self.dataloader_train.dataset)  # the length of train data set
         train_loss = 0
         self.model.train()
@@ -130,7 +141,6 @@ class NNPredictor:
             loss = self._criteria(outputs, y)  # Compute the loss
 
             # Backpropagation
-
             self._optimizer.zero_grad()  # After getting rid of the gradients from the last round
             loss.backward()  # compute the gradients of all parameters we want the network to learn.
             self._optimizer.step()  # Update the model.
@@ -138,7 +148,7 @@ class NNPredictor:
         train_loss = train_loss / size  # get average loss
         print('Training Loss: {:.6f}'.format(train_loss), end='        ')
 
-    def __model_predict(self, loader):
+    def __model_predict(self, loader) -> dict:
         """Internal method, cannot be called by outside"""
         size = len(loader.dataset)
         eval_loss = 0
@@ -161,7 +171,7 @@ class NNPredictor:
             'True labels': true_labels,
         }
 
-    def validate_loop(self):
+    def validate_loop(self) -> None:
         res_dict = self.__model_predict(self.dataloader_val)
         eval_loss = res_dict['Evaluation loss']
         true_labels = res_dict['True labels']
@@ -172,7 +182,7 @@ class NNPredictor:
         acc = np.sum(true_labels == pred_labels) / len(pred_labels)
         print('Validation Loss: {:.6f}, Accuracy: {:6f}\n'.format(eval_loss, acc))
 
-    def train(self):
+    def train(self) -> None:
         for t in range(self._epochs):
             print(f"Epoch {t + 1}-------------------------------")
             # print(self._optimizer.param_groups[0]['lr'])
@@ -182,7 +192,7 @@ class NNPredictor:
             self._scheduler.step()  # Update learning rate
         print("Done!")
 
-    def save_model(self):
+    def save_model(self) -> None:
         """Save the params of current model"""
         base_dir = os.path.abspath(os.path.dirname(__file__))
         name = 'attention_' + self._kind + '_e' + str(self._epochs) + '_b' + str(self._batch_size) + '.pth'
@@ -191,7 +201,7 @@ class NNPredictor:
             os.remove(model_path)
         torch.save(self.model.state_dict(), model_path)
 
-    def save_model_onnx(self, pth_file, batch_size):
+    def save_model_onnx(self, pth_file, batch_size) -> None:
         """
         Must call save_model before this method!!!!!
         @param pth_file:
@@ -216,7 +226,7 @@ class NNPredictor:
 
         )
 
-    def load_model(self, model_file: str):
+    def load_model(self, model_file: str) -> bool:
         """
         Can load the GPU model on cpu-only machine by map_location params
         @param model_file: id of file
@@ -229,30 +239,24 @@ class NNPredictor:
             return False
         return True
 
-    @staticmethod
-    def load_model_onnx(onnx_file: str):
-        try:
-            onnx.checker.check_model(onnx_file)
-        except onnx.checker.ValidationError as e:
-            print("The model is invalid: %s" % e)
-        else:
-            print('The model is valid!')
-            return ort.InferenceSession(onnx_file)
-
-    def predict(self):
-        """Do prediction on blind test data set"""
+    def predict(self) -> tuple:
+        """
+        Do prediction on blind test data set
+        @return: (y_true, y_pred)
+        """
         res_dict = self.__model_predict(self.dataloader_blind_test)
         true_labels = res_dict['True labels']
         pred_labels = res_dict['Prediction result']
 
         true_labels, pred_labels = np.concatenate(true_labels), np.concatenate(pred_labels)
+        return true_labels, pred_labels
+
         acc = np.sum(true_labels == pred_labels) / len(pred_labels)
         print('Accuracy: {:6f}\n'.format(acc))
         print(classification_report(true_labels, pred_labels))
-        utilitis.show_ROC_curve(true_labels, pred_labels)
-        return acc
+        utility.show_ROC_curve(true_labels, pred_labels, 'Attention Neural Network')
 
-    def infer(self):
+    def infer(self) -> None:
         """Using onnx and do inference"""
         # Load onnx model
         sess = ort.InferenceSession("models/plant/attention.onnx", providers=['CPUExecutionProvider'])

@@ -4,10 +4,8 @@ import lightgbm as lgb
 from abc import ABC, abstractmethod
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
-from matplotlib import pyplot as plt
-from data_sets import AnimalDataSet, PlantDataSet
-
-from sklearn import metrics
+from algorithm import utility
+from algorithm.data_sets import AnimalDataSet, PlantDataSet
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
@@ -61,27 +59,6 @@ class Predictor(ABC):
         """
         target_names = ['Class-0', 'Class-1']
         print(classification_report(y_true, y_pred, target_names=target_names))
-
-    @classmethod
-    def _show_ROC_curve(cls, blind_y_ture, blind_y_pred):
-        """
-        After the prediction to blind test data and Run to see the performance.
-        @param blind_y_ture: true val
-        @param blind_y_pred: prediction val
-        @return: None
-        """
-        fpr, tpr, threshold = metrics.roc_curve(blind_y_ture, blind_y_pred)
-        roc_auc = metrics.auc(fpr, tpr)
-        plt.figure(figsize=(6, 6))
-        plt.title('Validation ROC')
-        plt.plot(fpr, tpr, 'b', label='Val AUC = %0.3f' % roc_auc)
-        plt.legend(loc='lower right')
-        plt.plot([0, 1], [0, 1], 'r--')
-        plt.xlim([0, 1])
-        plt.ylim([0, 1])
-        plt.ylabel('True Positive Rate')
-        plt.xlabel('False Positive Rate')
-        plt.show()
 
 
 class RFPredictor(Predictor):
@@ -154,12 +131,13 @@ class RFPredictor(Predictor):
         dataset_obj.normalize('l2')
         self.blind_y_ture = dataset_obj.get_label()
         self.blind_y_pred = self.rf_classifier.predict(dataset_obj.get_data())
+        return self.blind_y_ture, self.blind_y_pred
 
     def output_metrix(self):
         Predictor._report(self.blind_y_ture, self.blind_y_pred)
 
     def show_ROC_curve(self):
-        Predictor._show_ROC_curve(self.blind_y_ture, self.blind_y_pred)
+        utility.show_ROC_curve(self.blind_y_ture, self.blind_y_pred, 'Random Forest ROC Curve')
 
 
 class XGBoostPredictor(Predictor):
@@ -215,7 +193,7 @@ class XGBoostPredictor(Predictor):
     def load_model(self, file_name):
         self.xgb = pickle.load(open(file_name, 'rb'))
 
-    def predict(self, target_file):
+    def predict(self, target_file) -> tuple:
         dataset_obj = None
         if self._kind == 'plant':
             dataset_obj = PlantDataSet(target_file)
@@ -226,14 +204,14 @@ class XGBoostPredictor(Predictor):
         dataset_obj.data_clean()
         dataset_obj.normalize('l2')
         self.blind_y_ture = dataset_obj.get_label()
-        print(dataset_obj.get_data().shape)
         self.blind_y_pred = self.xgb.predict(dataset_obj.get_data())
+        return self.blind_y_ture, self.blind_y_pred
 
     def output_metrix(self):
         Predictor._report(self.blind_y_ture, self.blind_y_pred)
 
     def show_ROC_curve(self):
-        Predictor._show_ROC_curve(self.blind_y_ture, self.blind_y_pred)
+        utility.show_ROC_curve(self.blind_y_ture, self.blind_y_pred, title='XGBoost ROC Curve')
 
 
 class LGBMPredictor(Predictor):
@@ -309,6 +287,7 @@ class LGBMPredictor(Predictor):
         dataset_obj.normalize('l2')
         self.blind_y_ture = dataset_obj.get_label()
         self.blind_y_pred = self.lgb_clf.predict(dataset_obj.get_data())
+        return self.blind_y_ture, self.blind_y_pred
 
     def show_ROC_curve(self):
-        Predictor._show_ROC_curve(self.blind_y_ture, self.blind_y_pred)
+        utility.show_ROC_curve(self.blind_y_ture, self.blind_y_pred, title='LightGBM ROC Curve')

@@ -5,8 +5,8 @@ import pandas as pd
 
 from sklearn import metrics
 from matplotlib import pyplot as plt
-from data_sets import PlantDataSet, AnimalDataSet
-from ml_preds import RFPredictor, XGBoostPredictor, LGBMPredictor
+from algorithm.data_sets import PlantDataSet, AnimalDataSet
+from algorithm.ml_preds import RFPredictor, XGBoostPredictor, LGBMPredictor
 
 
 def get_dataset_obj(path, kind: str):
@@ -22,7 +22,6 @@ def get_dataset_obj(path, kind: str):
         dataset_obj = AnimalDataSet(path)
     else:
         raise Exception("No this item.")
-        return
     return dataset_obj
 
 
@@ -106,22 +105,27 @@ def attention_pred():
     pass
 
 
-def show_ROC_curve(blind_y_ture, blind_y_pred):
-    """
-    After the prediction to blind test data and Run to see the performance.
-    @param blind_y_ture: true val
-    @param blind_y_pred: prediction val
-    @return: None
-    """
-    fpr, tpr, threshold = metrics.roc_curve(blind_y_ture, blind_y_pred)
-    roc_auc = metrics.auc(fpr, tpr)
-    plt.figure(figsize=(6, 6))
-    plt.title('Validation ROC')
-    plt.plot(fpr, tpr, 'b', label='Val AUC = %0.3f' % roc_auc)
-    plt.legend(loc='lower right')
-    plt.plot([0, 1], [0, 1], 'r--')
-    plt.xlim([0, 1])
-    plt.ylim([0, 1])
-    plt.ylabel('True Positive Rate')
-    plt.xlabel('False Positive Rate')
-    plt.show()
+
+class Model:
+    def __init__(self):
+        self.observers = []
+
+    def add_observer(self, observer):
+        self.observers.append(observer)
+
+    def remove_observer(self, observer):
+        self.observers.remove(observer)
+
+    def notify_observers(self, message):
+        for observer in self.observers:
+            observer.update(message)
+
+
+class Observer:
+    def update(self, message):
+        pass
+
+
+class Logger(Observer):
+    def update(self, message):
+        print("Logging message:", message)

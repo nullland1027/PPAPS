@@ -1,7 +1,7 @@
 import os
 from flask import Blueprint
 from flask import Flask, request, render_template, redirect, url_for
-from algorithm.utilitis import file_md5, rf_pred, xgb_pred, lgbm_pred
+from algorithm.interface import file_md5, rf_pred, xgb_pred, lgbm_pred
 
 bp_model = Blueprint('model', __name__)
 

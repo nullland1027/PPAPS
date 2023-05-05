@@ -2,15 +2,18 @@ import os
 import time
 import numpy as np
 import torch
-
-from data_sets import PlantDataSet, AnimalDataSet, DatasetDL
-from ml_preds import RFPredictor, XGBoostPredictor, LGBMPredictor
-from dl_preds import NNPredictor, AttentionNet
+from algorithm import utility
+from algorithm.data_sets import PlantDataSet, AnimalDataSet, DatasetDL
+from algorithm.ml_preds import RFPredictor, XGBoostPredictor, LGBMPredictor
+from algorithm.dl_preds import NNPredictor, AttentionNet
 import argparse
 
 parser = argparse.ArgumentParser(description='This is a demo script')
 parser.add_argument('--kind', dest='kind', type=str, required=True,
                     help='please input `animal` or `plant`')
+parser.add_argument('--algorithm', dest='algorithm', type=str,
+                    help='4 types. `rf` for Random Forest, `xgboost` for XGBoost, `lgbm` for LightGBM, `att` for Attention Nerual Network')
+parser.add_argument('--roc', action='store_true', required=False)
 args = parser.parse_args()
 
 
@@ -77,7 +80,10 @@ def random_forest(kind, data, label, test_data):
         'min_weight_fraction_leaf': 0.4,
         'n_jobs': -1
     }
-    rf = RFPredictor(kind, np.load(data), np.load(label), **rf_params_bst)
+    if data is None or label is None:
+        rf = RFPredictor(kind, None, None, **rf_params_bst)
+    else:
+        rf = RFPredictor(kind, np.load(data), np.load(label), **rf_params_bst)
     # start_time = time.time()
     # rf = rf_adjust_params(rf)
     # end_time = time.time()
@@ -86,7 +92,7 @@ def random_forest(kind, data, label, test_data):
     # rf.save_model('algorithm/models')
 
     rf.load_model(os.path.join('algorithm', 'models', kind, 'random_forest.pickle'))
-    rf.predict(test_data)
+    return rf.predict(test_data)
     rf.output_metrix()
     rf.show_ROC_curve()
 
@@ -117,8 +123,10 @@ def xgboost(kind, data, label, test_data):
         'random_state': 42,
         'tree_method': 'hist'
     }
-
-    xgb = XGBoostPredictor(kind, np.load(data), np.load(label), **xgb_params)
+    if data is None or label is None:
+        xgb = XGBoostPredictor(kind, None, None, **xgb_params)
+    else:
+        xgb = XGBoostPredictor(kind, np.load(data), np.load(label), **xgb_params)
     # start_time = time.time()
     # xgb = xgboost_adjust_params(xgb)  # turning params
     # end_time = time.time()
@@ -127,7 +135,7 @@ def xgboost(kind, data, label, test_data):
     # xgb.save_model('algorithm/models')
 
     xgb.load_model(os.path.join('algorithm', 'models', kind, 'xgboost.pickle'))
-    xgb.predict(test_data)
+    return xgb.predict(test_data)
     xgb.output_metrix()
     xgb.show_ROC_curve()
 
@@ -150,7 +158,10 @@ def lgbm(kind, data, label, test_data):
         'random_state': 42,
         #         'device': 'gpu'
     }
-    lgbm_predictor = LGBMPredictor(kind, np.load(data), np.load(label), **lgbm_params)
+    if data is None or label is None:
+        lgbm_predictor = LGBMPredictor(kind, None, None, **lgbm_params)
+    else:
+        lgbm_predictor = LGBMPredictor(kind, np.load(data), np.load(label), **lgbm_params)
     # start_time = time.time()
     # lgbm_predictor = lgbm_adjust_params(lgbm_predictor)
     # end_time = time.time()
@@ -159,7 +170,7 @@ def lgbm(kind, data, label, test_data):
     # lgbm_predictor.save_model('algorithm/models')
 
     lgbm_predictor.load_model(os.path.join('algorithm', 'models', kind, 'lgbm.pickle'))
-    lgbm_predictor.predict(test_data)
+    return lgbm_predictor.predict(test_data)
     lgbm_predictor.output_metrix()
     lgbm_predictor.show_ROC_curve()
 
@@ -171,12 +182,37 @@ def deep_learning(kind, data, label, test_data):
         'epoch': 80
     }
     attention_pred = NNPredictor(kind, 1082, hyparams)
-    attention_pred.load_data(data, label)
+    # attention_pred.load_data(data, label)
     attention_pred.load_blind_test(test_data, batch_size=3)
     # attention_pred.train()
     # attention_pred.save_model()
-    attention_pred.load_model(os.path.join("algorithm", "models", kind, "attention" + "_e100_b5.pth"))
-    attention_pred.predict()
+    attention_pred.load_model(os.path.join("algorithm", "models", kind, "attention.pth"))
+    return attention_pred.predict()
+
+
+def args_algorithm_choose(kind, data, label, btest):
+    if args.algorithm.lower() == 'rf':
+        random_forest(kind, data, label, btest)
+    elif args.algorithm.lower() == 'xgboost':
+        xgboost(kind, data, label, btest)
+    elif args.algorithm.lower() == 'lgbm':
+        lgbm(kind, data, label, btest)
+    elif args.algorithm.lower() == 'att':
+        deep_learning(kind, data, label, btest)
+    else:
+        raise argparse.ArgumentError(args.algorithm, 'algorithm must be one of `rf`, `xgboost`, `lgbm` and `att`!')
+
+
+def draw_pics(kind, btest):
+    res, y_trues, y_preds = [], [], []
+    res.append(random_forest(kind, None, None, btest))
+    res.append(xgboost(kind, None, None, btest))
+    res.append(lgbm(kind, None, None, btest))
+    res.append(deep_learning(kind, None, None, btest))
+    for i in res:
+        y_trues.append(i[0])
+        y_preds.append(i[1])
+    utility.show_ROC_curve_all(y_trues, y_preds, kind, title='ROC Curve of Plant Protein Prediction')
 
 
 if __name__ == '__main__':
@@ -189,14 +225,14 @@ if __name__ == '__main__':
     plant_btest = os.path.join("algorithm", "raw_data", "plant", "Blind_Plant.csv")
 
     if args.kind.lower() == 'animal':
-        # lgbm('animal', animal_data, animal_label, os.path.join('algorithm', 'raw_data', 'animal', 'Blind_Animal.csv'))
-        deep_learning('animal', animal_data, animal_label, animal_btest)
-        # random_forest('animal', animal_data, animal_label, os.path.join('algorithm', 'raw_data', 'animal', 'Blind_Animal.csv'))
-        # xgboost('animal', animal_data, animal_label,
-        #         os.path.join('algorithm', 'raw_data', 'animal', 'Blind_Animal.csv'))
+        if args.roc:
+            draw_pics('animal', animal_btest)
+        else:
+            args_algorithm_choose('animal', animal_data, animal_label, animal_btest)
     elif args.kind.lower() == 'plant':
-        # lgbm('plant', plant_data, plant_label, os.path.join('algorithm', 'raw_data', 'plant', 'Blind_Plant.csv'))
-
-        deep_learning(args.kind.lower(), plant_data, plant_label, plant_btest)
-        # random_forest('plant', plant_data, plant_label, os.path.join('algorithm', 'raw_data', 'plant', 'Blind_Plant.csv'))
-        # xgboost('plant', plant_data, plant_label, os.path.join('algorithm', 'raw_data', 'plant', 'Blind_Plant.csv'))
+        if args.roc:
+            draw_pics('plant', plant_btest)
+        else:
+            args_algorithm_choose('plant', plant_data, plant_label, plant_btest)
+    else:
+        raise argparse.ArgumentError(args.kind, 'kind must be one of `animal`, `plant` or `roc`!')

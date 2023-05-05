@@ -1,53 +1,56 @@
 import os
-import pickle
-import pandas as pd
+from tools import Tools
 from redis import Redis
 from views import bp_views
 from model import bp_model
-from algorithm.utilitis import file_md5, rf_pred
-from algorithm.ml_preds import RFPredictor, LGBMPredictor
-from flask import Flask, request, render_template, send_from_directory
-from flask import redirect, url_for, send_file
+from dataclasses import dataclass
+from flask import Flask, request, render_template, send_from_directory, redirect, url_for, send_file, session, g
 
 app = Flask(__name__)  # 申明app对象
-redis = Redis(host='127.0.0.1', port=6379)  # host:数据库的服务名
-
-# Global variables area
-IS_LOGIN = False  # 用户是否登陆
+app.config['SECRET_KEY'] = "$#%^&YGHG^&(*)IVBIUG*(&RT&(T("
+redis = Redis(host='127.0.0.1', port=6379, db=0)  # host:数据库的服务名
 
 # Link other blueprints
 app.register_blueprint(bp_views)  # about page render
 app.register_blueprint(bp_model)  # about model
 
 
-@app.after_request
-def set_response_headers(response):
-    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    response.headers['Pragma'] = 'no-cache'
-    response.headers['Expires'] = '0'
-    return response
+@dataclass
+class User:
+    id: int
+    username: str
+    password: str
 
 
-@app.route('/check-state')
-def check_if_login():
-    """Check"""
-    if IS_LOGIN:
-        return redirect(url_for("home"))
-    else:
-        return redirect(url_for("login"))
+@app.before_request
+def before_rqt():
+    g.user = None
+    if 'user_id' in session:
+        pass
 
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    global IS_LOGIN
-    if IS_LOGIN:
+    """
+    处理登陆的函数
+    如果已登陆：直接跳转到主页
+    """
+
+    if session.get():
         return redirect(url_for('home'))
     if request.method == 'POST':  # received user's input
         user_id = request.form['email']
         pwd = request.form['password']
-        if user_id == 'admin@super.com' and pwd == '123':
-            IS_LOGIN = True
-            return redirect(url_for("home"))
+        if redis.exists(user_id):  # User exists
+            if Tools.password_encode(redis.get(user_id)) == Tools.password_encode(pwd):  # True password
+                session['user_id'] = user_id  # TODO
+                return redirect(url_for("home"))  # Jump to home page
+            else:
+                pass  # Wrong password
+                return redirect(url_for("home_with_error"))
+        else:  # User not exists
+            pass
+
     else:  # not receive user's input 由其他页面跳转而来
         return render_template('login.html')
 
@@ -55,7 +58,7 @@ def login():
 @app.route('/home-page', methods=['POST', 'GET'])
 def home():
     """The home page, do prediction"""
-    global IS_LOGIN
+
     if not IS_LOGIN:  # 没有登陆
         return redirect(url_for("login"))
 
@@ -76,7 +79,6 @@ def download():
     """The file has been uploaded"""
     file_name = request.args.get('file_name')
     return send_file("downloads/" + file_name, as_attachment=True)
-
 
 
 if __name__ == '__main__':

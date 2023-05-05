@@ -43,7 +43,7 @@ class DataSet:
         scaler = preprocessing.MinMaxScaler(feature_range=(low, up))
         return scaler.fit_transform(self.df)
 
-    def normalize(self, norm='l1'):
+    def normalize(self, norm='l2'):
         """
         Ensure the data at the same order of magnitude to improve the comparability of data with different features.
         :param norm:
