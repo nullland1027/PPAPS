@@ -7,6 +7,7 @@ from algorithm.data_sets import PlantDataSet, AnimalDataSet, DatasetDL
 from algorithm.ml_preds import RFPredictor, XGBoostPredictor, LGBMPredictor
 from algorithm.dl_preds import NNPredictor, AttentionNet
 import argparse
+from algorithm.interface import attention_pred
 
 parser = argparse.ArgumentParser(description='This is a demo script')
 parser.add_argument('--kind', dest='kind', type=str, required=True,
@@ -224,15 +225,22 @@ if __name__ == '__main__':
     animal_btest = os.path.join("algorithm", "raw_data", "animal", "Blind_Animal.csv")
     plant_btest = os.path.join("algorithm", "raw_data", "plant", "Blind_Plant.csv")
 
-    if args.kind.lower() == 'animal':
-        if args.roc:
-            draw_pics('animal', animal_btest)
-        else:
-            args_algorithm_choose('animal', animal_data, animal_label, animal_btest)
-    elif args.kind.lower() == 'plant':
-        if args.roc:
-            draw_pics('plant', plant_btest)
-        else:
-            args_algorithm_choose('plant', plant_data, plant_label, plant_btest)
-    else:
-        raise argparse.ArgumentError(args.kind, 'kind must be one of `animal`, `plant` or `roc`!')
+    # if args.kind.lower() == 'animal':
+    #     if args.roc:
+    #         draw_pics('animal', animal_btest)
+    #     else:
+    #         args_algorithm_choose('animal', animal_data, animal_label, animal_btest)
+    # elif args.kind.lower() == 'plant':
+    #     if args.roc:
+    #         draw_pics('plant', plant_btest)
+    #     else:
+    #         args_algorithm_choose('plant', plant_data, plant_label, plant_btest)
+    # else:
+    #     raise argparse.ArgumentError(args.kind, 'kind must be one of `animal`, `plant` or `roc`!')
+
+    att = NNPredictor(args.kind.lower(), 1082, {
+        'lr': 0.02,
+        'batch_size': 8,
+        'epoch': 80
+    })
+    att.save_model_onnx(os.path.join('algorithm', 'models', 'animal', 'attention.pth'), 3)

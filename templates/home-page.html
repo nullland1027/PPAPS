@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PON</title>
+    <title>PPAPS</title>
 
     <link rel="stylesheet" type="text/css" href="../static/assets/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../static/css/home-page.css">
@@ -64,6 +64,7 @@
 
     <link href="../static/css/headers.css" rel="stylesheet">
 </head>
+
 <body>
 <!--side bars' little icon svg-->
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -129,23 +130,29 @@
         <path fill-rule="evenodd"
               d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.319 1.319 0 0 0-.37.265.301.301 0 0 0-.057.09V14l.002.008a.147.147 0 0 0 .016.033.617.617 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.619.619 0 0 0 .146-.15.148.148 0 0 0 .015-.033L12 14v-.004a.301.301 0 0 0-.057-.09 1.318 1.318 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465-1.281 0-2.462-.172-3.34-.465-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411z"/>
     </symbol>
-</svg>
 
+    <symbol id="logo" viewBox="0 0 1200 1200">
+        <path d="M528 872c1.6-16 16-28.8 32-28.8 14.4 0 27.2 9.6 30.4 24l56-3.2c4.8 0 8 3.2 8 8s-3.2 8-8 8l-57.6 3.2c-3.2 14.4-16 24-30.4 24-12.8 0-25.6-8-30.4-20.8l-144 9.6c-4.8 0-8-3.2-8-8s3.2-8 8-8l144-8z m-94.4-320c3.2-14.4 16-24 30.4-24s27.2 9.6 30.4 24H640c4.8 0 8 3.2 8 8s-3.2 8-8 8h-145.6c-3.2 14.4-16 24-30.4 24s-27.2-9.6-30.4-24h-41.6c-4.8 0-8-3.2-8-8s3.2-8 8-8h41.6z m112-56c3.2-14.4 16-24 30.4-24 12.8 0 24 8 28.8 19.2l33.6-3.2c4.8 0 8 3.2 8 8s-3.2 8-8 8l-30.4 3.2c-1.6 16-14.4 28.8-32 28.8-14.4 0-27.2-9.6-30.4-24l-168 16c-4.8 0-8-3.2-8-8s3.2-8 8-8l168-16z m-96-361.6c3.2-12.8 16-22.4 30.4-22.4 16 0 30.4 12.8 32 28.8l128 11.2c4.8 0 8 4.8 8 8s-4.8 8-8 8l-129.6-11.2c-4.8 11.2-16 19.2-30.4 19.2-16 0-28.8-11.2-32-25.6L376 144c-4.8 0-8-4.8-8-8 0-4.8 4.8-8 8-8l73.6 6.4z m-14.4 305.6c-4.8 1.6-8 0-9.6-4.8-1.6-4.8 0-8 4.8-9.6l160-56c4.8-1.6 8 0 9.6 4.8 1.6 4.8 0 8-4.8 9.6l-160 56z m1.6-216c-4.8-1.6-6.4-6.4-4.8-11.2 1.6-4.8 6.4-6.4 11.2-4.8l152 64c4.8 1.6 6.4 6.4 4.8 11.2-1.6 4.8-6.4 6.4-11.2 4.8l-152-64z m-38.4-40c-4.8-1.6-6.4-4.8-6.4-9.6 1.6-4.8 4.8-6.4 9.6-6.4l224 48c4.8 1.6 6.4 4.8 6.4 9.6-1.6 4.8-4.8 6.4-9.6 6.4l-224-48z m-30.4-80c-4.8 0-8-3.2-8-8s3.2-8 8-8h288c4.8 0 8 3.2 8 8s-3.2 8-8 8H368z m235.2 656l-152 64c-4.8 1.6-8 0-11.2-4.8-1.6-4.8 0-8 4.8-11.2l152-64c4.8-1.6 8 0 11.2 4.8 1.6 4.8-1.6 9.6-4.8 11.2zM406.4 848l216-48c4.8-1.6 8 1.6 9.6 6.4 1.6 4.8-1.6 8-6.4 9.6l-216 48c-4.8 1.6-8-1.6-9.6-6.4 0-4.8 1.6-8 6.4-9.6zM368 936c-4.8 0-8-3.2-8-8s3.2-8 8-8h288c4.8 0 8 3.2 8 8s-3.2 8-8 8H368z m25.6-448c-4.8 1.6-8-1.6-9.6-6.4-1.6-4.8 1.6-8 6.4-9.6l232-48c4.8-1.6 8 1.6 9.6 6.4 1.6 4.8-1.6 8-6.4 9.6l-232 48z m20.8 120c-4.8 0-8-4.8-6.4-9.6s4.8-8 9.6-6.4l208 24c4.8 0 8 4.8 6.4 9.6 0 4.8-4.8 8-9.6 6.4l-208-24z m62.4 40c-4.8-1.6-6.4-6.4-4.8-9.6s6.4-6.4 9.6-4.8l112 40c4.8 1.6 6.4 6.4 4.8 9.6s-6.4 6.4-9.6 4.8l-112-40z"
+              fill="#d4237a" p-id="1398" data-spm-anchor-id="a313x.7781069.0.i5" class=""></path>
+        <path d="M553.6 305.6C611.2 240 640 171.2 640 80c0-9.6 6.4-16 16-16s16 6.4 16 16c0 100.8-33.6 177.6-97.6 249.6 62.4 70.4 89.6 126.4 89.6 198.4 0 68.8-25.6 123.2-80 185.6C641.6 776 672 848 672 944c0 9.6-6.4 16-16 16s-16-6.4-16-16c0-86.4-25.6-150.4-78.4-208-12.8 12.8-27.2 27.2-43.2 41.6-4.8 4.8-51.2 46.4-64 57.6-22.4 20.8-36.8 36.8-48 52.8-16 20.8-22.4 38.4-22.4 56 0 9.6-6.4 16-16 16s-16-6.4-16-16c0-25.6 9.6-49.6 28.8-75.2 12.8-17.6 28.8-35.2 52.8-56 12.8-11.2 59.2-54.4 64-57.6 16-14.4 28.8-27.2 41.6-40-11.2-11.2-24-20.8-36.8-32-12.8-9.6-89.6-64-107.2-80-28.8-24-43.2-48-43.2-75.2 0-19.2 8-38.4 22.4-56 12.8-16 28.8-32 56-54.4 6.4-6.4 32-25.6 35.2-28.8 14.4-11.2 25.6-20.8 36.8-30.4 11.2-9.6 20.8-19.2 30.4-28.8l-35.2-35.2c-1.6-1.6-33.6-33.6-43.2-41.6-16-16-28.8-28.8-40-41.6-41.6-48-62.4-88-62.4-131.2 0-9.6 6.4-16 16-16s16 6.4 16 16c0 33.6 17.6 67.2 54.4 108.8 11.2 12.8 22.4 24 38.4 40 9.6 9.6 40 40 43.2 41.6 11.2 12.8 22.4 24 33.6 35.2z m6.4 385.6c48-56 72-104 72-163.2 0-60.8-24-112-78.4-174.4-9.6 9.6-19.2 19.2-30.4 28.8 11.2-9.6-105.6 88-123.2 108.8-11.2 12.8-16 25.6-16 36.8 0 16 9.6 32 32 51.2 16 14.4 91.2 67.2 105.6 78.4 14.4 11.2 27.2 20.8 38.4 33.6z"
+              fill="#1296db" p-id="1399" data-spm-anchor-id="a313x.7781069.0.i7" class="selected"></path>
+    </symbol>
+</svg>
 
 <main class="d-flex flex-nowrap">
 
     <!--side bars-->
     <div class="d-flex flex-column flex-shrink-0 p-0 bg-light" style="width: 280px;">
         <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-            <svg class="bi pe-none me-2" width="40" height="32">
-                <use xlink:href="#bootstrap"/>
+            <svg class="bi pe-none me-2" width="60" height="48">
+                <use xlink:href="#logo"/>
             </svg>
-            <span class="fs-4">Sidebar</span>
+            <span class="fs-4">PPAPS</span>
         </a>
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
-                <a href="#" class="nav-link active" aria-current="page">
+                <a href="/" class="nav-link active" aria-current="page">
                     <svg class="bi pe-none me-2" width="16" height="16">
                         <use xlink:href="#home"/>
                     </svg>
@@ -165,26 +172,17 @@
                     <svg class="bi pe-none me-2" width="16" height="16">
                         <use xlink:href="#table"/>
                     </svg>
-                    Orders
+                    Proteins
                 </a>
             </li>
         </ul>
         <hr>
         <div class="dropdown">
-            <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
+            <a href="/afterSignOut" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
                data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                <strong>mdo</strong>
+                <strong>{{ msg }}</strong>
             </a>
-            <ul class="dropdown-menu text-small shadow">
-                <li><a class="dropdown-item" href="#">New project...</a></li>
-                <li><a class="dropdown-item" href="#">Settings</a></li>
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="#">Sign out</a></li>
-            </ul>
         </div>
     </div>
 
@@ -192,8 +190,8 @@
     <div class="b-example-divider b-example-vr"></div>
 
     <!--The whole form area in right-->
-    <div class="col-10">
-        <form method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+    <div class="col-10 p-lg-1">
+        <form method="post" enctype="multipart/form-data" onsubmit="return validateForm()" action="/afterSubmitJob">
             <div style="text-align: center;">
                 <label>选择您要预测蛋白质的种类</label>
             </div>

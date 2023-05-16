@@ -16,6 +16,18 @@ def sign_up():
     return render_template('sign-up.html')
 
 
+@bp_views.route('/login', methods=['POST', 'GET'])
+def login():
+    """Login page"""
+    return render_template('login.html')
+
+
+@bp_views.route('/home')
+def home():
+    """Home page"""
+    return render_template('home-page.html')
+
+
 @bp_views.route('/after_upload')
 def download_page():
     return render_template('download.html')

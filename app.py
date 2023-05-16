@@ -1,10 +1,12 @@
 import os
+import time
 from tools import Tools
 from redis import Redis
 from views import bp_views
 from model import bp_model
 from dataclasses import dataclass
-from flask import Flask, request, render_template, send_from_directory, redirect, url_for, send_file, session, g
+from flask import Flask, request, render_template, send_from_directory, redirect, url_for, send_file, session
+from flask import jsonify
 
 app = Flask(__name__)  # 申明app对象
 app.config['SECRET_KEY'] = "$#%^&YGHG^&(*)IVBIUG*(&RT&(T("
@@ -17,51 +19,51 @@ app.register_blueprint(bp_model)  # about model
 
 @dataclass
 class User:
-    id: int
     username: str
     password: str
 
 
-@app.before_request
-def before_rqt():
-    g.user = None
-    if 'user_id' in session:
-        pass
-
-
-@app.route('/login', methods=['POST', 'GET'])
-def login():
+@app.route('/afterLogin', methods=['POST', 'GET'])
+def after_login():
     """
     处理登陆的函数
     如果已登陆：直接跳转到主页
     """
-
-    if session.get():
-        return redirect(url_for('home'))
     if request.method == 'POST':  # received user's input
-        user_id = request.form['email']
+        username = request.form['email']
         pwd = request.form['password']
-        if redis.exists(user_id):  # User exists
-            if Tools.password_encode(redis.get(user_id)) == Tools.password_encode(pwd):  # True password
-                session['user_id'] = user_id  # TODO
-                return redirect(url_for("home"))  # Jump to home page
-            else:
-                pass  # Wrong password
-                return redirect(url_for("home_with_error"))
-        else:  # User not exists
-            pass
+        remember = request.form.get('remember')
 
+        if redis.exists(username):  # User exists
+            if redis.get(username).decode('utf-8') == Tools.password_encode(pwd):  # True password
+                if remember:
+                    session['LOGIN_USER'] = username
+                return render_template('home-page.html', msg=username)
+            else:
+                return render_template('login.html', msg='Wrong Password')
+        else:  # User not exists
+            return render_template('login.html', msg='User does not exist!')
     else:  # not receive user's input 由其他页面跳转而来
         return render_template('login.html')
 
 
-@app.route('/home-page', methods=['POST', 'GET'])
-def home():
+@app.route('/afterSignUp', methods=['POST'])
+def after_sign_up():
+    username = request.form['email']
+    pwd = request.form['password']
+    if redis.exists(username):
+        response_data = {"state": '0', "message": "User already exists"}
+        return jsonify(response_data), 400
+    else:
+        redis.set(username, Tools.password_encode(pwd))
+        response_data = {"state": '0', "message": "Sign up success"}
+        return jsonify(response_data), 200
+        # return render_template('login.html')
+
+
+@app.route('/afterSubmitJob', methods=['POST', 'GET'])
+def after_submit_job():
     """The home page, do prediction"""
-
-    if not IS_LOGIN:  # 没有登陆
-        return redirect(url_for("login"))
-
     kind = request.form.get('kind')
     al = request.form.get('al')
     file = request.files.get('file')
@@ -70,14 +72,29 @@ def home():
         return render_template('home-page.html')
 
     file.save(os.path.join("upload", file.filename))
-    print('in home 函数', file.filename)
     return redirect(url_for('model.compute', kind=kind, al=al, file_name=file.filename))
+
+
+@app.route('/check-status')
+def check_status():
+    if len(session.keys()) == 0:  # No on login
+        return render_template('login.html')
+    else:
+        return render_template('home-page.html', msg=session['LOGIN_USER'])
+
+
+@app.route('/afterSignOut')
+def after_sign_out():
+    if len(session.keys()) == 1:
+        session.pop('LOGIN_USER')
+    return render_template('index.html')
 
 
 @app.route('/download')
 def download():
     """The file has been uploaded"""
     file_name = request.args.get('file_name')
+    print(file_name)
     return send_file("downloads/" + file_name, as_attachment=True)
 
 

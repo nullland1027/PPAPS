@@ -3,10 +3,9 @@ import hashlib
 import numpy as np
 import pandas as pd
 
-from sklearn import metrics
-from matplotlib import pyplot as plt
 from algorithm.data_sets import PlantDataSet, AnimalDataSet
 from algorithm.ml_preds import RFPredictor, XGBoostPredictor, LGBMPredictor
+from algorithm.dl_preds import NNPredictor
 
 
 def get_dataset_obj(path, kind: str):
@@ -63,7 +62,7 @@ def rf_pred(file_path, kind):
     rf_predictor.load_model(os.path.join("algorithm", "models", kind, "random_forest.pickle"))
     try:
         rf_predictor.predict(file_path)
-        data_frame['prediction_res'] = pd.Series(list(rf_predictor.blind_y_pred))
+        data_frame['prediction_result'] = pd.Series(list(rf_predictor.blind_y_pred))
         file_name = file_path[7:-4] + '_rf_' + kind + '.csv'
         data_frame.to_csv(os.path.join('downloads', file_name), index=False)
         return file_name
@@ -74,11 +73,11 @@ def rf_pred(file_path, kind):
 def xgb_pred(file_path, kind):
     """For web app"""
     data_frame = pd.read_csv(file_path)
-    xgb_predictor = RFPredictor(kind, None, None)
+    xgb_predictor = XGBoostPredictor(kind, None, None)
     xgb_predictor.load_model(os.path.join("algorithm", "models", kind, "xgboost.pickle"))
     try:
         xgb_predictor.predict(file_path)
-        data_frame['prediction_res'] = pd.Series(list(xgb_predictor.blind_y_pred))
+        data_frame['prediction_result'] = pd.Series(list(xgb_predictor.blind_y_pred))
         file_name = file_path[7:-4] + '_xgb_' + kind + '.csv'
         data_frame.to_csv(os.path.join('downloads', file_name), index=False)
         return file_name
@@ -89,11 +88,11 @@ def xgb_pred(file_path, kind):
 def lgbm_pred(file_path, kind):
     """For web app"""
     data_frame = pd.read_csv(file_path)
-    lgbm_predictor = RFPredictor(kind, None, None)
+    lgbm_predictor = LGBMPredictor(kind, None, None)
     lgbm_predictor.load_model(os.path.join("algorithm", "models", kind, "lgbm.pickle"))
     try:
         lgbm_predictor.predict(file_path)
-        data_frame['prediction_res'] = pd.Series(list(lgbm_predictor.blind_y_pred))
+        data_frame['prediction_result'] = pd.Series(list(lgbm_predictor.blind_y_pred))
         file_name = file_path[7:-4] + '_lgbm_' + kind + '.csv'
         data_frame.to_csv(os.path.join('downloads', file_name), index=False)
         return file_name
@@ -101,12 +100,26 @@ def lgbm_pred(file_path, kind):
         return "FAILED"
 
 
-def attention_pred():
-    pass
+def attention_pred(file_path, kind):
+    """For web app"""
+    att_predictor = NNPredictor(kind, 1082, {
+        'lr': 0.02,
+        'batch_size': 3,
+        'epoch': 80
+    })
+    att_predictor.load_blind_test(file_path, 3)
+    try:
+        res = att_predictor.infer()
+        data_frame = pd.read_csv(file_path)
+        data_frame['prediction_result'] = pd.Series(res)
+        file_name = file_path[7:-4] + '_attention_' + kind + '.csv'
+        data_frame.to_csv(os.path.join('downloads', file_name), index=False)
+        return file_name
+    except FileNotFoundError as e:
+        return "FAILED"
 
 
-
-class Model:
+class ObserverModel:
     def __init__(self):
         self.observers = []
 

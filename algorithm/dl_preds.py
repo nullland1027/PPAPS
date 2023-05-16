@@ -5,7 +5,6 @@ from sklearn.metrics import classification_report
 from algorithm.data_sets import AnimalDataSet, PlantDataSet, DatasetDL
 
 import torch
-from algorithm import interface
 from algorithm import utility
 import onnx
 import onnxruntime as ort
@@ -67,16 +66,6 @@ class NNPredictor:
         self._criteria = nn.CrossEntropyLoss()  # Loss function
         self._optimizer = torch.optim.Adam(self.model.parameters(), lr=hyper_params['lr'])
         self._scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self._optimizer, 3, eta_min=0.00001, verbose=True)
-
-    @staticmethod
-    def load_model_onnx(onnx_file: str):
-        try:
-            onnx.checker.check_model(onnx_file)
-        except onnx.checker.ValidationError as e:
-            print("The model is invalid: %s" % e)
-        else:
-            print('The model is valid!')
-            return ort.InferenceSession(onnx_file)
 
     def load_data(self, data_filepath: str, label_filepath: str) -> None:
         """
@@ -217,7 +206,7 @@ class NNPredictor:
         torch.onnx.export(
             self.model,
             args=(x,),
-            f='models/attention_' + self._kind + '.onnx',
+            f=os.path.join('algorithm', 'models', self._kind, 'attention.onnx'),
             export_params=True,
             opset_version=12,
             do_constant_folding=True,
@@ -239,6 +228,16 @@ class NNPredictor:
             return False
         return True
 
+    @staticmethod
+    def load_model_onnx(onnx_file: str) -> ort.InferenceSession:
+        try:
+            onnx.checker.check_model(onnx_file)
+        except onnx.checker.ValidationError as e:
+            print("The model is invalid: %s" % e)
+        else:
+            print('The model is valid!')
+            return ort.InferenceSession(onnx_file)
+
     def predict(self) -> tuple:
         """
         Do prediction on blind test data set
@@ -249,17 +248,18 @@ class NNPredictor:
         pred_labels = res_dict['Prediction result']
 
         true_labels, pred_labels = np.concatenate(true_labels), np.concatenate(pred_labels)
-        return true_labels, pred_labels
 
         acc = np.sum(true_labels == pred_labels) / len(pred_labels)
         print('Accuracy: {:6f}\n'.format(acc))
         print(classification_report(true_labels, pred_labels))
         utility.show_ROC_curve(true_labels, pred_labels, 'Attention Neural Network')
 
-    def infer(self) -> None:
+    def infer(self):
         """Using onnx and do inference"""
         # Load onnx model
-        sess = ort.InferenceSession("models/plant/attention.onnx", providers=['CPUExecutionProvider'])
+        sess = ort.InferenceSession(
+            os.path.join('algorithm', 'models', self._kind, 'attention.onnx'),
+            providers=['CPUExecutionProvider'])
         pred_res = []
         # Prepare input data, Must be np.ndarray type
 
@@ -272,3 +272,4 @@ class NNPredictor:
                 pred_res.append(np.argmax(ort_outs[0][i][0]))
         print(classification_report(np.concatenate((self.__model_predict(self.dataloader_blind_test)['True labels'])),
                                     pred_res))
+        return pred_res

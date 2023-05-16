@@ -40,32 +40,49 @@ function validateForm() {
     return true;
 }
 
-function test() {
-    // 获取按钮元素
-    const myButton = document.getElementById('myButton');
-
-    // 监听按钮点击事件
-    myButton.addEventListener('click', function() {
-        // 使用 AJAX 或 Fetch API 发送请求到 Flask 后台
-        fetch('/my-endpoint')
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.error(error));
-    });
-}
 
 function validatePassword() {
-  var password = document.getElementsByName("password")[0].value;
-  var confirmPassword = document.getElementsByName("confirm-password")[0].value;
+    var password = document.getElementsByName("password")[0].value;
+    var confirmPassword = document.getElementsByName("confirm-password")[0].value;
 
-  if (password != confirmPassword) {
-    document.getElementsByName("password")[0].classList.add("border-danger");
-    document.getElementsByName("confirm-password")[0].classList.add("border-danger");
-    return false;
-  } else {
-    document.getElementsByName("password")[0].classList.remove("border-danger");
-    document.getElementsByName("confirm-password")[0].classList.remove("border-danger");
-    return true;
-  }
+    if (password !== confirmPassword) {
+        document.getElementsByName("password")[0].classList.add("border-danger");
+        document.getElementsByName("password")[0].style.borderWidth = "4px";
+        document.getElementsByName("confirm-password")[0].classList.add("border-danger");
+        document.getElementsByName("confirm-password")[0].style.borderWidth = "4px";
+        alert('Password Not Match!')
+        return false;
+    } else {
+        document.getElementsByName("password")[0].classList.remove("border-danger");
+        document.getElementsByName("confirm-password")[0].classList.remove("border-danger");
+        return true;
+    }
+}
+
+function signUp() {
+    if (!validatePassword()) {
+        return
+    }
+    $.ajax({
+        type: "POST",
+        url: "/afterSignUp",
+        data: {
+            email: $("#email").val(),
+            password: $("#floatingPassword").val()
+        },
+        success: function (response) {
+            alert(response['message']);
+            window.location.assign("/login");
+        },
+        error: function (xhr, status, error) {
+            document.getElementById('email').style.borderWidth = "4px";
+            document.getElementById('email').classList.add("border-danger");
+            if (xhr.status === 400) {
+                alert(xhr.responseJSON['message']);
+            } else {
+                console.log("Error:", error);
+            }
+        }
+    })
 }
 
