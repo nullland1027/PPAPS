@@ -103,6 +103,7 @@
 
 </svg>
 <main class="form-signin w-100 m-auto">
+
     <form id="login-form" method="post" enctype="multipart/form-data" action="/afterLogin">
         <a href="/">
             <svg t="1679481892861" class="bi" viewBox="0 0 1200 1200 "
@@ -138,8 +139,21 @@
         <button class="w-100 btn btn-lg btn-primary">Click to Sign Up</button>
     </a>
 
-</main>
 
+</main>
+<script>
+    const form = document.getElementById('login-form');
+    const emailInput = document.getElementById('floatingInput');
+    const passwordInput = document.getElementById('floatingPassword');
+
+    form.addEventListener('submit', (event) => {
+        if (!emailInput.value || !passwordInput.value) {
+            event.preventDefault();
+            alert('Please fill your email and password to login!');
+        }
+    });
+
+</script>
 
 </body>
 </html>

@@ -6,6 +6,9 @@ import pandas as pd
 from algorithm.data_sets import PlantDataSet, AnimalDataSet
 from algorithm.ml_preds import RFPredictor, XGBoostPredictor, LGBMPredictor
 from algorithm.dl_preds import NNPredictor
+from redis import Redis
+
+r = Redis(host='127.0.0.1', port=6379, db=0)
 
 
 def get_dataset_obj(path, kind: str):
@@ -55,6 +58,20 @@ def file_md5(file):
     return md5.hexdigest()
 
 
+def save_res(predictor):
+    """
+    Store the prediction result in databse
+    @param predictor:
+    @return: None
+    """
+    if r.exists('0') and r.exists('1'):
+        r.set('0', int(r.get('0')) + list(predictor.blind_y_pred).count(0))
+        r.set('1', int(r.get('0')) + list(predictor.blind_y_pred).count(1))
+    else:
+        r.set('0', list(predictor.blind_y_pred).count(0))
+        r.set('1', list(predictor.blind_y_pred).count(1))
+
+
 def rf_pred(file_path, kind):
     """For web app"""
     data_frame = pd.read_csv(file_path)
@@ -62,11 +79,14 @@ def rf_pred(file_path, kind):
     rf_predictor.load_model(os.path.join("algorithm", "models", kind, "random_forest.pickle"))
     try:
         rf_predictor.predict(file_path)
+        save_res(rf_predictor)
         data_frame['prediction_result'] = pd.Series(list(rf_predictor.blind_y_pred))
         file_name = file_path[7:-4] + '_rf_' + kind + '.csv'
         data_frame.to_csv(os.path.join('downloads', file_name), index=False)
         return file_name
     except FileNotFoundError as e:
+        return "FAILED"
+    except Exception as base_error:
         return "FAILED"
 
 
@@ -77,11 +97,14 @@ def xgb_pred(file_path, kind):
     xgb_predictor.load_model(os.path.join("algorithm", "models", kind, "xgboost.pickle"))
     try:
         xgb_predictor.predict(file_path)
+        save_res(xgb_predictor)
         data_frame['prediction_result'] = pd.Series(list(xgb_predictor.blind_y_pred))
         file_name = file_path[7:-4] + '_xgb_' + kind + '.csv'
         data_frame.to_csv(os.path.join('downloads', file_name), index=False)
         return file_name
     except FileNotFoundError as e:
+        return "FAILED"
+    except Exception as base_error:
         return "FAILED"
 
 
@@ -92,11 +115,14 @@ def lgbm_pred(file_path, kind):
     lgbm_predictor.load_model(os.path.join("algorithm", "models", kind, "lgbm.pickle"))
     try:
         lgbm_predictor.predict(file_path)
+        save_res(lgbm_predictor)
         data_frame['prediction_result'] = pd.Series(list(lgbm_predictor.blind_y_pred))
         file_name = file_path[7:-4] + '_lgbm_' + kind + '.csv'
         data_frame.to_csv(os.path.join('downloads', file_name), index=False)
         return file_name
     except FileNotFoundError as e:
+        return "FAILED"
+    except Exception as base_error:
         return "FAILED"
 
 
@@ -110,12 +136,20 @@ def attention_pred(file_path, kind):
     att_predictor.load_blind_test(file_path, 3)
     try:
         res = att_predictor.infer()
+        if r.exists('0') and r.exists('1'):
+            r.set('0', int(r.get('0')) + res.count(0))
+            r.set('1', int(r.get('0')) + res.count(1))
+        else:
+            r.set('0', res.count(0))
+            r.set('1', res.count(1))
         data_frame = pd.read_csv(file_path)
         data_frame['prediction_result'] = pd.Series(res)
         file_name = file_path[7:-4] + '_attention_' + kind + '.csv'
         data_frame.to_csv(os.path.join('downloads', file_name), index=False)
         return file_name
     except FileNotFoundError as e:
+        return "FAILED"
+    except Exception as base_error:
         return "FAILED"
 
 

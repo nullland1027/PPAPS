@@ -5,12 +5,13 @@ from redis import Redis
 from views import bp_views
 from model import bp_model
 from dataclasses import dataclass
-from flask import Flask, request, render_template, send_from_directory, redirect, url_for, send_file, session
+from flask import Flask, request, render_template, g, redirect, url_for, send_file, session
 from flask import jsonify
 
 app = Flask(__name__)  # 申明app对象
 app.config['SECRET_KEY'] = "$#%^&YGHG^&(*)IVBIUG*(&RT&(T("
-redis = Redis(host='127.0.0.1', port=6379, db=0)  # host:数据库的服务名
+# redis = Redis(host='172.19.0.2', port=6379, db=0)  # host:数据库的服务名
+redis = Redis(host='127.0.0.1', port=6379, db=0)
 
 # Link other blueprints
 app.register_blueprint(bp_views)  # about page render
@@ -36,8 +37,7 @@ def after_login():
 
         if redis.exists(username):  # User exists
             if redis.get(username).decode('utf-8') == Tools.password_encode(pwd):  # True password
-                if remember:
-                    session['LOGIN_USER'] = username
+                session['LOGIN_USER'] = username
                 return render_template('home-page.html', msg=username)
             else:
                 return render_template('login.html', msg='Wrong Password')
@@ -77,7 +77,7 @@ def after_submit_job():
 
 @app.route('/check-status')
 def check_status():
-    if len(session.keys()) == 0:  # No on login
+    if 'LOGIN_USER' not in session.keys():  # No on login
         return render_template('login.html')
     else:
         return render_template('home-page.html', msg=session['LOGIN_USER'])
@@ -85,9 +85,16 @@ def check_status():
 
 @app.route('/afterSignOut')
 def after_sign_out():
-    if len(session.keys()) == 1:
+    if 'LOGIN_USER' in session.keys():
         session.pop('LOGIN_USER')
     return render_template('index.html')
+
+
+@app.route('/showChart')
+def show_chart():
+    zero = int(redis.get('0'))
+    one = int(redis.get('1'))
+    return render_template('home-page.html', zero=zero, one=one, click='YES', msg=session['LOGIN_USER'])
 
 
 @app.route('/download')

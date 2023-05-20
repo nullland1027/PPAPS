@@ -1,14 +1,18 @@
-version: '3.8'
+version: '3'
 services:
   web:
     build: .
     ports:
-      - "8088:5000"
-    volumes:
-      - .:/src
+      - "9999:9999"
+    networks:
+      - my-network
     depends_on:
       - redis
-    environment:
-      - REDIS_HOST=redis
   redis:
-    image: "redis:alpine"
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    networks:
+      - my-network
+networks:
+  my-network:
