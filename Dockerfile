@@ -1,7 +1,5 @@
-FROM arm64v8/python:3.8-bullseye
+FROM nullland1027/bio:0.0.2-arm64
 
 ADD . /src
-WORKDIR /src
 
-RUN pip install -r requirements.txt
-CMD python app.py
+ENTRYPOINT ["python", "/src/app.py"]y

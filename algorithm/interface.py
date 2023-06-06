@@ -8,7 +8,7 @@ from algorithm.ml_preds import RFPredictor, XGBoostPredictor, LGBMPredictor
 from algorithm.dl_preds import NNPredictor
 from redis import Redis
 
-r = Redis(host='127.0.0.1', port=6379, db=0)
+r = Redis(host='172.19.0.2', port=6379, db=0)
 
 
 def get_dataset_obj(path, kind: str):

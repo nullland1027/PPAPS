@@ -10,8 +10,8 @@ from flask import jsonify
 
 app = Flask(__name__)  # 申明app对象
 app.config['SECRET_KEY'] = "$#%^&YGHG^&(*)IVBIUG*(&RT&(T("
-# redis = Redis(host='172.19.0.2', port=6379, db=0)  # host:数据库的服务名
-redis = Redis(host='127.0.0.1', port=6379, db=0)
+redis = Redis(host='172.19.0.2', port=6379, db=0)  # host:数据库的服务名
+# redis = Redis(host='127.0.0.1', port=6379, db=0)
 
 # Link other blueprints
 app.register_blueprint(bp_views)  # about page render
